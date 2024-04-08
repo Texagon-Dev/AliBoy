@@ -1,6 +1,6 @@
 const CreateStory = () => {
 	return (
-		<div>CreateStory</div>
+		<div className="mt-10">CreateStory</div>
 	)
 }
 export default CreateStory
