@@ -16,8 +16,8 @@ const Navbar = () => {
           <ul className="flex items-center flex-shrink-0">
             <li>
               <NavLink
-                to="/create"
-                className="hidden lg:flex text-xl tracking-tight mr-4"
+                to="/create/begin"
+                className="hidden lg:flex text-xl tracking-tight mr-8"
               >
                 Create Story
               </NavLink>
@@ -65,7 +65,7 @@ const Navbar = () => {
                 <NavLink to="/create">Create Story</NavLink>
               </li>
               <li className="py-4">
-                <NavLink to='/dashboard'>Dashboard</NavLink>
+                <NavLink to="/dashboard">Dashboard</NavLink>
               </li>
               <li className="py-4">
                 <NavLink to="/pricing">Pricing</NavLink>

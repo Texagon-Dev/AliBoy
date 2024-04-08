@@ -1,6 +1,4 @@
 const LandingPage = () => {
-	return (
-		<div>LandingPage</div>
-	)
-}
-export default LandingPage
+  return <div>LandingPage</div>;
+};
+export default LandingPage;
