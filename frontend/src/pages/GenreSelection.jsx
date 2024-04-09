@@ -25,10 +25,12 @@ const GenreSelection = () => {
   const [selectedGenre, setSelectedGenre] = useState(0);
   return (
     <section className="container mx-auto mt-[140px]">
-      <div className="w-full flex justify-center items-center text-4xl text-center flex-col lg:text-[64px] lg:leading-[58px] font-bold mb-10">
-        <div className="w-full lg:w-[75%] mb-8">
-          <h1 className="text-primary1-blue">Explore Diverse Story Genres</h1>
-          <p className="text-[28px] leading-8 text-[#6B6D6E] font-thin py-4">
+      <div className="w-full flex justify-center items-center text-4xl text-center flex-col lg:text-[64px] lg:leading-[58px] font-bold mb-6">
+        <div className="w-full lg:w-[80%] mb-8">
+          <h1 className="text-primary1-blue text-5xl arvo-bold leading-[59px]">
+            Explore Diverse Story Genres
+          </h1>
+          <p className="text-[28px] leading-8 text-[#6B6D6E] raleway-medium py-4">
             Select the genre that best suits your imagination and let the AI
             weave its magic into your story
           </p>
@@ -43,14 +45,14 @@ const GenreSelection = () => {
               onClick={() => setSelectedGenre(index)}
             >
               <img className="mb-1" src={genre.image} alt={genre.name} />
-              <div className="text-xl leading-5 tracking-tighter mb-4 font-bold">
+              <div className="text-2xl  tracking-tighter mb-4 raleway-bold">
                 {genre.name}
               </div>
             </button>
           ))}
         </div>
         <NavLink to="/create/details">
-          <Button className="bg-[#F15084] w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6">
+          <Button className="bg-[#F15084] w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6 arvo">
             Next
           </Button>
         </NavLink>

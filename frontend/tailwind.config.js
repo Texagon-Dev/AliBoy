@@ -53,7 +53,9 @@ module.exports = {
         },
         primary1: {
           blue: "#0F151B",
+          pink: "#F15084",
         },
+     
       },
       borderRadius: {
         lg: "var(--radius)",
