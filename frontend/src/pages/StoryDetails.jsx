@@ -28,9 +28,8 @@ const StoryDetails = () => {
   };
 
   const [file, setFile] = useState(null);
-
   const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/*", // Accept only image files
+    accept: "image/*",
     onDrop: (acceptedFiles) => {
       setFile(acceptedFiles[0]);
     },
@@ -40,10 +39,10 @@ const StoryDetails = () => {
     <section className="container mx-auto mt-[140px] mb-10">
       <div className="w-full flex justify-center items-center text-4xl text-center flex-col lg:text-[64px] lg:leading-[58px] font-bold mb-10">
         <div className="w-full  mb-8">
-          <h1 className="text-primary1-blue text-5xl arvo-bold leading-[59px] ">
+          <h1 className="text-primary1-blue text-3xl lg:text-5xl md:text-4xl arvo-bold leading-[59px] ">
             Craft Your Story
           </h1>
-          <p className="text-[28px] leading-8 text-[#6B6D6E] font-thin py-4">
+          <p className=" text-xl lg:text-[28px] leading-8 text-[#6B6D6E] lg:w-[80%] raleway-medium py-4 mx-auto">
             Enter your story prompt below, providing a brief description or
             theme. (e.g., 'Write a story about a mysterious island' or 'Create a
             romantic tale set in Paris')
@@ -63,12 +62,12 @@ const StoryDetails = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormItem className="flex justify-between items-center">
-                    <FormLabel className="text-2xl font-bold ">
+                    <FormLabel className="text-xl lg:text-2xl arvo-bold ">
                       Story Explanation
                     </FormLabel>
                     <div className="flex justify-center ">
                       <Dialog>
-                        <DialogTrigger className="font-bold flex justify-center items-center">
+                        <DialogTrigger className="arvo-bold  flex justify-center items-center">
                           Watch Video
                           <div className="bg-transparent p-0 lg:mr-[-150px] text-black border-none shadow-none hover:bg-transparent font-bold">
                             <img src={play} alt="play icon" />
@@ -96,19 +95,21 @@ const StoryDetails = () => {
                   <FormDescription>
                     <div className="flex justify-between items-center text-center gap-2 mt-1 ">
                       <div className="flex text-center gap-4">
-                        <p className="text-[#9D8780]">Suggestions:</p>
-                        <span className="border border-primary1-pink px-2 rounded-lg text-[12px] text-primary1-pink">
+                        <p className="text-[#9D8780] lg:text-[16px] raleway-medium">
+                          Suggestions:
+                        </p>
+                        <span className="border border-primary1-pink px-2 rounded-lg lg:text-[12px] text-primary1-pink">
                           Lorem ipsum delour ...
                         </span>
-                        <span className="border border-primary1-pink px-2 rounded-lg text-[12px] text-primary1-pink">
+                        <span className="hidden lg:flex border border-primary1-pink px-2 rounded-lg lg:text-[12px] text-primary1-pink">
                           Lorem ipsum delour ...
                         </span>
-                        <span className="border border-primary1-pink px-2 rounded-lg text-[12px] text-primary1-pink">
+                        <span className=" hidden lg:flex border border-primary1-pink px-2 rounded-lg lg:text-[12px] text-primary1-pink">
                           Lorem ipsum delour ...
                         </span>
                       </div>
                       <div>
-                        <span className="text-[#C7C8CC] text-[16px]">
+                        <span className="text-[#C7C8CC] lg:text-[16px] raleway-medium">
                           0/3000
                         </span>
                       </div>
@@ -123,12 +124,12 @@ const StoryDetails = () => {
               name="character-explanation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-2xl font-bold ">
+                  <FormLabel className="text-xl lg:text-2xl arvo-bold  ">
                     Character Explanation
                   </FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Tell us a little bit about yourself"
+                      placeholder="Enter prompt here "
                       className="resize-none min-h-[100px] border-[#FAC0D3] border-solid border-2 rounded-lg "
                       {...field}
                     />
@@ -136,19 +137,21 @@ const StoryDetails = () => {
                   <FormDescription>
                     <div className="flex justify-between items-center text-center gap-2 mt-1 ">
                       <div className="flex text-center gap-4">
-                        <p className="text-[#9D8780]">Suggestions:</p>
-                        <span className="border border-primary1-pink px-2 rounded-lg lg:text-[12px]   text-primary1-pink">
+                        <p className="text-[#9D8780] lg:text-[16px] raleway-medium">
+                          Suggestions:
+                        </p>
+                        <span className="  border border-primary1-pink px-2 rounded-lg lg:text-[12px]   text-primary1-pink">
                           Lorem ipsum delour ...
                         </span>
-                        <span className="border border-primary1-pink px-2 rounded-lg text-[12px] text-primary1-pink">
+                        <span className="hidden lg:flex border border-primary1-pink px-2 rounded-lg text-[12px] text-primary1-pink">
                           Lorem ipsum delour ...
                         </span>
-                        <span className="border border-primary1-pink px-2 rounded-lg text-[12px] text-primary1-pink">
+                        <span className="hidden lg:flex border border-primary1-pink px-2 rounded-lg text-[12px] text-primary1-pink">
                           Lorem ipsum delour ...
                         </span>
                       </div>
                       <div>
-                        <span className="text-[#C7C8CC] text-[16px]">
+                        <span className="text-[#C7C8CC] lg:text-[16px] raleway-medium">
                           0/1000
                         </span>
                       </div>
@@ -163,36 +166,43 @@ const StoryDetails = () => {
               name="radio-group"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-2xl font-bold ">
+                  <FormLabel className="text-xl lg:text-2xl arvo-bold  ">
                     Story Length
                   </FormLabel>
                   <FormControl>
                     <RadioGroup
-                      className="grid gap-x-10 grid-cols-3"
+                      className="grid gap-x-10 grid-cols-1 lg:grid-cols-3"
+                      defaultValue="option-one"
                       value={selectedValue}
                       onClick={handleChange}
                     >
                       <div
-                        className={`flex items-center space-x-2 border lg:w-[80%] rounded-3xl px-1 lg:p-4 ${
+                        className={`flex items-center space-x-2 border lg:w-[80%] rounded-3xl  p-4 ${
                           selectedValue === "option-one"
                             ? "bg-[#F15084] text-white"
                             : "border-[#F15084]"
                         }`}
                       >
                         <RadioGroupItem value="option-one" id="option-one" />
-                        <Label className="text-xl" htmlFor="option-one">
+                        <Label
+                          className="text-xl raleway-semibold"
+                          htmlFor="option-one"
+                        >
                           Standard
                         </Label>
                       </div>
                       <div
-                        className={`flex items-center space-x-2 border lg:w-[80%] rounded-3xl h-14 lg:p-5 ${
+                        className={`flex items-center space-x-2 border lg:w-[80%] rounded-3xl h-14 p-4 ${
                           selectedValue === "option-two"
                             ? "bg-[#F15084] text-white"
                             : "border-[#F15084]"
                         }`}
                       >
                         <RadioGroupItem value="option-two" id="option-two" />
-                        <Label className="text-xl" htmlFor="option-two">
+                        <Label
+                          className="text-xl raleway-semibold"
+                          htmlFor="option-two"
+                        >
                           Medium
                         </Label>
                       </div>
@@ -207,7 +217,10 @@ const StoryDetails = () => {
                           value="option-three"
                           id="option-three"
                         />
-                        <Label className="text-xl" htmlFor="option-three">
+                        <Label
+                          className="text-xl raleway-semibold"
+                          htmlFor="option-three"
+                        >
                           Long
                         </Label>
                       </div>
@@ -222,15 +235,15 @@ const StoryDetails = () => {
               name="file"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-2xl font-bold">
+                  <FormLabel className="text-xl lg:text-2xl arvo-bold ">
                     Upload Photo
-                    <span className="text-[#C7C8CC] text-[12px] font-normal">
+                    <span className="text-[#C7C8CC] text-xs raleway-regular">
                       (Optional)
                     </span>
                   </FormLabel>
                   <div
                     {...getRootProps()}
-                    className="min-h-[100px] border border-[#F15084] rounded-lg flex items-center justify-center"
+                    className="min-h-[100px] border border-[#F15084] rounded-lg flex items-center justify-center cursor-pointer"
                   >
                     <Input {...getInputProps()} />
                     {file ? (
@@ -240,7 +253,7 @@ const StoryDetails = () => {
                         className="max-h-full max-w-full"
                       />
                     ) : (
-                      <div className="flex justify-center items-center gap-2">
+                      <div className="flex justify-center items-center gap-2 lg:text-xl raleway-regular">
                         <span>
                           <img src={upload} alt="upload icon" />
                         </span>
@@ -253,12 +266,16 @@ const StoryDetails = () => {
                       </div>
                     )}
                   </div>
+                  <div className="flex justify-between text-[#C7C8CC] lg:text-[16px] raleway-medium">
+                    <p>File Supported: PNG,JPG</p>
+                    <p>Max Size: 5mb</p>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <NavLink to="" className="flex justify-center">
-              <Button className="bg-[#F15084] w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6 arvo">
+            <NavLink to="/create/generate" className="flex justify-center">
+              <Button className="bg-[#F15084] w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6 arvo-regular">
                 Next
               </Button>
             </NavLink>

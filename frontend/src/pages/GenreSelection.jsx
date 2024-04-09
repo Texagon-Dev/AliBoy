@@ -27,10 +27,10 @@ const GenreSelection = () => {
     <section className="container mx-auto mt-[140px]">
       <div className="w-full flex justify-center items-center text-4xl text-center flex-col lg:text-[64px] lg:leading-[58px] font-bold mb-6">
         <div className="w-full lg:w-[80%] mb-8">
-          <h1 className="text-primary1-blue text-5xl arvo-bold leading-[59px]">
+          <h1 className="text-primary1-blue text-3xl lg:text-5xl md:text-4xl arvo-bold leading-[59px]">
             Explore Diverse Story Genres
           </h1>
-          <p className="text-[28px] leading-8 text-[#6B6D6E] raleway-medium py-4">
+          <p className="text-xl lg:text-[28px]  leading-8 text-[#6B6D6E] raleway-medium py-4">
             Select the genre that best suits your imagination and let the AI
             weave its magic into your story
           </p>
@@ -52,7 +52,7 @@ const GenreSelection = () => {
           ))}
         </div>
         <NavLink to="/create/details">
-          <Button className="bg-[#F15084] w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6 arvo">
+          <Button className="bg-[#F15084] w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6 arvo-regular">
             Next
           </Button>
         </NavLink>
