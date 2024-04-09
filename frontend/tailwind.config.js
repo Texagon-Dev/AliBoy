@@ -55,6 +55,9 @@ module.exports = {
           blue: "#0F151B",
           pink: "#F15084",
         },
+        secondary1: {
+          pink: "#FBD3C4"
+        }
      
       },
       borderRadius: {
