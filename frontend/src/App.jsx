@@ -9,7 +9,7 @@ import SignUp from "./pages/SignUp";
 import StoryDetails from "./pages/StoryDetails";
 import StoryGeneration from "./pages/StoryGeneration";
 import StoryGenerationLoading from "./pages/StoryGenerationLoading";
-import GeneratedStoryPage from "./pages/GeneratedStoryPage";
+import StoryBookPdfPage from "./pages/StoryBookPdfPage";
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
             <Route path="create/details" element={<StoryDetails />} />
             <Route path="create/generate" element={<StoryGeneration />} />
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="dashboard/storypage" element={<GeneratedStoryPage />} />
+            <Route path="dashboard/storypage" element={<StoryBookPdfPage />} />
             <Route path="pricing" element={<Pricing />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="signin" element={<SignIn />} />
