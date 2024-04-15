@@ -1,4 +1,8 @@
+import InputNumberIcon from "@/components/InputNumberIcon";
+
 const SignUp = () => {
-  return <div>SignUp</div>;
+  return <div>
+    
+  <InputNumberIcon/></div>;
 };
 export default SignUp;

@@ -22,6 +22,7 @@ import { useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import StoryGenerationLoading from "./StoryGenerationLoading";
+import InputNumberIcon from "@/components/InputNumberIcon";
 
 const StoryGeneration = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,10 +30,29 @@ const StoryGeneration = () => {
 
   const handleGenerate = () => {
     setIsLoading(true);
+    
 
     setTimeout(() => {
       navigate("/dashboard/storypage");
     }, 5000);
+  };
+
+  const [value, setValue] = useState(5);
+
+  const handleChange = (e) => {
+    setValue(parseInt(e.target.value) || 0);
+    const newValue = parseInt(e.target.value) || 0;
+    setValue(newValue >= 0 ? newValue : 0);
+  };
+
+  const handleIncrement = () => {
+    setValue(value + 1);
+  };
+
+  const handleDecrement = () => {
+    if (value > 0) {
+      setValue(value - 1);
+    }
   };
   const form = useForm();
 
@@ -59,7 +79,7 @@ const StoryGeneration = () => {
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit()}
-                className="lg:w-[80%] w-full space-y-6"
+                className="lg:w-[68%] w-full space-y-6"
               >
                 <FormField
                   control={form.control}
@@ -76,7 +96,15 @@ const StoryGeneration = () => {
                           placeholder="05"
                           {...field}
                           type="number"
-                          className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  border border-primary1-pink focus:outline-none focus:border-pink-500 focus:ring-pink-500"
+                          className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
+                          value={value}
+                          onChange={handleChange}
+                          icon={
+                            <InputNumberIcon
+                              onIncrement={handleIncrement}
+                              onDecrement={handleDecrement}
+                            />
+                          }
                         />
                       </FormControl>
                       <FormDescription></FormDescription>
@@ -98,7 +126,7 @@ const StoryGeneration = () => {
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <FormControl className=" w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl border border-primary1-pink focus:outline-none focus:border-pink-500 focus:ring-pink-500">
+                        <FormControl className=" w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl">
                           <SelectTrigger>
                             <SelectValue placeholder="Auto" />
                           </SelectTrigger>
@@ -128,7 +156,7 @@ const StoryGeneration = () => {
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <FormControl className=" w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl border border-primary1-pink focus:outline-none focus:border-pink-500 focus:ring-pink-500">
+                        <FormControl className=" w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl ">
                           <SelectTrigger>
                             <SelectValue placeholder="English" />
                           </SelectTrigger>
@@ -146,7 +174,7 @@ const StoryGeneration = () => {
                 />
                 <NavLink className="flex justify-center">
                   <Button
-                    onClick={handleGenerate} // Use onClick instead of onSubmit
+                    onClick={handleGenerate}
                     className="bg-[#F15084] w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6 arvo-regular"
                   >
                     Generate

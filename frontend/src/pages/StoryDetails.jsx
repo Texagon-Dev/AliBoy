@@ -25,12 +25,28 @@ const StoryDetails = () => {
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
+    console.log(selectedValue)
   };
 
   const [file, setFile] = useState(null);
   const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/*",
-    onDrop: (acceptedFiles) => {
+    accept: "image/png, image/jpeg", // Accept any image MIME type
+    maxFiles: 1,
+    maxSize: 5 * 1024 * 1024,
+    onDrop: (acceptedFiles, rejectedFiles) => {
+      if (rejectedFiles.length > 0) {
+        // Set the error message in the form
+        console.log("Rejected files:", rejectedFiles);
+        form.setError("file", {
+          type: "manual",
+          message:
+            "Invalid file type or extension. Please upload an image file.",
+        });
+        return;
+      }
+      // Clear the error message
+      form.clearErrors("file");
+      // Set the accepted file
       setFile(acceptedFiles[0]);
     },
   });
@@ -54,7 +70,7 @@ const StoryDetails = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit()}
-            className="lg:w-[80%] w-full space-y-6"
+            className="lg:w-[68%] w-full space-y-6"
           >
             <FormField
               control={form.control}
@@ -74,12 +90,15 @@ const StoryDetails = () => {
                           </div>
                         </DialogTrigger>
 
-                        <DialogContent className=" flex justify-center p-10">
+                        <DialogContent className=" flex justify-center p-10 ">
                           <iframe
-                            width="560"
-                            height="315"
                             src="https://www.youtube.com/watch?v=gmn8tacmiys"
                             origin="https://www.youtube.com"
+                            style={{
+                              borderRadius: "24px",
+                              width: "1040px",
+                              height: "576px",
+                            }}
                           ></iframe>
                         </DialogContent>
                       </Dialog>
@@ -88,7 +107,7 @@ const StoryDetails = () => {
                   <FormControl>
                     <Textarea
                       placeholder="Enter prompt here"
-                      className="resize-none border-[#FAC0D3] border-solid border-2 rounded-lg "
+                      className="resize-none  rounded-lg "
                       {...field}
                     />
                   </FormControl>
@@ -130,7 +149,7 @@ const StoryDetails = () => {
                   <FormControl>
                     <Textarea
                       placeholder="Enter prompt here "
-                      className="resize-none min-h-[100px] border-[#FAC0D3] border-solid border-2 rounded-lg "
+                      className="resize-none min-h-[102px] rounded-lg "
                       {...field}
                     />
                   </FormControl>
@@ -174,16 +193,21 @@ const StoryDetails = () => {
                       className="grid gap-x-10 grid-cols-1 lg:grid-cols-3"
                       defaultValue="option-one"
                       value={selectedValue}
-                      onClick={handleChange}
                     >
                       <div
-                        className={`flex items-center space-x-2 border lg:w-[80%] rounded-3xl  p-4 ${
+                        className={`flex items-center space-x-2 border   rounded-[32px] h-[58px] w-[278px] px-5 ${
                           selectedValue === "option-one"
                             ? "bg-[#F15084] text-white"
-                            : "border-[#F15084]"
+                            : "border-[#FAC0D3] "
                         }`}
                       >
-                        <RadioGroupItem value="option-one" id="option-one" />
+                        <RadioGroupItem
+                          value="option-one"
+                          id="option-one"
+                          onClick={() => {
+                            setSelectedValue("option-one");
+                          }}
+                        />
                         <Label
                           className="text-xl raleway-semibold"
                           htmlFor="option-one"
@@ -192,13 +216,19 @@ const StoryDetails = () => {
                         </Label>
                       </div>
                       <div
-                        className={`flex items-center space-x-2 border lg:w-[80%] rounded-3xl h-14 p-4 ${
+                        className={`flex items-center space-x-2 border  rounded-[32px] h-[58px] w-[278px] px-5 ${
                           selectedValue === "option-two"
                             ? "bg-[#F15084] text-white"
-                            : "border-[#F15084]"
+                            : "border-[#FAC0D3] "
                         }`}
                       >
-                        <RadioGroupItem value="option-two" id="option-two" />
+                        <RadioGroupItem
+                          value="option-two"
+                          id="option-two"
+                          onClick={() => {
+                            setSelectedValue("option-two");
+                          }}
+                        />
                         <Label
                           className="text-xl raleway-semibold"
                           htmlFor="option-two"
@@ -207,15 +237,18 @@ const StoryDetails = () => {
                         </Label>
                       </div>
                       <div
-                        className={`flex items-center space-x-2 border lg:w-[80%] rounded-3xl h-14 p-4 ${
+                        className={`flex items-center space-x-2 border   rounded-[32px] h-[58px] w-[278px] px-5 ${
                           selectedValue === "option-three"
                             ? "bg-[#F15084] text-white"
-                            : "border-[#F15084]"
+                            : "border-[#FAC0D3] "
                         }`}
                       >
                         <RadioGroupItem
                           value="option-three"
                           id="option-three"
+                          onClick={() => {
+                            setSelectedValue("option-three");
+                          }}
                         />
                         <Label
                           className="text-xl raleway-semibold"
@@ -243,14 +276,14 @@ const StoryDetails = () => {
                   </FormLabel>
                   <div
                     {...getRootProps()}
-                    className="min-h-[100px] border border-[#F15084] rounded-lg flex items-center justify-center cursor-pointer"
+                    className="min-h-[102px] border-[#FAC0D3]  border-solid border-2 rounded-lg flex items-center justify-center cursor-pointer"
                   >
                     <Input {...getInputProps()} />
                     {file ? (
                       <img
                         src={URL.createObjectURL(file)}
                         alt="Uploaded"
-                        className="max-h-full max-w-full"
+                        className="max-h-full max-w-full "
                       />
                     ) : (
                       <div className="flex justify-center items-center gap-2 lg:text-xl raleway-regular">
@@ -270,12 +303,12 @@ const StoryDetails = () => {
                     <p>File Supported: PNG,JPG</p>
                     <p>Max Size: 5mb</p>
                   </div>
-                  <FormMessage />
+                  <FormMessage name="file" />
                 </FormItem>
               )}
             />
             <NavLink to="/create/generate" className="flex justify-center">
-              <Button className="bg-[#F15084] w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6 arvo-regular">
+              <Button className="bg-primary1-pink w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6 arvo-regular">
                 Next
               </Button>
             </NavLink>

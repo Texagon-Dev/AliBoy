@@ -11,13 +11,13 @@ const Navbar = () => {
   };
   return (
     <nav className="fixed w-full bg-transparent top-0 z-20 py-3  backdrop-blur-lg">
-      <div className="container px-4 mx-auto relative lg:text-sm">
+      <div className="container lg:w-[1280px] px-4 mx-auto relative lg:text-sm">
         <div className="flex justify-between items-center">
           <ul className="flex items-center flex-shrink-0">
             <li>
               <NavLink
                 to="/create/begin"
-                className="hidden lg:flex text-xl tracking-tight mr-8"
+                className="hidden lg:flex text-2xl leading-7 tracking-tight mr-8 raleway-medium"
               >
                 Create Story
               </NavLink>
@@ -25,7 +25,7 @@ const Navbar = () => {
             <li>
               <NavLink
                 to="/dashboard"
-                className="hidden lg:flex text-xl tracking-tight"
+                className="hidden lg:flex text-2xl leading-7 tracking-tight raleway-medium"
               >
                 Dashboard
               </NavLink>
@@ -33,7 +33,7 @@ const Navbar = () => {
             <li>
               <NavLink
                 to="/"
-                className="lg:hidden md:flex text-xl  tracking-tight"
+                className="lg:hidden md:flex text-2xl leading-7  tracking-tight"
               >
                 Logo
               </NavLink>
@@ -44,7 +44,7 @@ const Navbar = () => {
               <img className="h-10 w-10 mr-2 " src={logo} alt="Logo" />
             </NavLink>
           </div>
-          <ul className="hidden lg:flex ml-14 space-x-12 text-xl">
+          <ul className="hidden lg:flex ml-14 space-x-12 text-2xl leading-7">
             <li>
               <NavLink to="/pricing">Pricing</NavLink>
             </li>
@@ -59,7 +59,7 @@ const Navbar = () => {
           </div>
         </div>
         {mobileDrawerOpen && (
-          <div className="fixed right-0 top-[54px] z-800 bg-white w-full p-12 flex flex-col justify-center items-center lg:hidden">
+          <div className="fixed right-0 top-[54px] z-800 bg-white w-full p-12 flex flex-col justify-center items-center lg:hidden text-2xl leading-7">
             <ul>
               <li className="py-4">
                 <NavLink to="/create">Create Story</NavLink>

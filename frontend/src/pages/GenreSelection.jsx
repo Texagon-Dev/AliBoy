@@ -35,7 +35,7 @@ const GenreSelection = () => {
             weave its magic into your story
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 gap-x-40  items-center relative">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 gap-x-[130px]  items-center relative">
           {genres.map((genre, index) => (
             <button
               key={index}
