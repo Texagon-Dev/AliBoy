@@ -10,6 +10,7 @@ import StoryDetails from "./pages/StoryDetails";
 import StoryGeneration from "./pages/StoryGeneration";
 import StoryGenerationLoading from "./pages/StoryGenerationLoading";
 import StoryBookPdfPage from "./pages/StoryBookPdfPage";
+import UserHomePage from "./pages/UserHomePage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={<RootLayout />}>
             <Route index element={<LandingPage />} />
+            <Route path="user" element={<UserHomePage />} />
             <Route path="create/begin" element={<GenreSelection />} />
             <Route path="create/details" element={<StoryDetails />} />
             <Route path="create/generate" element={<StoryGeneration />} />
