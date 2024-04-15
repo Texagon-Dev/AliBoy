@@ -1,6 +1,10 @@
+import HeroSection from "@/components/shared/HeroSection/HeroSection"
+
 const Dashboard = () => {
 	return (
-		<div>Dashboard</div>
+		<div>
+			<HeroSection />
+		</div>
 	)
 }
 export default Dashboard
