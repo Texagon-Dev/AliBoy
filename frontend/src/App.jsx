@@ -11,6 +11,8 @@ import StoryGeneration from "./pages/StoryGeneration";
 import StoryGenerationLoading from "./pages/StoryGenerationLoading";
 import StoryBookPdfPage from "./pages/StoryBookPdfPage";
 import UserHomePage from "./pages/UserHomePage";
+import EditAndShareStoryPage from "./pages/EditAndShareStoryPage";
+import CompleteStoryBook from "./pages/CompleteStoryBook";
 
 function App() {
   return (
@@ -25,6 +27,14 @@ function App() {
             <Route path="create/generate" element={<StoryGeneration />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="dashboard/storypage" element={<StoryBookPdfPage />} />
+            <Route
+              path="dashboard/editstorybook"
+              element={<EditAndShareStoryPage />}
+            />
+            <Route
+              path="dashboard/completestorybook"
+              element={<CompleteStoryBook />}
+            />
             <Route path="pricing" element={<Pricing />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="signin" element={<SignIn />} />
