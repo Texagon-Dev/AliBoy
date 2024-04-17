@@ -103,6 +103,7 @@ const StoryGeneration = () => {
                             <InputNumberIcon
                               onIncrement={handleIncrement}
                               onDecrement={handleDecrement}
+                              py="py-[10px]"
                             />
                           }
                         />

@@ -13,6 +13,8 @@ import StoryBookPdfPage from "./pages/StoryBookPdfPage";
 import UserHomePage from "./pages/UserHomePage";
 import EditAndShareStoryPage from "./pages/EditAndShareStoryPage";
 import CompleteStoryBook from "./pages/CompleteStoryBook";
+import BookPrintingOptions from "./pages/BookPrintingOptions";
+import OrderPage from "./pages/OrderPage";
 
 function App() {
   return (
@@ -26,7 +28,16 @@ function App() {
             <Route path="create/details" element={<StoryDetails />} />
             <Route path="create/generate" element={<StoryGeneration />} />
             <Route path="dashboard" element={<Dashboard />} />
+            <Route
+              path="dashboard/bookprinting"
+              element={<BookPrintingOptions />}
+            />
+            <Route
+              path="dashboard/order"
+              element={<OrderPage/>}
+            />
             <Route path="dashboard/storypage" element={<StoryBookPdfPage />} />
+
             <Route
               path="dashboard/editstorybook"
               element={<EditAndShareStoryPage />}
