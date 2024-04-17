@@ -15,6 +15,7 @@ import EditAndShareStoryPage from "./pages/EditAndShareStoryPage";
 import CompleteStoryBook from "./pages/CompleteStoryBook";
 import BookPrintingOptions from "./pages/BookPrintingOptions";
 import OrderPage from "./pages/OrderPage";
+import UserProfile from "./pages/UserProfile";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<RootLayout />}>
             <Route index element={<LandingPage />} />
             <Route path="user" element={<UserHomePage />} />
+            <Route path="user/profile" element={<UserProfile />} />
             <Route path="create/begin" element={<GenreSelection />} />
             <Route path="create/details" element={<StoryDetails />} />
             <Route path="create/generate" element={<StoryGeneration />} />
