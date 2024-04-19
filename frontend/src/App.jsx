@@ -22,6 +22,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+            <Route path="dashboard" element={<Dashboard />} />
           <Route path="/" element={<RootLayout />}>
             <Route index element={<LandingPage />} />
             <Route path="user" element={<UserHomePage />} />
@@ -29,7 +30,6 @@ function App() {
             <Route path="create/begin" element={<GenreSelection />} />
             <Route path="create/details" element={<StoryDetails />} />
             <Route path="create/generate" element={<StoryGeneration />} />
-            <Route path="dashboard" element={<Dashboard />} />
             <Route
               path="dashboard/bookprinting"
               element={<BookPrintingOptions />}
