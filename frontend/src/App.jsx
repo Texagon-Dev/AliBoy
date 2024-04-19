@@ -22,7 +22,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-            <Route path="dashboard" element={<Dashboard />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="/" element={<RootLayout />}>
             <Route index element={<LandingPage />} />
             <Route path="user" element={<UserHomePage />} />
@@ -34,10 +34,7 @@ function App() {
               path="dashboard/bookprinting"
               element={<BookPrintingOptions />}
             />
-            <Route
-              path="dashboard/order"
-              element={<OrderPage/>}
-            />
+            <Route path="dashboard/order" element={<OrderPage />} />
             <Route path="dashboard/storypage" element={<StoryBookPdfPage />} />
 
             <Route

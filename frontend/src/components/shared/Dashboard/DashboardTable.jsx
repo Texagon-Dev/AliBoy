@@ -1,12 +1,15 @@
+
+import { Dialog } from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import DashboardOrderDetails from "./DashboardOrderDetails";
+
 
 const DashboardTable = () => {
   const orders = [
@@ -22,6 +25,8 @@ const DashboardTable = () => {
     Pending: "#FF0000",
     Delivered: "#27AC06",
   };
+
+
   return (
     <div className="overflow-x-auto overflow-auto mt-8 md:h-[460px] ">
       <div className="p-4 border border-[#FAC0D3]  rounded-[24px] mb-8">
@@ -67,7 +72,9 @@ const DashboardTable = () => {
                   {order.status}
                 </TableCell>
                 <TableCell className="md:w-[150px] w-[100px]  text-primary1-pink raleway-regular md:text-2xl">
-                  View
+                  <Dialog >
+                   <DashboardOrderDetails/>
+                  </Dialog>
                 </TableCell>
               </TableRow>
             ))}
