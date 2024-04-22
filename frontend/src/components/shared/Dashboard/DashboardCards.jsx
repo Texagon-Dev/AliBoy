@@ -9,7 +9,7 @@ const DashboardCards = () => {
   return (
     <div className="md:mt-[120px] mt-[80px]">
       <div className="flex md:flex-row flex-col mb-8 md:justify-between  ">
-        <div className="flex flex-col mt-4 mb-8">
+        <div className="flex flex-col mt-4 ">
           <h1 className="arvo-bold text-[44px] leading-[54.3px]">Dashboard</h1>
           <p className="text-xl raleway-medium text-[#6B6D6E]">
             Hi, Samantha. Welcome back to Story Book Admin!
@@ -50,7 +50,7 @@ const DashboardCards = () => {
             </div>
             <div className="p-6 pt-0">
               <div className="text-[44px] arvo-bold text-primary1-blue ">
-                $75
+                75
               </div>
               <h5 className="leading-[18px] text-[16px] raleway-regular text-primary1-blue">
                 Total Orders
@@ -71,7 +71,7 @@ const DashboardCards = () => {
             </div>
             <div className="p-6 pt-0">
               <div className="text-[44px] arvo-bold text-primary1-blue ">
-                $357
+                357
               </div>
               <h5 className="leading-[18px] text-[16px] raleway-regular text-primary1-blue">
                 Total Delivered
@@ -92,7 +92,7 @@ const DashboardCards = () => {
             </div>
             <div className="p-6 pt-0">
               <div className="text-[44px] arvo-bold text-primary1-blue ">
-                $65
+                65
               </div>
               <h5 className="leading-[18px] text-[16px] raleway-regular text-primary1-blue">
                 Total Cancelled

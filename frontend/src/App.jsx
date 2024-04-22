@@ -16,6 +16,7 @@ import CompleteStoryBook from "./pages/CompleteStoryBook";
 import BookPrintingOptions from "./pages/BookPrintingOptions";
 import OrderPage from "./pages/OrderPage";
 import UserProfile from "./pages/UserProfile";
+import AdminLoginPage from "./pages/AdminLoginPage";
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="signup" element={<SignUp />} />
+          <Route path="signin" element={<SignIn />} />
+          <Route path="adminlogin" element={<AdminLoginPage />} />
           <Route path="/" element={<RootLayout />}>
             <Route index element={<LandingPage />} />
             <Route path="user" element={<UserHomePage />} />
@@ -46,8 +50,6 @@ function App() {
               element={<CompleteStoryBook />}
             />
             <Route path="pricing" element={<Pricing />} />
-            <Route path="signup" element={<SignUp />} />
-            <Route path="signin" element={<SignIn />} />
           </Route>
           <Route
             path="create/generateloading"

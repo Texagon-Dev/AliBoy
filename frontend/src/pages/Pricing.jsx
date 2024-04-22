@@ -70,7 +70,7 @@ const Pricing = () => {
                           For Individuals
                         </span>
                         <h1 className="arvo-bold text-2xl text-[#170F49]">
-                          Basics
+                          Basic
                         </h1>
                       </div>
                     </div>

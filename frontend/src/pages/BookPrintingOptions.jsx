@@ -22,6 +22,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { addBookPrintingOrder } from "@/app/bookPrintingSlice";
+import { useDispatch } from "react-redux";
 
 const BookPrintingOptions = () => {
   const [value, setValue] = useState(5);
@@ -41,6 +43,35 @@ const BookPrintingOptions = () => {
       setValue(value - 1);
     }
   };
+
+  //  const dispatch = useDispatch();
+  //  const [orderDetails, setOrderDetails] = useState({
+  //    story_book_id: "",
+  //    user_id: "",
+  //    binding_name: "",
+  //    title_size: "",
+  //    quantity: "",
+  //    country: "",
+  //    city_region: "",
+  //    delivery_address: "",
+  //    postal_code: "",
+  //    item_total: "",
+  //    discount: "",
+  //    shipping_amount: "",
+  //    payment_method: "",
+  //  });
+
+  //  const handleInputChange = (event) => {
+  //    setOrderDetails({
+  //      ...orderDetails,
+  //      [event.target.name]: event.target.value,
+  //    });
+  //  };
+
+  //  const handleSubmit = (event) => {
+  //    event.preventDefault();
+  //    dispatch(addBookPrintingOrder(orderDetails));
+  //  };
 
   const form = useForm();
 

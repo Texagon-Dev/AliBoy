@@ -9,16 +9,29 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import DashboardOrderDetails from "./DashboardOrderDetails";
+import { useSelector,  useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { fetchCustomerOrders } from "@/app/customerOrdersSlice";
 
 
 const DashboardTable = () => {
-  const orders = [
-    { id: 1, name: "Product A", quantity: 5, status: "Dispatched" },
-    { id: 2, name: "Product B", quantity: 10, status: "Printing" },
-    { id: 3, name: "Product C", quantity: 8, status: "Pending" },
-    { id: 4, name: "Product D", quantity: 3, status: "Delivered" },
-  ];
 
+  const dispatch = useDispatch()
+  // const orders = [
+  //   { id: 1, name: "Product A", quantity: 5, status: "Dispatched" },
+  //   { id: 2, name: "Product B", quantity: 10, status: "Printing" },
+  //   { id: 3, name: "Product C", quantity: 8, status: "Pending" },
+  //   { id: 4, name: "Product D", quantity: 3, status: "Delivered" },
+  // ];
+  
+  const { orders, status, error } = useSelector(
+    (state) => state.customerOrders
+  );
+
+ useEffect(() => {
+   dispatch(fetchCustomerOrders());
+ }, [dispatch]);
+  
   const statusColors = {
     Dispatched: "#FF9700",
     Printing: "#3182CE",

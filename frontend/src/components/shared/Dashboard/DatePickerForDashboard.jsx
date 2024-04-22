@@ -2,11 +2,9 @@
 
 import * as React from "react";
 import { addDays, format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
 import calenderimg from "../../../assets/Images/calender.png";
 import dropdash from "../../../assets/Images/dropdowndash.png";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -28,8 +26,8 @@ export function DatePickerForDashboard({ className }) {
         >
           <img src={calenderimg} alt="" className="w-[36px] h-[36px]" />
           <div className="flex justify-start items-start flex-col">
-						<h1 className="arvo-regular text-[18px]">Filter Period</h1>
-						
+            <h1 className="arvo-regular text-[18px]">Filter Period</h1>
+
             <div
               id="date"
               className={cn(
