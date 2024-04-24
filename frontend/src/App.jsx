@@ -14,7 +14,7 @@ import UserHomePage from "./pages/UserHomePage";
 import EditAndShareStoryPage from "./pages/EditAndShareStoryPage";
 import CompleteStoryBook from "./pages/CompleteStoryBook";
 import BookPrintingOptions from "./pages/BookPrintingOptions";
-import OrderPage from "./pages/OrderPage";
+import CheckoutPage from "./pages/CheckoutPage";
 import UserProfile from "./pages/UserProfile";
 import AdminLoginPage from "./pages/AdminLoginPage";
 
@@ -38,7 +38,7 @@ function App() {
               path="dashboard/bookprinting"
               element={<BookPrintingOptions />}
             />
-            <Route path="dashboard/order" element={<OrderPage />} />
+            <Route path="dashboard/checkout" element={<CheckoutPage />} />
             <Route path="dashboard/storypage" element={<StoryBookPdfPage />} />
 
             <Route

@@ -13,25 +13,18 @@ export const fetchBookPrintingOrders = createAsyncThunk(
   }
 );
 
-export const addBookPrintingOrder = createAsyncThunk(
-  "bookPrintingOrders/addBookPrintingOrder",
-	async (order) => {
-		
-    const response = await axios.post(BASE_URL, order);
-		// return order;
-		return response.data;
-  }
-);
-
 const bookPrintingOrdersSlice = createSlice({
   name: "bookPrintingOrders",
   initialState: {
-		orders: [],
-		// order: null,
+    order: null,
     status: "idle",
     error: null,
   },
-  reducers: {},
+  reducers: {
+    setPrintingOrder: (state, action) => {
+      state.order = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchBookPrintingOrders.pending, (state) => {
@@ -44,12 +37,10 @@ const bookPrintingOrdersSlice = createSlice({
       .addCase(fetchBookPrintingOrders.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
-      })
-      .addCase(addBookPrintingOrder.fulfilled, (state, action) => {
-        state.orders.push(action.payload);
-        // state.order = (action.payload);
       });
   },
 });
+
+export const { setPrintingOrder } = bookPrintingOrdersSlice.actions;
 
 export default bookPrintingOrdersSlice.reducer;

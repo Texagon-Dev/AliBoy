@@ -25,12 +25,19 @@ export const fetchCustomerOrders = createAsyncThunk(
 );
 
 export const fetchCustomerOrder = createAsyncThunk(
-  "customerOrder/fetchCustomerOrder",
+  "customerOrders/fetchCustomerOrderDetails",
   async (orderId) => {
     // const response = await axios.post(BASE_URL, orderId);
     // return response.data;
     console.log(orderId);
     return ORDER;
+  }
+);
+export const createCustomerOrder = createAsyncThunk(
+  "customerOrders/createCustomerOrder",
+  async (data) => {
+    const response = await axios.post(BASE_URL, data);
+    return response.data;
   }
 );
 

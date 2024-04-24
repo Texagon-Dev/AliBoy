@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import lefticon from "../assets/Images/left-icon.png";
 import storyImage from "../assets/Images/storyImage1.png";
 import {
@@ -12,8 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import InputNumberIcon from "@/components/InputNumberIcon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Select,
@@ -22,58 +21,53 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { addBookPrintingOrder } from "@/app/bookPrintingSlice";
+
 import { useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom";
+import { setPrintingOrder } from "@/app/bookPrintingSlice";
+import calculateOrderPricing from "@/utils/calculateOrderPricing";
 
 const BookPrintingOptions = () => {
-  const [value, setValue] = useState(5);
+  const [searchParams] = useSearchParams();
+  const storyBookId = searchParams.get("storyBookId");
 
-  const handleChange = (e) => {
-    setValue(parseInt(e.target.value) || 0);
-    const newValue = parseInt(e.target.value) || 0;
-    setValue(newValue >= 0 ? newValue : 0);
+  const form = useForm({
+    defaultValues: {
+      story_book_id: storyBookId,
+      user_id: "",
+      binding_name: "",
+      title_size: "",
+      quantity: 5,
+      country: "",
+      city_region: "",
+      delivery_address: "",
+      postal_code: "",
+      item_total: 0,
+      discount: 0,
+      shipping_amount: 0,
+      payment_method: "",
+    },
+  });
+
+  const [orderPricing, setOrderPricing] = useState(
+    calculateOrderPricing(form.getValues())
+  );
+  const watchQuantity = form.watch("quantity");
+  useEffect(() => {
+    setOrderPricing(calculateOrderPricing(form.getValues()));
+  }, [form, watchQuantity]);
+
+  const { unitPrice, subTotal } = orderPricing;
+
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
+  const onSubmit = (orderDetails) => {
+    dispatch(setPrintingOrder(orderDetails));
+    console.log(orderDetails);
+    navigate("/dashboard/checkout");
   };
-
-  const handleIncrement = () => {
-    setValue(value + 1);
-  };
-
-  const handleDecrement = () => {
-    if (value > 0) {
-      setValue(value - 1);
-    }
-  };
-
-  //  const dispatch = useDispatch();
-  //  const [orderDetails, setOrderDetails] = useState({
-  //    story_book_id: "",
-  //    user_id: "",
-  //    binding_name: "",
-  //    title_size: "",
-  //    quantity: "",
-  //    country: "",
-  //    city_region: "",
-  //    delivery_address: "",
-  //    postal_code: "",
-  //    item_total: "",
-  //    discount: "",
-  //    shipping_amount: "",
-  //    payment_method: "",
-  //  });
-
-  //  const handleInputChange = (event) => {
-  //    setOrderDetails({
-  //      ...orderDetails,
-  //      [event.target.name]: event.target.value,
-  //    });
-  //  };
-
-  //  const handleSubmit = (event) => {
-  //    event.preventDefault();
-  //    dispatch(addBookPrintingOrder(orderDetails));
-  //  };
-
-  const form = useForm();
 
   return (
     <section className="container mx-auto w-full mt-[80px] lg:mt-[120px] mb-10 lg:w-[1280px]">
@@ -123,19 +117,17 @@ const BookPrintingOptions = () => {
                   <div className="flex w-full flex-col">
                     <Form {...form}>
                       <form
-                        onSubmit={form.handleSubmit()}
+                        onSubmit={form.handleSubmit(onSubmit)}
                         className=" space-y-6"
                       >
                         <FormField
                           control={form.control}
-                          name="select-binding"
+                          name="binding_name"
                           render={({ field }) => (
-                            <FormItem>
-                              <FormItem className="flex justify-between items-center">
-                                <FormLabel className="text-xl lg:text-2xl arvo-bold ">
-                                  Select Your Binding
-                                </FormLabel>
-                              </FormItem>
+                            <FormItem className="flex justify-between items-center">
+                              <FormLabel className="text-xl lg:text-2xl arvo-bold ">
+                                Select Your Binding
+                              </FormLabel>
                               <Select
                                 onValueChange={field.onChange}
                                 defaultValue={field.value}
@@ -146,28 +138,28 @@ const BookPrintingOptions = () => {
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent className="raleway-semibold text-xl">
-                                  <SelectItem value="Spanish">
-                                    Random
+                                  <SelectItem value="Perfect Bound">
+                                    Perfect Bound
                                   </SelectItem>
-                                  <SelectItem value="German">Random</SelectItem>
-                                  <SelectItem value="Arabic">Random</SelectItem>
+                                  <SelectItem value="Spiral Binding">
+                                    Spiral Binding
+                                  </SelectItem>
+                                  <SelectItem value="Case Binding">
+                                    Case Binding
+                                  </SelectItem>
                                 </SelectContent>
                               </Select>
-                              <FormDescription></FormDescription>
-                              <FormMessage />
                             </FormItem>
                           )}
                         />
                         <FormField
                           control={form.control}
-                          name="select-title-size"
+                          name="title_size"
                           render={({ field }) => (
-                            <FormItem>
-                              <FormItem className="flex justify-between items-center">
-                                <FormLabel className="text-xl lg:text-2xl arvo-bold ">
-                                  Select Title Size
-                                </FormLabel>
-                              </FormItem>
+                            <FormItem className="flex justify-between items-center">
+                              <FormLabel className="text-xl lg:text-2xl arvo-bold ">
+                                Select Title Size
+                              </FormLabel>
                               <Select
                                 onValueChange={field.onChange}
                                 defaultValue={field.value}
@@ -178,15 +170,13 @@ const BookPrintingOptions = () => {
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent className="raleway-semibold text-xl">
-                                  <SelectItem value="Spanish">
-                                    Random
+                                  <SelectItem value="Standard">
+                                    Standard
                                   </SelectItem>
-                                  <SelectItem value="German">Random</SelectItem>
-                                  <SelectItem value="Arabic">Random</SelectItem>
+                                  <SelectItem value="Medium">Medium</SelectItem>
+                                  <SelectItem value="Small">Small</SelectItem>
                                 </SelectContent>
                               </Select>
-                              <FormDescription></FormDescription>
-                              <FormMessage />
                             </FormItem>
                           )}
                         />
@@ -195,49 +185,35 @@ const BookPrintingOptions = () => {
                           control={form.control}
                           name="quantity"
                           render={({ field }) => (
-                            <FormItem>
-                              <FormItem className="flex justify-between items-center">
-                                <FormLabel className="text-xl lg:text-2xl arvo-bold ">
-                                  Quantity
-                                </FormLabel>
-                              </FormItem>
+                            <FormItem className="flex justify-between items-center">
+                              <FormLabel className="text-xl lg:text-2xl arvo-bold ">
+                                Quantity
+                              </FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="05"
                                   {...field}
                                   type="number"
                                   className="block w-full px-4 py-3  h-[50px] rounded-[40px] raleway-semibold text-xl  "
-                                  value={value}
-                                  onChange={handleChange}
-                                  icon={
-                                    <InputNumberIcon
-                                      onIncrement={handleIncrement}
-                                      onDecrement={handleDecrement}
-                                      py="py-[10px]"
-                                    />
-                                  }
+                                  min="1"
                                 />
                               </FormControl>
                               <FormDescription className="text-end space-x-2">
                                 <span className=" text-primary1-blue raleway-medium">
-                                  $11.36
+                                  {subTotal}
                                 </span>
-                                <span>$0.4 / unit</span>
+                                <span>{unitPrice}</span>
                               </FormDescription>
-                              <FormMessage />
                             </FormItem>
                           )}
                         />
                         <FormField
                           control={form.control}
-                          name="select-country"
+                          name="country"
                           render={({ field }) => (
-                            <FormItem>
-                              <FormItem className="flex justify-between items-center">
-                                <FormLabel className="text-xl mt-[-20px] lg:text-2xl arvo-bold ">
-                                  Select Country
-                                </FormLabel>
-                              </FormItem>
+                            <FormItem className="flex justify-between items-center">
+                              <FormLabel className="text-xl mt-[-20px] lg:text-2xl arvo-bold ">
+                                Select Country
+                              </FormLabel>
                               <Select
                                 onValueChange={field.onChange}
                                 defaultValue={field.value}
@@ -259,21 +235,17 @@ const BookPrintingOptions = () => {
                                   </SelectItem>
                                 </SelectContent>
                               </Select>
-                              <FormDescription></FormDescription>
-                              <FormMessage />
                             </FormItem>
                           )}
                         />
                         <FormField
                           control={form.control}
-                          name="select-city"
+                          name="city_region"
                           render={({ field }) => (
-                            <FormItem>
-                              <FormItem className="flex justify-between items-center">
-                                <FormLabel className="text-xl lg:text-2xl arvo-bold ">
-                                  Select City/Region
-                                </FormLabel>
-                              </FormItem>
+                            <FormItem className="flex justify-between items-center">
+                              <FormLabel className="text-xl lg:text-2xl arvo-bold ">
+                                Select City/Region
+                              </FormLabel>
                               <Select
                                 onValueChange={field.onChange}
                                 defaultValue={field.value}
@@ -295,21 +267,17 @@ const BookPrintingOptions = () => {
                                   </SelectItem>
                                 </SelectContent>
                               </Select>
-                              <FormDescription></FormDescription>
-                              <FormMessage />
                             </FormItem>
                           )}
                         />
                         <FormField
                           control={form.control}
-                          name="address"
+                          name="delivery_address"
                           render={({ field }) => (
-                            <FormItem>
-                              <FormItem className="flex justify-between items-center">
-                                <FormLabel className="text-xl lg:text-2xl arvo-bold ">
-                                  Delivery Address
-                                </FormLabel>
-                              </FormItem>
+                            <FormItem className="flex justify-between items-center">
+                              <FormLabel className="text-xl lg:text-2xl arvo-bold ">
+                                Delivery Address
+                              </FormLabel>
                               <FormControl>
                                 <Input
                                   placeholder="Example"
@@ -325,14 +293,13 @@ const BookPrintingOptions = () => {
                         />
                         <FormField
                           control={form.control}
-                          name="postalCode"
+                          name="postal_code"
                           render={({ field }) => (
-                            <FormItem>
-                              <FormItem className="flex justify-between items-center">
-                                <FormLabel className="text-xl lg:text-2xl arvo-bold ">
-                                  Postcode/AreaCode
-                                </FormLabel>
-                              </FormItem>
+                            <FormItem className="flex justify-between items-center">
+                              <FormLabel className="text-xl lg:text-2xl arvo-bold ">
+                                Postcode/AreaCode
+                              </FormLabel>
+
                               <FormControl>
                                 <Input
                                   placeholder="Example"
@@ -341,19 +308,15 @@ const BookPrintingOptions = () => {
                                   className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
                                 />
                               </FormControl>
-                              <FormDescription></FormDescription>
-                              <FormMessage />
                             </FormItem>
                           )}
                         />
-                        <NavLink
-                          to="/dashboard/order"
-                          className="flex justify-center"
+                        <Button
+                          className="bg-[#F15084] lg:w-[357px] lg:h-[64px] rounded-[32px] lg:px-[88px] w-[300px] h-[50px] px-[60px] hover:bg-transparent hover:text-primary1-pink hover:border hover:border-primary1-pink text-2xl leading-7 mt-6 arvo-regular"
+                          type="submit"
                         >
-                          <Button className="bg-[#F15084] lg:w-[357px] lg:h-[64px] rounded-[32px] lg:px-[88px] w-[300px] h-[50px] px-[60px] hover:bg-transparent hover:text-primary1-pink hover:border hover:border-primary1-pink text-2xl leading-7 mt-6 arvo-regular">
-                            Place Order
-                          </Button>
-                        </NavLink>
+                          Place Order
+                        </Button>
                       </form>
                     </Form>
                   </div>

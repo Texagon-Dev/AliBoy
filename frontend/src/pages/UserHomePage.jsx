@@ -22,24 +22,28 @@ const UserHomePage = () => {
         </div>
         <div className="w-full flex flex-wrap justify-center gap-10  ">
           <StoryCard
+            storyBookId="1"
             image={cardImage}
             title={"Ocean Odyssey"}
             button1={"View Details"}
             button2={"Print Book"}
           />
           <StoryCard
+            storyBookId="2"
             image={cardImage}
             title={"Ocean Odyssey"}
             button1={"View Details"}
             button2={"Print Book"}
           />
           <StoryCard
+            storyBookId="3"
             image={cardImage}
             title={"Ocean Odyssey"}
             button1={"View Details"}
             button2={"Print Book"}
           />
           <StoryCard
+            storyBookId="4"
             image={cardImage}
             title={"Ocean Odyssey"}
             button1={"View Details"}

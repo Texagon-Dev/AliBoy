@@ -22,7 +22,6 @@ import { useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import StoryGenerationLoading from "./StoryGenerationLoading";
-import InputNumberIcon from "@/components/InputNumberIcon";
 
 const StoryGeneration = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,31 +29,17 @@ const StoryGeneration = () => {
 
   const handleGenerate = () => {
     setIsLoading(true);
-    
 
     setTimeout(() => {
       navigate("/dashboard/storypage");
     }, 5000);
   };
 
-  const [value, setValue] = useState(5);
-
-  const handleChange = (e) => {
-    setValue(parseInt(e.target.value) || 0);
-    const newValue = parseInt(e.target.value) || 0;
-    setValue(newValue >= 0 ? newValue : 0);
-  };
-
-  const handleIncrement = () => {
-    setValue(value + 1);
-  };
-
-  const handleDecrement = () => {
-    if (value > 0) {
-      setValue(value - 1);
-    }
-  };
-  const form = useForm();
+  const form = useForm({
+    defaultValues: {
+      chapters: 1,
+    },
+  });
 
   return (
     <>
@@ -93,19 +78,10 @@ const StoryGeneration = () => {
                       </FormItem>
                       <FormControl>
                         <Input
-                          placeholder="05"
                           {...field}
                           type="number"
                           className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
-                          value={value}
-                          onChange={handleChange}
-                          icon={
-                            <InputNumberIcon
-                              onIncrement={handleIncrement}
-                              onDecrement={handleDecrement}
-                              py="py-[10px]"
-                            />
-                          }
+                          min="1"
                         />
                       </FormControl>
                       <FormDescription></FormDescription>
