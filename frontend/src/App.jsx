@@ -4,8 +4,8 @@ import LandingPage from "./pages/LandingPage";
 import GenreSelection from "./pages/GenreSelection";
 import Dashboard from "./pages/Dashboard";
 import Pricing from "./pages/Pricing";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
+import SignIn from "./pages/auth/login";
+import SignUp from "./pages/auth/signup";
 import StoryDetails from "./pages/StoryDetails";
 import StoryGeneration from "./pages/StoryGeneration";
 import StoryGenerationLoading from "./pages/StoryGenerationLoading";
@@ -23,10 +23,24 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="signup" element={<SignUp />} />
+          {
+            /*
+              Checked and Verified Till Here
+            */
+          }
+          {
+            /*
+              url/dashboards
+            */
+          }
+
           <Route path="signin" element={<SignIn />} />
+          <Route path="signup" element={<SignUp />} />
+          
+
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="adminlogin" element={<AdminLoginPage />} />
+
           <Route path="/" element={<RootLayout />}>
             <Route index element={<LandingPage />} />
             <Route path="user" element={<UserHomePage />} />
@@ -51,10 +65,12 @@ function App() {
             />
             <Route path="pricing" element={<Pricing />} />
           </Route>
+
           <Route
             path="create/generateloading"
             element={<StoryGenerationLoading />}
           />
+
         </Routes>
       </BrowserRouter>
     </>

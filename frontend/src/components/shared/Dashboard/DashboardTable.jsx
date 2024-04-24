@@ -11,7 +11,7 @@ import {
 import DashboardOrderDetails from "./DashboardOrderDetails";
 import { useSelector,  useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { fetchCustomerOrders } from "@/app/customerOrdersSlice";
+import { fetchCustomerOrders } from "@/redux/features/customerOrdersSlice";
 
 
 const DashboardTable = () => {
