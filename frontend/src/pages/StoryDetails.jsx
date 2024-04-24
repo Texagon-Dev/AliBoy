@@ -23,10 +23,7 @@ import { useDropzone } from "react-dropzone";
 const StoryDetails = () => {
   const [selectedValue, setSelectedValue] = useState("option-one");
 
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-    console.log(selectedValue)
-  };
+
 
   const [file, setFile] = useState(null);
   const { getRootProps, getInputProps } = useDropzone({
