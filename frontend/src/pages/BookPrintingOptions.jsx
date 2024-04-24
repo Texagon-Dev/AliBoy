@@ -23,8 +23,8 @@ import {
 } from "@/components/ui/select";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { setPrintingOrder } from "@/app/bookPrintingSlice";
-import calculateOrderPricing from "@/utils/calculateOrderPricing";
+import { setPrintingOrder } from "@/redux/features/bookPrintingSlice";
+import calculateOrderPricing from "@/lib/calculateOrderPricing";
 
 const BookPrintingOptions = () => {
   const [searchParams] = useSearchParams();

@@ -23,10 +23,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useDispatch, useSelector } from "react-redux";
-import { createCustomerOrder } from "@/app/customerOrdersSlice";
+import { createCustomerOrder } from "@/redux/features/customerOrdersSlice";
 import { useEffect, useState } from "react";
-import { setPrintingOrder } from "@/app/bookPrintingSlice";
-import calculateOrderPricing from "@/utils/calculateOrderPricing";
+import { setPrintingOrder } from "@/redux/features/bookPrintingSlice";
+import calculateOrderPricing from "@/lib/calculateOrderPricing";
 
 const CheckoutPage = () => {
   const dispatch = useDispatch();
@@ -45,9 +45,8 @@ const CheckoutPage = () => {
     setOrderPricing(calculateOrderPricing(form.getValues()));
   }, [form, watchQuantity]);
 
-  const { unitPrice, subTotal, grandTotal, discountPrice, shippingPrice } = orderPricing;
-
-
+  const { unitPrice, subTotal, grandTotal, discountPrice, shippingPrice } =
+    orderPricing;
 
   const navigate = useNavigate();
   const onSubmit = (confirmedOrder) => {
@@ -233,7 +232,7 @@ const CheckoutPage = () => {
                           Discount
                         </p>
                         <span className="text-primary1-blue raleway-bold text-xl">
-                          ${ discountPrice.toFixed(2)}
+                          ${discountPrice.toFixed(2)}
                         </span>
                       </div>
                       <div className="flex justify-between py-2">
