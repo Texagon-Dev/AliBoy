@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import play from "../assets/Images/play.png";
 import upload from "../assets/Images/upload.png";
@@ -23,33 +23,38 @@ import { useDropzone } from "react-dropzone";
 const StoryDetails = () => {
   const [selectedValue, setSelectedValue] = useState("option-one");
 
-
-
   const [file, setFile] = useState(null);
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/png, image/jpeg", // Accept any image MIME type
-    maxFiles: 1,
-    maxSize: 5 * 1024 * 1024,
-    onDrop: (acceptedFiles, rejectedFiles) => {
-      if (rejectedFiles.length > 0) {
-        // Set the error message in the form
-        console.log("Rejected files:", rejectedFiles);
-        form.setError("file", {
-          type: "manual",
-          message:
-            "Invalid file type or extension. Please upload an image file.",
-        });
-        return;
+  const [error, setError] = useState("");
+
+  const onDrop = useCallback((acceptedFiles, fileRejections) => {
+    if (fileRejections.length > 0) {
+      // Handling errors if the file is rejected
+      setError(
+        "Invalid file type or file too large. Please upload a PNG or JPEG image within 5MB."
+      );
+    } else if (acceptedFiles.length > 0) {
+      const file = acceptedFiles[0];
+      // Check file type on client side as additional verification
+      if (file.type === "image/jpeg" || file.type === "image/png") {
+        setError("");
+        setFile(file);
+      } else {
+        setError("Only PNG or JPEG files are allowed.");
+        setFile(null);
       }
-      // Clear the error message
-      form.clearErrors("file");
-      // Set the accepted file
-      setFile(acceptedFiles[0]);
-    },
+    }
+  }, []);
+
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: "image/png, image/jpeg", // Accepts only PNG and JPEG
+    maxFiles: 1,
+    maxSize: 5 * 1024 * 1024, // 5MB limit
+    onDrop,
   });
+
   const form = useForm();
   return (
-    <section className="container mx-auto mt-[140px] mb-10">
+    <section className="container mx-auto  mb-10 lg:mt-[120px] md:mt-[100px] mt-[80px]">
       <div className="w-full flex justify-center items-center text-4xl text-center flex-col lg:text-[64px] lg:leading-[58px] font-bold mb-10">
         <div className="w-full  mb-8">
           <h1 className="text-primary1-blue text-3xl lg:text-5xl md:text-4xl arvo-bold leading-[59px] ">
@@ -276,7 +281,9 @@ const StoryDetails = () => {
                     className="min-h-[102px] border-[#FAC0D3]  border-solid border-2 rounded-lg flex items-center justify-center cursor-pointer"
                   >
                     <Input {...getInputProps()} />
-                    {file ? (
+                    {error ? (
+                      <div className="text-red-700 md:w-full w-1/2 text-center raleway-medium text-xs md:text-[18px]  mx-auto">{error}</div>
+                    ) : file ? (
                       <img
                         src={URL.createObjectURL(file)}
                         alt="Uploaded"

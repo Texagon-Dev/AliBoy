@@ -16,7 +16,7 @@ const SignIn = () => {
 
 return <div className="grid h-screen grid-cols-2">
     {/* LEFT IMAGE SECTION */}
-    <section className="relative hidden px-12 md:grid bg-primary size-full place-content-center">
+    <section className="relative hidden px-12 md:grid bg-primary size-full place-content-center ">
       <h2 className="absolute text-6xl text-white arvo-bold top-5 left-5">LOGO</h2>
       <img
         width={612}
@@ -25,7 +25,7 @@ return <div className="grid h-screen grid-cols-2">
       />
     </section>
     {/* RIGHT FORM SECTION */}
-    <section className="container flex flex-col items-start col-span-2 text-left size-full md:col-span-1 ">
+    <section className="container flex flex-col items-start justify-center col-span-2 text-left size-full md:col-span-1 ">
 
       <Form>
         <form className="w-full max-w-lg mx-auto my-12 md:my-auto " >

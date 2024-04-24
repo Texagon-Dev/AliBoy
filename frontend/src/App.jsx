@@ -17,26 +17,22 @@ import BookPrintingOptions from "./pages/BookPrintingOptions";
 import CheckoutPage from "./pages/CheckoutPage";
 import UserProfile from "./pages/UserProfile";
 import AdminLoginPage from "./pages/AdminLoginPage";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          {
-            /*
+          {/*
               Checked and Verified Till Here
-            */
-          }
-          {
-            /*
+            */}
+          {/*
               url/dashboards
-            */
-          }
+            */}
 
           <Route path="signin" element={<SignIn />} />
           <Route path="signup" element={<SignUp />} />
-          
 
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="adminlogin" element={<AdminLoginPage />} />
@@ -65,12 +61,11 @@ function App() {
             />
             <Route path="pricing" element={<Pricing />} />
           </Route>
-
+          <Route path="*" element={<NotFound />} />
           <Route
             path="create/generateloading"
             element={<StoryGenerationLoading />}
           />
-
         </Routes>
       </BrowserRouter>
     </>

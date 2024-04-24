@@ -24,10 +24,10 @@ const genres = [
 const GenreSelection = () => {
   const [selectedGenre, setSelectedGenre] = useState(0);
   return (
-    <section className="container mx-auto mt-[140px]">
-      <div className="w-full flex justify-center items-center text-4xl text-center flex-col lg:text-[64px] lg:leading-[58px] font-bold mb-6">
+    <section className="container mx-auto lg:mt-[120px] md:mt-[100px] mt-[80px]">
+      <div className="w-full flex justify-center items-center text-center flex-col   ">
         <div className="w-full lg:w-[80%] mb-8">
-          <h1 className="text-primary1-blue text-3xl lg:text-5xl md:text-4xl arvo-bold leading-[59px]">
+          <h1 className="text-primary1-blue text-2xl lg:text-5xl md:text-4xl arvo-bold leading-[59px]">
             Explore Diverse Story Genres
           </h1>
           <p className="text-xl lg:text-[28px]  leading-8 text-[#6B6D6E] raleway-medium py-4">
@@ -44,8 +44,8 @@ const GenreSelection = () => {
               }`}
               onClick={() => setSelectedGenre(index)}
             >
-              <img className="mb-1" src={genre.image} alt={genre.name} />
-              <div className="text-2xl  tracking-tighter mb-4 raleway-bold">
+              <img className="mb-2 " src={genre.image} alt={genre.name}  />
+              <div className="text-xl md:text-2xl  tracking-tighter mb-4 raleway-bold">
                 {genre.name}
               </div>
             </button>

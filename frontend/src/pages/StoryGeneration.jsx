@@ -46,7 +46,7 @@ const StoryGeneration = () => {
       {isLoading ? (
         <StoryGenerationLoading />
       ) : (
-        <section className="container mx-auto mt-[140px] mb-10">
+        <section className="container mx-auto lg:mt-[120px] md:mt-[100px] mt-[80px] mb-10">
           <div className="w-full flex justify-center items-center text-4xl text-center flex-col lg:text-[64px] lg:leading-[58px] font-bold mb-10">
             <div className="w-full  mb-8">
               <h1 className="text-primary1-blue text-3xl lg:text-5xl md:text-4xl arvo-bold leading-[59px] ">
