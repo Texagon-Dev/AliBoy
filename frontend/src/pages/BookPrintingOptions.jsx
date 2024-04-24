@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { addBookPrintingOrder } from "@/app/bookPrintingSlice";
+import { addBookPrintingOrder } from "@/redux/features/bookPrintingSlice";
 import { useDispatch } from "react-redux";
 
 const BookPrintingOptions = () => {
