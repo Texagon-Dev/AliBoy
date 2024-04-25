@@ -26,10 +26,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          
-
           {/* Auth */}
-
           <Route path="signin" element={<SignIn />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="reset-password" element={<ResetPassword />} />

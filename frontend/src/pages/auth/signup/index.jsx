@@ -3,9 +3,68 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
+import supabase from "@/lib/supabase";
+import { useForm } from "react-hook-form";
+import { Link, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
 
 const SignUp = () => {
+  const location = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
+  const searchParams = new URLSearchParams(location.search);
+  const to = searchParams.get("to") || "";
+  const validationSchema = Yup.object().shape({
+    fullname: Yup.string().required("Full name is required"),
+    dob: Yup.date().required("Date of birth is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters long")
+      .required("Password is required"),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+    mode: "onTouched",
+  });
+
+  const handleSignUp = async (data) => {
+    console.log(data)
+    setIsLoading(true);
+    try {
+      const { error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            full_name: data.fullname,
+            dob: data.dob,
+          },
+        },
+      });
+
+      if (error) throw error;
+
+      toast.success(
+        "Registration successful. Check your email to verify your account."
+      );
+      reset();
+    } catch (error) {
+      toast.error(`Signup failed: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="grid h-screen grid-cols-2">
       {/* LEFT IMAGE SECTION */}
@@ -24,7 +83,10 @@ const SignUp = () => {
       {/* RIGHT FORM SECTION */}
       <section className="container flex flex-col items-start justify-center col-span-2 text-left size-full md:col-span-1 ">
         <Form>
-          <form className="w-full max-w-lg mx-auto my-12 md:my-auto ">
+          <form
+            onSubmit={handleSubmit(handleSignUp)}
+            className="w-full max-w-lg mx-auto my-12 md:my-auto "
+          >
             <div className="mb-8 space-y-4 leading-relaxed">
               <h1 className="text-4xl arvo-bold">Account Signup</h1>
               <p className="text-xl text-muted">
@@ -41,13 +103,21 @@ const SignUp = () => {
                 placeholder="Full Name ex: John Doe"
                 id="fullname"
                 className="p-2 border rounded-full"
+                {...register("fullname")}
               />
+              {errors.fullName && <p>{errors.fullName.message}</p>}
             </div>
             <div className="my-6">
               <Label className="arvo-bold" htmlFor="dob">
                 Date of birth
               </Label>
-              <Input type="date" id="dob" className="p-2 border rounded-full" />
+              <Input
+                type="date"
+                id="dob"
+                className="p-2 border rounded-full"
+                {...register("dob")}
+              />
+              {errors.dob && <p>{errors.dob.message}</p>}
             </div>
             <div className="my-6">
               <Label className="arvo-bold" htmlFor="email">
@@ -58,7 +128,9 @@ const SignUp = () => {
                 placeholder="user@email.com"
                 id="email"
                 className="p-2 border rounded-full"
+                {...register("email")}
               />
+              {errors.email && <p>{errors.email.message}</p>}
             </div>
             <div className="my-6">
               <Label className="arvo-bold" htmlFor="password">
@@ -69,11 +141,13 @@ const SignUp = () => {
                 placeholder="Pa$$word"
                 id="password"
                 className="p-2 border rounded-full"
+                {...register("password")}
               />
+              {errors.password && <p>{errors.password.message}</p>}
             </div>
 
             <div className="flex items-center my-6 space-x-2">
-              <Checkbox />
+              <Checkbox {...register("terms")} />
               <Label
                 htmlFor="terms"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -82,7 +156,9 @@ const SignUp = () => {
               </Label>
             </div>
 
-            <Button className="w-full rounded-full">Sign Up</Button>
+            <Button className="w-full rounded-full" disabled={isLoading}>
+              Sign Up
+            </Button>
 
             <p className="my-6 text-center text-muted">
               Already have an account ?{" "}

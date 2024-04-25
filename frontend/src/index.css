@@ -146,3 +146,13 @@
   font-weight: 700;
   font-style: normal;
 }
+html {
+  scrollbar-gutter: stable;
+}
+body {
+  margin: 0;
+}
+
+body[style][data-scroll-locked] {
+  margin-right: 0px !important;
+}
