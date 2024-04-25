@@ -123,39 +123,41 @@ const BookPrintingOptions = () => {
                           control={form.control}
                           name="binding_name"
                           render={({ field }) => (
-                            <FormItem className="flex justify-between items-center">
-                              <FormLabel className="text-xl lg:text-2xl arvo-bold ">
-                                Select Your Binding
-                              </FormLabel>
-                              <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <FormControl className="  px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl">
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Perfect Bound" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent className="raleway-semibold text-xl">
-                                  <SelectItem value="Perfect Bound">
-                                    Perfect Bound
-                                  </SelectItem>
-                                  <SelectItem value="Spiral Binding">
-                                    Spiral Binding
-                                  </SelectItem>
-                                  <SelectItem value="Case Binding">
-                                    Case Binding
-                                  </SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </FormItem>
+                     
+                              <FormItem>
+                                <FormLabel className="text-xl lg:text-2xl arvo-bold ">
+                                  Select Your Binding
+                                </FormLabel>
+                                <Select
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <FormControl className="  px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl">
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Perfect Bound" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent className="raleway-semibold text-xl">
+                                    <SelectItem value="Perfect Bound">
+                                      Perfect Bound
+                                    </SelectItem>
+                                    <SelectItem value="Spiral Binding">
+                                      Spiral Binding
+                                    </SelectItem>
+                                    <SelectItem value="Case Binding">
+                                      Case Binding
+                                    </SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </FormItem>
+                            
                           )}
                         />
                         <FormField
                           control={form.control}
                           name="title_size"
                           render={({ field }) => (
-                            <FormItem className="flex justify-between items-center">
+                            <FormItem >
                               <FormLabel className="text-xl lg:text-2xl arvo-bold ">
                                 Select Title Size
                               </FormLabel>
@@ -184,7 +186,7 @@ const BookPrintingOptions = () => {
                           control={form.control}
                           name="quantity"
                           render={({ field }) => (
-                            <FormItem className="flex justify-between items-center">
+                            <FormItem >
                               <FormLabel className="text-xl lg:text-2xl arvo-bold ">
                                 Quantity
                               </FormLabel>
@@ -209,7 +211,7 @@ const BookPrintingOptions = () => {
                           control={form.control}
                           name="country"
                           render={({ field }) => (
-                            <FormItem className="flex justify-between items-center">
+                            <FormItem >
                               <FormLabel className="text-xl mt-[-20px] lg:text-2xl arvo-bold ">
                                 Select Country
                               </FormLabel>
@@ -241,7 +243,7 @@ const BookPrintingOptions = () => {
                           control={form.control}
                           name="city_region"
                           render={({ field }) => (
-                            <FormItem className="flex justify-between items-center">
+                            <FormItem >
                               <FormLabel className="text-xl lg:text-2xl arvo-bold ">
                                 Select City/Region
                               </FormLabel>
@@ -273,7 +275,7 @@ const BookPrintingOptions = () => {
                           control={form.control}
                           name="delivery_address"
                           render={({ field }) => (
-                            <FormItem className="flex justify-between items-center">
+                            <FormItem >
                               <FormLabel className="text-xl lg:text-2xl arvo-bold ">
                                 Delivery Address
                               </FormLabel>
@@ -294,7 +296,7 @@ const BookPrintingOptions = () => {
                           control={form.control}
                           name="postal_code"
                           render={({ field }) => (
-                            <FormItem className="flex justify-between items-center">
+                            <FormItem>
                               <FormLabel className="text-xl lg:text-2xl arvo-bold ">
                                 Postcode/AreaCode
                               </FormLabel>
@@ -310,12 +312,14 @@ const BookPrintingOptions = () => {
                             </FormItem>
                           )}
                         />
+                        <div className="text-center">
                         <Button
-                          className="bg-[#F15084] lg:w-[357px] lg:h-[64px] rounded-[32px] lg:px-[88px] w-[300px] h-[50px] px-[60px] hover:bg-transparent hover:text-primary1-pink hover:border hover:border-primary1-pink text-2xl leading-7 mt-6 arvo-regular"
+                          className="bg-[#F15084] lg:w-[357px] lg:h-[64px] rounded-[32px] lg:px-[88px] w-[300px] h-[50px] px-[60px] hover:bg-transparent hover:text-primary1-pink hover:border hover:border-primary1-pink text-2xl leading-7 mt-6 arvo-regular "
                           type="submit"
                         >
                           Place Order
-                        </Button>
+                          </Button>
+                          </div>
                       </form>
                     </Form>
                   </div>

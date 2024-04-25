@@ -1,5 +1,11 @@
 .hero {
-    clip-path: circle(120.5% at 51% -64%);
+    clip-path: circle(114.5% at 51% -64%);
+}
+
+@media screen and (max-width: 1100px) {
+.hero {
+    clip-path: circle(140.5% at 51% -64%);
+}
 }
 @media screen and (max-width: 768px) {
     .hero{
