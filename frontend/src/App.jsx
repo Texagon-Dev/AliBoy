@@ -20,6 +20,8 @@ import AdminLoginPage from "./pages/AdminLoginPage";
 import NotFound from "./pages/NotFound";
 import ResetPassword from "./pages/auth/fc";
 import UpdatePassword from "./pages/auth/fc/UpdatePassword";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -70,6 +72,7 @@ function App() {
           />
         </Routes>
       </BrowserRouter>
+      <ToastContainer autoClose={2000} toastStyle={{ marginTop: "70px" }} />
     </>
   );
 }

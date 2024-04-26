@@ -5,16 +5,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import supabase from "@/lib/supabase";
 import { useForm } from "react-hook-form";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 
 const SignUp = () => {
-  const location = useLocation();
+  
   const [isLoading, setIsLoading] = useState(false);
-  const searchParams = new URLSearchParams(location.search);
+ const [searchParams] = useSearchParams();
   const to = searchParams.get("to") || "";
   const validationSchema = Yup.object().shape({
     fullname: Yup.string().required("Full name is required"),
@@ -38,7 +38,7 @@ const SignUp = () => {
   });
 
   const handleSignUp = async (data) => {
-    console.log(data)
+    console.log(data);
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.signUp({
@@ -49,6 +49,7 @@ const SignUp = () => {
             full_name: data.fullname,
             dob: data.dob,
           },
+          emailRedirectTo: window.location.origin + to,
         },
       });
 
@@ -105,7 +106,9 @@ const SignUp = () => {
                 className="p-2 border rounded-full"
                 {...register("fullname")}
               />
-              {errors.fullName && <p>{errors.fullName.message}</p>}
+              {errors.fullname && (
+                <p className="text-red-600">{errors.fullname.message}</p>
+              )}
             </div>
             <div className="my-6">
               <Label className="arvo-bold" htmlFor="dob">
@@ -117,7 +120,9 @@ const SignUp = () => {
                 className="p-2 border rounded-full"
                 {...register("dob")}
               />
-              {errors.dob && <p>{errors.dob.message}</p>}
+              {errors.dob && (
+                <p className="text-red-600">{errors.dob.message}</p>
+              )}
             </div>
             <div className="my-6">
               <Label className="arvo-bold" htmlFor="email">
@@ -130,7 +135,9 @@ const SignUp = () => {
                 className="p-2 border rounded-full"
                 {...register("email")}
               />
-              {errors.email && <p>{errors.email.message}</p>}
+              {errors.email && (
+                <p className="text-red-600">{errors.email.message}</p>
+              )}
             </div>
             <div className="my-6">
               <Label className="arvo-bold" htmlFor="password">
@@ -143,11 +150,13 @@ const SignUp = () => {
                 className="p-2 border rounded-full"
                 {...register("password")}
               />
-              {errors.password && <p>{errors.password.message}</p>}
+              {errors.password && (
+                <p className="text-red-600">{errors.password.message}</p>
+              )}
             </div>
 
             <div className="flex items-center my-6 space-x-2">
-              <Checkbox {...register("terms")} />
+              <Checkbox />
               <Label
                 htmlFor="terms"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
