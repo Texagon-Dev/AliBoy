@@ -1,10 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import bookPrintingOrderReducer from "./features/bookPrintingSlice";
 import customerOrdersReducer from "./features/customerOrdersSlice";
+import userReducer from "./features/userSlice";
 
-export default configureStore({
+const store = configureStore({
   reducer: {
-		bookPrintingOrders: bookPrintingOrderReducer,
-		customerOrders: customerOrdersReducer
+    bookPrintingOrders: bookPrintingOrderReducer,
+    customerOrders: customerOrdersReducer,
+    user: userReducer,
   },
 });
+
+export default store;

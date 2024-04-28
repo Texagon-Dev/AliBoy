@@ -20,6 +20,7 @@ const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const to = searchParams.get("to") || "";
+  
 
   const form = useForm();
 
@@ -30,7 +31,7 @@ const SignIn = () => {
         email: data.email,
         password: data.password,
       });
-
+      console.log(data);
       if (error) {
         console.error("Login error:", error.message || "Unknown error");
         toast.error(`Login error: ${error.message || "Unknown error"}`);

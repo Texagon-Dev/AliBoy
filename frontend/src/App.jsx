@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import RootLayout from "./layout/RootLayout";
 import LandingPage from "./pages/LandingPage";
 import GenreSelection from "./pages/GenreSelection";
@@ -22,6 +22,7 @@ import ResetPassword from "./pages/auth/fc";
 import UpdatePassword from "./pages/auth/fc/UpdatePassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProtectedRoutes from "./lib/ProtectedRoutes";
 
 function App() {
   return (
@@ -29,8 +30,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* Auth */}
-          <Route path="signin" element={<SignIn />} />
+
           <Route path="signup" element={<SignUp />} />
+          <Route path="signin" element={<SignIn />} />
           <Route path="reset-password" element={<ResetPassword />} />
           <Route path="update-password" element={<UpdatePassword />} />
           {/* Dashboard */}
@@ -40,7 +42,9 @@ function App() {
           <Route path="/" element={<RootLayout />}>
             <Route index element={<LandingPage />} />
             {/* User */}
-            <Route path="user" element={<UserHomePage />} />
+            <Route element={<ProtectedRoutes />}>
+              <Route path="/user" element={<UserHomePage />} />
+            </Route>
             <Route path="user/profile" element={<UserProfile />} />
             {/* Story Creation */}
             <Route path="create/begin" element={<GenreSelection />} />

@@ -1,13 +1,16 @@
 import StoryCard from "@/components/StoryCard";
 import { Button } from "@/components/ui/button";
 import cardImage from "../assets/Images/cardimage.png";
+import { useSelector } from "react-redux";
 
 const UserHomePage = () => {
+    const { session } = useSelector((state) => state.user);
+
 	return (
     <section className="container mx-auto w-full mt-[100px] lg:mt-[140px] mb-10 lg:w-[1280px] ">
       <div className="flex flex-col justify-center w-full mx-auto">
         <h1 className="w-full mx-auto text-center lg:text-start text-primary1-blue text-3xl lg:text-5xl md:text-4xl arvo-bold leading-[59px] ">
-          Hello! John
+          Hello! {session.user.user_metadata.full_name}
         </h1>
         <div className="flex flex-col lg:flex-row lg:justify-between mb-8 lg:text-start justify-center ">
           <p className=" text-xl lg:text-[28px] leading-8 text-[#6B6D6E] lg:w-[70%] raleway-medium py-4 ">

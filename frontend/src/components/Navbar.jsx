@@ -2,8 +2,10 @@ import { NavLink } from "react-router-dom";
 import logo from "../assets/Images/Ellipse.png";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+   const { session } = useSelector((state) => state.user);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
   const toggleNavbar = () => {
@@ -48,9 +50,15 @@ const Navbar = () => {
             <li>
               <NavLink to="/pricing">Pricing</NavLink>
             </li>
-            <li>
-              <NavLink to="/signup">Signup</NavLink>
-            </li>
+            {session && session.user  ? (
+              <li>
+                <NavLink to="/signin">Logout</NavLink>
+              </li>
+            ) : (
+              <li>
+                <NavLink to="/signup">Signup</NavLink>
+              </li>
+            )}
           </ul>
           <div className="lg:hidden md:flex flex-col justify-end">
             <button onClick={toggleNavbar}>
