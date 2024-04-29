@@ -13,12 +13,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import play from "../assets/Images/play.png";
 import upload from "../assets/Images/upload.png";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
+import { addStory } from "@/redux/features/storySlice";
+import { useDispatch } from "react-redux";
 
 const StoryDetails = () => {
   const [selectedValue, setSelectedValue] = useState("option-one");
@@ -27,17 +29,16 @@ const StoryDetails = () => {
   const [error, setError] = useState("");
 
   const onDrop = useCallback((acceptedFiles, fileRejections) => {
+    console.log(acceptedFiles, "Accepted files: ");
     if (fileRejections.length > 0) {
-      // Handling errors if the file is rejected
       setError(
         "Invalid file type or file too large. Please upload a PNG or JPEG image within 5MB."
       );
-    } else if (acceptedFiles.length > 0) {
-      const file = acceptedFiles[0];
-      // Check file type on client side as additional verification
-      if (file.type === "image/jpeg" || file.type === "image/png") {
+    } else {
+      const newFile = acceptedFiles[0];
+      if (newFile.type === "image/jpeg" || newFile.type === "image/png") {
         setError("");
-        setFile(file);
+        setFile(newFile);
       } else {
         setError("Only PNG or JPEG files are allowed.");
         setFile(null);
@@ -46,13 +47,49 @@ const StoryDetails = () => {
   }, []);
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/png, image/jpeg", // Accepts only PNG and JPEG
-    maxFiles: 1,
-    maxSize: 5 * 1024 * 1024, // 5MB limit
     onDrop,
+    accept: "image/jpeg, image/png",
+    maxFiles: 1,
+    maxSize: 5242880, // 5MB
   });
 
-  const form = useForm();
+  const onSubmit = (data) => {
+    console.log(file, "file in on submit");
+    const storyData = {
+      storyBookId: Date.now().toString(),
+      story_explanation: data.story_explanation,
+      character_explanation: data.character_explanation,
+      storyLength: data.radio_group,
+      image: file ? URL.createObjectURL(file) : undefined,
+    };
+
+    dispatch(addStory(storyData));
+    console.log(storyData);
+    navigate("/create/generate");
+  };
+
+  useEffect(() => {
+    return () => {
+      if (file) {
+        URL.revokeObjectURL(file);
+      }
+    };
+  }, [file]);
+  const dispatch = useDispatch();
+
+  const form = useForm({
+    defaultValues: {
+      story_explanation: "",
+      character_explanation: "",
+      radio_group: "option-one",
+      file: file ? URL.createObjectURL(file) : undefined,
+    },
+  });
+
+  
+
+  const navigate = useNavigate();
+
   return (
     <section className="container mx-auto  mb-10 lg:mt-[120px] md:mt-[100px] mt-[80px]">
       <div className="w-full flex justify-center items-center text-4xl text-center flex-col lg:text-[64px] lg:leading-[58px] font-bold mb-10">
@@ -71,12 +108,12 @@ const StoryDetails = () => {
       <div className="flex justify-center">
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit()}
+            onSubmit={form.handleSubmit(onSubmit)}
             className="lg:w-[68%] w-full space-y-6"
           >
             <FormField
               control={form.control}
-              name="story-explanation"
+              name="story_explanation"
               render={({ field }) => (
                 <FormItem>
                   <FormItem className="flex justify-between items-center">
@@ -142,7 +179,7 @@ const StoryDetails = () => {
             />
             <FormField
               control={form.control}
-              name="character-explanation"
+              name="character_explanation"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-xl lg:text-2xl arvo-bold  ">
@@ -184,7 +221,7 @@ const StoryDetails = () => {
             />
             <FormField
               control={form.control}
-              name="radio-group"
+              name="radio_group"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-xl lg:text-2xl arvo-bold  ">
@@ -282,12 +319,14 @@ const StoryDetails = () => {
                   >
                     <Input {...getInputProps()} />
                     {error ? (
-                      <div className="text-red-700 md:w-full w-1/2 text-center raleway-medium text-xs md:text-[18px]  mx-auto">{error}</div>
+                      <div className="text-red-700 md:w-full w-1/2 text-center raleway-medium text-xs md:text-[18px]  mx-auto">
+                        {error}
+                      </div>
                     ) : file ? (
                       <img
                         src={URL.createObjectURL(file)}
                         alt="Uploaded"
-                        className="max-h-full max-w-full "
+                        className="max-h-full max-w-full w-[200px] h-[200px] p-4 "
                       />
                     ) : (
                       <div className="flex justify-center items-center gap-2 lg:text-xl raleway-regular">
@@ -311,11 +350,13 @@ const StoryDetails = () => {
                 </FormItem>
               )}
             />
-            <NavLink to="/create/generate" className="flex justify-center">
+            {/* <NavLink to="/create/generate" className="flex justify-center"> */}
+            <div className="flex justify-center">
               <Button className="bg-primary1-pink w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6 arvo-regular">
                 Next
               </Button>
-            </NavLink>
+            </div>
+            {/* </NavLink> */}
           </form>
         </Form>
       </div>

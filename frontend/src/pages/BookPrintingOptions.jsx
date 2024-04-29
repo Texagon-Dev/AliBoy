@@ -123,41 +123,39 @@ const BookPrintingOptions = () => {
                           control={form.control}
                           name="binding_name"
                           render={({ field }) => (
-                     
-                              <FormItem>
-                                <FormLabel className="text-xl lg:text-2xl arvo-bold ">
-                                  Select Your Binding
-                                </FormLabel>
-                                <Select
-                                  onValueChange={field.onChange}
-                                  defaultValue={field.value}
-                                >
-                                  <FormControl className="  px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl">
-                                    <SelectTrigger>
-                                      <SelectValue placeholder="Perfect Bound" />
-                                    </SelectTrigger>
-                                  </FormControl>
-                                  <SelectContent className="raleway-semibold text-xl">
-                                    <SelectItem value="Perfect Bound">
-                                      Perfect Bound
-                                    </SelectItem>
-                                    <SelectItem value="Spiral Binding">
-                                      Spiral Binding
-                                    </SelectItem>
-                                    <SelectItem value="Case Binding">
-                                      Case Binding
-                                    </SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </FormItem>
-                            
+                            <FormItem>
+                              <FormLabel className="text-xl lg:text-2xl arvo-bold ">
+                                Select Your Binding
+                              </FormLabel>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <FormControl className="  px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl">
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Perfect Bound" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="raleway-semibold text-xl">
+                                  <SelectItem value="Perfect Bound">
+                                    Perfect Bound
+                                  </SelectItem>
+                                  <SelectItem value="Spiral Binding">
+                                    Spiral Binding
+                                  </SelectItem>
+                                  <SelectItem value="Case Binding">
+                                    Case Binding
+                                  </SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </FormItem>
                           )}
                         />
                         <FormField
                           control={form.control}
                           name="title_size"
                           render={({ field }) => (
-                            <FormItem >
+                            <FormItem>
                               <FormLabel className="text-xl lg:text-2xl arvo-bold ">
                                 Select Title Size
                               </FormLabel>
@@ -186,7 +184,7 @@ const BookPrintingOptions = () => {
                           control={form.control}
                           name="quantity"
                           render={({ field }) => (
-                            <FormItem >
+                            <FormItem>
                               <FormLabel className="text-xl lg:text-2xl arvo-bold ">
                                 Quantity
                               </FormLabel>
@@ -211,31 +209,33 @@ const BookPrintingOptions = () => {
                           control={form.control}
                           name="country"
                           render={({ field }) => (
-                            <FormItem >
-                              <FormLabel className="text-xl mt-[-20px] lg:text-2xl arvo-bold ">
-                                Select Country
-                              </FormLabel>
-                              <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <FormControl className=" w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl ">
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="United Kingdom" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent className="raleway-semibold text-xl">
-                                  <SelectItem value="United States">
-                                    United States
-                                  </SelectItem>
-                                  <SelectItem value="Germany">
-                                    Germany
-                                  </SelectItem>
-                                  <SelectItem value="Iceland">
-                                    Iceland
-                                  </SelectItem>
-                                </SelectContent>
-                              </Select>
+                            <FormItem>
+                              <div className="mt-[-20px]">
+                                <FormLabel className="text-xl  lg:text-2xl arvo-bold  ">
+                                  Select Country
+                                </FormLabel>
+                                <Select
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <FormControl className=" w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl ">
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="United Kingdom" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent className="raleway-semibold text-xl">
+                                    <SelectItem value="United States">
+                                      United States
+                                    </SelectItem>
+                                    <SelectItem value="Germany">
+                                      Germany
+                                    </SelectItem>
+                                    <SelectItem value="Iceland">
+                                      Iceland
+                                    </SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
                             </FormItem>
                           )}
                         />
@@ -243,7 +243,7 @@ const BookPrintingOptions = () => {
                           control={form.control}
                           name="city_region"
                           render={({ field }) => (
-                            <FormItem >
+                            <FormItem>
                               <FormLabel className="text-xl lg:text-2xl arvo-bold ">
                                 Select City/Region
                               </FormLabel>
@@ -275,7 +275,7 @@ const BookPrintingOptions = () => {
                           control={form.control}
                           name="delivery_address"
                           render={({ field }) => (
-                            <FormItem >
+                            <FormItem>
                               <FormLabel className="text-xl lg:text-2xl arvo-bold ">
                                 Delivery Address
                               </FormLabel>
@@ -313,13 +313,13 @@ const BookPrintingOptions = () => {
                           )}
                         />
                         <div className="text-center">
-                        <Button
-                          className="bg-[#F15084] lg:w-[357px] lg:h-[64px] rounded-[32px] lg:px-[88px] w-[300px] h-[50px] px-[60px] hover:bg-transparent hover:text-primary1-pink hover:border hover:border-primary1-pink text-2xl leading-7 mt-6 arvo-regular "
-                          type="submit"
-                        >
-                          Place Order
+                          <Button
+                            className="bg-[#F15084] lg:w-[357px] lg:h-[64px] rounded-[32px] lg:px-[88px] w-[300px] h-[50px] px-[60px] hover:bg-transparent hover:text-primary1-pink hover:border hover:border-primary1-pink text-2xl leading-7 mt-6 arvo-regular "
+                            type="submit"
+                          >
+                            Place Order
                           </Button>
-                          </div>
+                        </div>
                       </form>
                     </Form>
                   </div>

@@ -15,7 +15,7 @@ const SignUp = () => {
   
   const [isLoading, setIsLoading] = useState(false);
  const [searchParams] = useSearchParams();
-  const to = searchParams.get("to") || "";
+  const to = searchParams.get("to") || "/user";
   const validationSchema = Yup.object().shape({
     fullname: Yup.string().required("Full name is required"),
     dob: Yup.date().required("Date of birth is required"),

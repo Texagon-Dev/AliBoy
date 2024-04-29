@@ -26,14 +26,14 @@ const StoryCard = ({ storyBookId, image, title, button1, button2 }) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col lg:flex-col md:justify-center justify-center  gap-4 ">
+        <div className="flex flex-col lg:flex-col md:justify-center md:items-center justify-center  gap-4 ">
           <Button className=" rounded-[40px] bg-primary1-pink  lg:w-[209px] lg:h-[40px] px-4 arvo-regular text-[16px] md:w-40 hover:bg-transparent hover:border hover:border-primary1-pink hover:text-primary1-pink">
             {button1}
           </Button>
           <NavLink to={`/dashboard/bookprinting?storyBookId=${storyBookId}`}>
             <Button
               variant="outlined"
-              className="rounded-[40px] border border-primary1-pink px-4 lg:w-[209px] lg:h-[40px] md:w-40 text-primary1-pink hover:bg-primary1-pink hover:text-white arvo-regular text-[16px] "
+              className="rounded-[40px] border border-primary1-pink px-4 lg:w-[209px] w-full lg:h-[40px] md:w-40 text-primary1-pink hover:bg-primary1-pink hover:text-white arvo-regular text-[16px] "
             >
               {button2}
             </Button>

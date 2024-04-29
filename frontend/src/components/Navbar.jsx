@@ -1,12 +1,28 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/Images/Ellipse.png";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import supabase from "@/lib/supabase";
 
 const Navbar = () => {
    const { session } = useSelector((state) => state.user);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+
+  const navigate = useNavigate()
+
+ const handleSignout = async () => {
+   try {
+     await supabase.auth.signOut();
+     navigate("/signin");
+     toast.info("Sign out successful");
+   } catch (error) {
+     if (error instanceof Error) {
+       console.error("Error signing out:", error.message);
+     }
+   }
+ };
 
   const toggleNavbar = () => {
     setMobileDrawerOpen(!mobileDrawerOpen);
@@ -50,9 +66,9 @@ const Navbar = () => {
             <li>
               <NavLink to="/pricing">Pricing</NavLink>
             </li>
-            {session && session.user  ? (
+            {session && session.user ? (
               <li>
-                <NavLink to="/signin">Logout</NavLink>
+                <NavLink onClick={handleSignout}>Logout</NavLink>
               </li>
             ) : (
               <li>
@@ -78,9 +94,15 @@ const Navbar = () => {
               <li className="py-4">
                 <NavLink to="/pricing">Pricing</NavLink>
               </li>
-              <li className="py-4">
-                <NavLink to="signup">SignUp</NavLink>
-              </li>
+              {session && session.user ? (
+                <li className="py-4">
+                  <NavLink onClick={handleSignout}>Logout</NavLink>
+                </li>
+              ) : (
+                <li className="py-4">
+                  <NavLink to="/signup">Signup</NavLink>
+                </li>
+              )}
             </ul>
           </div>
         )}

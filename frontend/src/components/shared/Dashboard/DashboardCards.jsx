@@ -7,11 +7,11 @@ import down from "../../../assets/Images/downtrend.png";
 import up from "../../../assets/Images/uptrend1.png";
 const DashboardCards = () => {
   return (
-    <div className="md:mt-[120px] mt-[80px]">
-      <div className="flex md:flex-row flex-col mb-8 md:justify-between  ">
-        <div className="flex flex-col mt-4 ">
+    <div className="md:mt-[100px] mt-[80px]">
+      <div className="flex md:flex-row flex-col mb-8 md:justify-between justify-center items-center ">
+        <div className="flex flex-col lg:mt-4 md:mt-0 mt-2 md:justify-start justify-center   ">
           <h1 className="arvo-bold text-[44px] leading-[54.3px]">Dashboard</h1>
-          <p className="text-xl raleway-medium text-[#6B6D6E]">
+          <p className="text-xl raleway-medium text-[#6B6D6E] lg:w-full md:w-2/3 md:mb-0 mb-4">
             Hi, Samantha. Welcome back to Story Book Admin!
           </p>
         </div>
@@ -21,7 +21,7 @@ const DashboardCards = () => {
           </div>
         </div>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 items-center justify-center">
         <div className="rounded-xl border bg-card border-[#FAC0D3] text-card-foreground shadow h-[164px] w-[320px]">
           <div className="p-6 flex flex-row items-center justify-center space-y-0 pb-2">
             <div>

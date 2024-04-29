@@ -1,7 +1,28 @@
 import StoryCard from "@/components/StoryCard";
 import { Button } from "@/components/ui/button";
 import cardImage from "../assets/Images/cardimage.png";
+import cardImage1 from "../assets/Images/generatingstory.png";
 import { useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
+
+
+
+const stories = [
+  {
+    storyBookId: "1",
+    title: "Ocean Odyssey",
+    button1: "View Details",
+    button2: "Print Book",
+    image: cardImage,
+  },
+  {
+    storyBookId: "2",
+    title: "Magic World",
+    button1: "View Details",
+    button2: "Print Book",
+    image: cardImage1,
+  },
+];
 
 const UserHomePage = () => {
     const { session } = useSelector((state) => state.user);
@@ -18,40 +39,24 @@ const UserHomePage = () => {
             our advanced AI-driven platform
           </p>
           <div className="flex justify-center">
-            <Button className=" rounded-[32px] bg-primary1-pink w-[180px] px-[60px] text-[18px] lg:w-[232px] lg:h-[50px] lg:px-[88px] arvo-regular lg:text-[24px] md:w-40 hover:bg-transparent hover:border hover:border-primary1-pink hover:text-primary1-pink shadow-md ">
-              Create Story
-            </Button>
+            <NavLink to="/create/begin">
+              <Button className=" rounded-[32px] bg-primary1-pink w-[180px] px-[60px] text-[18px] lg:w-[232px] lg:h-[50px] lg:px-[88px] arvo-regular lg:text-[24px] md:w-40 hover:bg-transparent hover:border hover:border-primary1-pink hover:text-primary1-pink shadow-md ">
+                Create Story
+              </Button>
+            </NavLink>
           </div>
         </div>
-        <div className="w-full flex flex-wrap justify-center gap-10  ">
-          <StoryCard
-            storyBookId="1"
-            image={cardImage}
-            title={"Ocean Odyssey"}
-            button1={"View Details"}
-            button2={"Print Book"}
-          />
-          <StoryCard
-            storyBookId="2"
-            image={cardImage}
-            title={"Ocean Odyssey"}
-            button1={"View Details"}
-            button2={"Print Book"}
-          />
-          <StoryCard
-            storyBookId="3"
-            image={cardImage}
-            title={"Ocean Odyssey"}
-            button1={"View Details"}
-            button2={"Print Book"}
-          />
-          <StoryCard
-            storyBookId="4"
-            image={cardImage}
-            title={"Ocean Odyssey"}
-            button1={"View Details"}
-            button2={"Print Book"}
-          />
+        <div className="w-full flex flex-wrap justify-center md:justify-start gap-10">
+          {stories.map((story) => (
+            <StoryCard
+              key={story.storyBookId}
+              storyBookId={story.storyBookId}
+              image={story.image}
+              title={story.title}
+              button1={story.button1}
+              button2={story.button2}
+            />
+          ))}
         </div>
       </div>
     </section>
