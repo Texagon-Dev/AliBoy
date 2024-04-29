@@ -1,0 +1,26 @@
+
+@font-face {
+  font-family: "Arvo";
+  src: url('./Arvo/Arvo-Regular.ttf') format('truetype');
+  font-weight: normal; /* Default font weight for Regular */
+}
+
+
+@font-face {
+  font-family: "Arvo Bold";
+  src: url('./Arvo/Arvo-Bold.ttf') format('truetype');
+  font-weight: bold; /* Font weight for Bold */
+}
+
+
+.arvo-regular {
+  font-family: "Arvo", serif;
+  font-weight: normal;
+  font-style: normal;
+}
+
+.arvo-bold {
+  font-family: "Arvo", serif;
+  font-weight: bold;
+  font-style: normal;
+}
