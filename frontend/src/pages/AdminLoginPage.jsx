@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 const AdminLoginPage = () => {
   const form = useForm();
   return (
-    <div className="bg-primary1-pink w-full h-full pb-[120px]">
+    <div className="bg-primary1-pink w-full h-full pb-[53px]">
       <section className="container">
         <div className="pt-[50px]">
           <div className="flex flex-col justify-center items-center gap-8 ">
@@ -34,9 +34,9 @@ const AdminLoginPage = () => {
                   If you are already a member you can login with your email
                   address and password.
                 </p>
-                <div className="mt-8">
+                <div className="mt-4">
                   <Form {...form}>
-                    <form onSubmit={form.handleSubmit()} className="space-y-6">
+                    <form onSubmit={form.handleSubmit()} className="space-y-10">
                       <FormField
                         control={form.control}
                         name="email"
@@ -50,10 +50,9 @@ const AdminLoginPage = () => {
                             </FormItem>
                             <FormControl>
                               <Input
-                                placeholder="Joe Doe"
                                 {...field}
                                 type="email"
-                                className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
+                                className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl input-placeholder "
                               />
                             </FormControl>
                             <FormDescription></FormDescription>
@@ -74,7 +73,6 @@ const AdminLoginPage = () => {
                             </FormItem>
                             <FormControl>
                               <Input
-                                placeholder="Enter Password"
                                 {...field}
                                 type="password"
                                 autoComplete="current-password"

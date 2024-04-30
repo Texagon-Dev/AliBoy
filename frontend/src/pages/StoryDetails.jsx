@@ -19,7 +19,7 @@ import play from "../assets/Images/play.png";
 import upload from "../assets/Images/upload.png";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
-import { addStory } from "@/redux/features/storySlice";
+import {  setStoryDetails } from "@/redux/features/storySlice";
 import { useDispatch } from "react-redux";
 
 const StoryDetails = () => {
@@ -54,19 +54,18 @@ const StoryDetails = () => {
   });
 
   const onSubmit = (data) => {
-    console.log(file, "file in on submit");
-    const storyData = {
-      storyBookId: Date.now().toString(),
-      story_explanation: data.story_explanation,
-      character_explanation: data.character_explanation,
-      storyLength: data.radio_group,
-      image: file ? URL.createObjectURL(file) : undefined,
-    };
-
-    dispatch(addStory(storyData));
-    console.log(storyData);
+    dispatch(
+      setStoryDetails({
+        storyBookId: Date.now().toString(),
+        storyExplanation: data.story_explanation,
+        characterExplanation: data.character_explanation,
+        storyLength: data.radio_group,
+        image: file ? URL.createObjectURL(file) : undefined,
+      })
+    );
     navigate("/create/generate");
   };
+
 
   useEffect(() => {
     return () => {
@@ -86,7 +85,37 @@ const StoryDetails = () => {
     },
   });
 
+  const storyExplanation = form.watch("story_explanation");
+  const characterExplanation = form.watch("character_explanation");
+
+
   
+   const handleStoryChange = (event) => {
+     const text = event.target.value;
+     if (text.length <= 3000) {
+       // Only update if within limit
+       form.setValue("story_explanation", text);
+     }
+   };
+  
+     const handleCharacterChange = (event) => {
+       const text = event.target.value;
+       if (text.length <= 1000) {
+         // Only update if within limit
+         form.setValue("character_explanation", text);
+       }
+     };
+
+   // Helper function to determine what message to display
+   const getCharacterFeedback = () => {
+     const length = storyExplanation.length;
+     if (length > 2950 && length <= 3000) {
+       return "You are reaching the character limit.";
+     } else if (length > 3000) {
+       return "Characters cannot be more than 3000.";
+     }
+     return ""; // No message if under the limit
+   };
 
   const navigate = useNavigate();
 
@@ -148,6 +177,8 @@ const StoryDetails = () => {
                       placeholder="Enter prompt here"
                       className="resize-none  rounded-lg "
                       {...field}
+                      onChange={handleStoryChange}
+                      value={storyExplanation}
                     />
                   </FormControl>
                   <FormDescription>
@@ -167,8 +198,9 @@ const StoryDetails = () => {
                         </span>
                       </div>
                       <div>
+                        <p className="text-red-500">{getCharacterFeedback()}</p>
                         <span className="text-[#C7C8CC] lg:text-[16px] raleway-medium">
-                          0/3000
+                          {storyExplanation.length}/3000
                         </span>
                       </div>
                     </div>
@@ -190,6 +222,8 @@ const StoryDetails = () => {
                       placeholder="Enter prompt here "
                       className="resize-none min-h-[102px] rounded-lg "
                       {...field}
+                      onChange={handleCharacterChange}
+                      value={characterExplanation}
                     />
                   </FormControl>
                   <FormDescription>
@@ -210,7 +244,7 @@ const StoryDetails = () => {
                       </div>
                       <div>
                         <span className="text-[#C7C8CC] lg:text-[16px] raleway-medium">
-                          0/1000
+                          {characterExplanation.length}/1000
                         </span>
                       </div>
                     </div>

@@ -9,17 +9,19 @@ import { useSelector } from "react-redux";
 
 const StoryBookPdfPage = () => {
 
-  const stories = useSelector((state) => state.stories.items);
-  const latestStory = stories[stories.length - 1] || {};
-const truncateStory = (text) => {
-  const words = text.split(" ");
-  if (words.length > 44) {
-    return words.slice(0, 44).join(" ") + "...";
-  }
-  return text;
-};
+  const currentStory = useSelector((state) => state.stories.currentStory);
+  const storyImageSrc = currentStory.storyDetails.image || storyImage;
 
-const truncatedStory = truncateStory(latestStory.story_explanation);
+  const truncateStory = (text) => {
+    const words = text.split(" ");
+    return words.length > 44 ? words.slice(0, 44).join(" ") + "..." : text;
+  };
+
+  // Handling potential undefined values
+  const storyExplanation =
+    currentStory.storyDetails.storyExplanation ||
+    "No story explanation available.";
+  const truncatedStory = truncateStory(storyExplanation);
   return (
     <section className="container mx-auto mt-[110px] mb-10">
       <div className="w-full flex justify-center items-center text-4xl text-center flex-col lg:text-[64px] lg:leading-[58px] font-bold mb-10 ">
@@ -86,7 +88,7 @@ const truncatedStory = truncateStory(latestStory.story_explanation);
             />
           
               <img
-                src={latestStory.image}
+                src={storyImageSrc}
                 alt="story image"
                 className="w-[411px] h-[348px] rounded-[16px] absolute top-20 left-14 cursor-pointer"
               />

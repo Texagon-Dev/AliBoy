@@ -22,14 +22,29 @@ import { useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import StoryGenerationLoading from "./StoryGenerationLoading";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  sendStoryData,
+  setGenerationOptions,
+} from "@/redux/features/storySlice";
 
 const StoryGeneration = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+   const currentStory = useSelector((state) => state.stories.currentStory);
 
+  const dispatch = useDispatch();
   const handleGenerate = () => {
-    setIsLoading(true);
+    const formData = {
+      chapters: form.getValues("chapters"),
+      imageStyle: form.getValues("select-image-style"),
+      language: form.getValues("select-story-language"),
+    };
 
+    dispatch(setGenerationOptions(formData)); // Sets local state
+    dispatch(sendStoryData(currentStory)); // Sends data to API
+    console.log(formData);
+    setIsLoading(true);
     setTimeout(() => {
       navigate("/dashboard/storypage");
     }, 5000);
@@ -109,9 +124,9 @@ const StoryGeneration = () => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="raleway-semibold text-xl">
-                          <SelectItem value="Spanish">Random</SelectItem>
-                          <SelectItem value="German">Random</SelectItem>
-                          <SelectItem value="Arabic">Random</SelectItem>
+                          <SelectItem value="Surrealist">Surrealist</SelectItem>
+                          <SelectItem value="Abstract">Abstract</SelectItem>
+                          <SelectItem value="Baroque">Baroque</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormDescription></FormDescription>
@@ -149,14 +164,14 @@ const StoryGeneration = () => {
                     </FormItem>
                   )}
                 />
-                <NavLink className="flex justify-center">
+                <div className="flex justify-center">
                   <Button
                     onClick={handleGenerate}
                     className="bg-[#F15084] w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6 arvo-regular"
                   >
                     Generate
                   </Button>
-                </NavLink>
+                </div>
               </form>
             </Form>
           </div>

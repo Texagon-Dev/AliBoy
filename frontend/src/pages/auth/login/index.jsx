@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, NavLink, useSearchParams } from "react-router-dom";
 import supabase from "@/lib/supabase";
 
 import { toast } from "react-toastify";
@@ -114,15 +114,21 @@ const SignIn = () => {
                 )}
               />
             </div>
-
-            <div className="flex items-center my-6 space-x-2">
-              <Checkbox />
-              <Label
-                htmlFor="terms"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Remember me
-              </Label>
+            <div className="flex justify-between items-center">
+              <div className="flex items-center my-6 space-x-2">
+                <Checkbox />
+                <Label
+                  htmlFor="terms"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Remember me
+                </Label>
+              </div>
+              <NavLink to="/reset-password">
+                <div className="text-gray-400 raleway-medium text-[14px] cursor-pointer">
+                  Forgot Password?
+                </div>
+              </NavLink>
             </div>
 
             <Button

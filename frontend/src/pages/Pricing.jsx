@@ -92,7 +92,7 @@ const Pricing = () => {
                     </NavLink>
                   </div>
                   <div className="md:w-1/2 w-full h-full rounded-l-none rounded-[24px] p-14 bg-[#FAC0D3] ">
-                    <div className="mt-16">
+                    <div className="mt-6">
                       <h1 className="arvo-bold text-2xl text-primary1-blue">
                         What's Included
                       </h1>
@@ -104,7 +104,7 @@ const Pricing = () => {
                             className="h-[26px] w-[26px]"
                           />
                           <p className="text-[20px] raleway-medium leading-[30px] text-primary1-blue">
-                            Lorem, ipsum dolor.
+                            Access to basic story templates and genres
                           </p>
                         </div>
                         <div className="flex gap-2 mt-2">
@@ -114,7 +114,7 @@ const Pricing = () => {
                             className="h-[26px] w-[26px]"
                           />
                           <p className="text-[20px] raleway-medium leading-[30px] text-primary1-blue">
-                            Lorem, ipsum dolor.
+                            Essential character building tools.
                           </p>
                         </div>
                         <div className="flex gap-2 mt-2">
@@ -124,7 +124,7 @@ const Pricing = () => {
                             className="h-[26px] w-[26px]"
                           />
                           <p className="text-[20px] raleway-medium leading-[30px] text-primary1-blue">
-                            Lorem, ipsum dolor.
+                            Up to 4 chapters.
                           </p>
                         </div>
                         <div className="flex gap-2 mt-2">
@@ -134,7 +134,8 @@ const Pricing = () => {
                             className="h-[26px] w-[26px]"
                           />
                           <p className="text-[20px] raleway-medium leading-[30px] text-primary1-blue">
-                            Lorem, ipsum dolor.
+                            Includes popular genres like Romance, Mystery, and
+                            Sci-Fi.
                           </p>
                         </div>
                       </div>

@@ -7,8 +7,10 @@ import scifi from "../assets/Images/Scifi.png";
 import mystery from "../assets/Images/Mystery.png";
 import automate from "../assets/Images/Automate.png";
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { setGenre } from "@/redux/features/storySlice";
+import { useDispatch } from "react-redux";
 
 const genres = [
   { name: "Horror", image: horror },
@@ -23,6 +25,18 @@ const genres = [
 
 const GenreSelection = () => {
   const [selectedGenre, setSelectedGenre] = useState(0);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+
+   const handleNext = () => {
+     if (selectedGenre !== null) {
+       dispatch(setGenre(genres[selectedGenre].name));
+       navigate("/create/details");
+     } else {
+       alert("Please select a genre.");
+     }
+   };
   return (
     <section className="container mx-auto lg:mt-[120px] md:mt-[100px] mt-[80px] mb-8">
       <div className="w-full flex justify-center items-center text-center flex-col   ">
@@ -43,19 +57,23 @@ const GenreSelection = () => {
                 selectedGenre === index ? "border px-2 pt-1 rounded-lg " : ""
               }`}
               onClick={() => setSelectedGenre(index)}
+             
             >
-              <img className="mb-2 w-[180px] h-[170px] " src={genre.image} alt={genre.name}   />
+              <img
+                className="mb-2 w-[180px] h-[170px] "
+                src={genre.image}
+                alt={genre.name}
+              />
               <div className="text-xl md:text-2xl  tracking-tighter mb-4 raleway-bold">
                 {genre.name}
               </div>
             </button>
           ))}
         </div>
-        <NavLink to="/create/details">
-          <Button className="bg-[#F15084] w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6 arvo-regular">
-            Next
-          </Button>
-        </NavLink>
+
+        <Button className="bg-[#F15084] w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6 arvo-regular" onClick={handleNext}>
+          Next
+        </Button>
       </div>
     </section>
   );
