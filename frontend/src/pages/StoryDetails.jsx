@@ -24,7 +24,7 @@ import { useDispatch } from "react-redux";
 
 const StoryDetails = () => {
   const [selectedValue, setSelectedValue] = useState("option-one");
-
+console.log(selectedValue, "selectedValue")
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
 
@@ -57,9 +57,9 @@ const StoryDetails = () => {
     dispatch(
       setStoryDetails({
         storyBookId: Date.now().toString(),
-        storyExplanation: data.story_explanation,
-        characterExplanation: data.character_explanation,
-        storyLength: data.radio_group,
+        story_explanation: data.story_explanation,
+        character_explanations: data.character_explanation,
+        story_length: selectedValue,
         image: file ? URL.createObjectURL(file) : undefined,
       })
     );
@@ -80,7 +80,7 @@ const StoryDetails = () => {
     defaultValues: {
       story_explanation: "",
       character_explanation: "",
-      radio_group: "option-one",
+      radio_group: "Standard",
       file: file ? URL.createObjectURL(file) : undefined,
     },
   });
@@ -264,68 +264,69 @@ const StoryDetails = () => {
                   <FormControl>
                     <RadioGroup
                       className="grid gap-x-10 grid-cols-1 lg:grid-cols-3"
-                      defaultValue="option-one"
+                      defaultValue="Standard"
                       value={selectedValue}
+                     
                     >
                       <div
                         className={`flex items-center space-x-2 border   rounded-[32px] h-[58px] w-[278px] px-5 ${
-                          selectedValue === "option-one"
+                          selectedValue === "Standard"
                             ? "bg-[#F15084] text-white"
                             : "border-[#FAC0D3] "
                         }`}
                       >
                         <RadioGroupItem
-                          value="option-one"
-                          id="option-one"
+                          value="Standard"
+                          id="Standard"
                           onClick={() => {
-                            setSelectedValue("option-one");
+                            setSelectedValue("Standard");
                           }}
                         />
                         <Label
                           className="text-xl raleway-semibold"
-                          htmlFor="option-one"
+                          htmlFor="Standard"
                         >
                           Standard
                         </Label>
                       </div>
                       <div
                         className={`flex items-center space-x-2 border  rounded-[32px] h-[58px] w-[278px] px-5 ${
-                          selectedValue === "option-two"
+                          selectedValue === "Medium"
                             ? "bg-[#F15084] text-white"
                             : "border-[#FAC0D3] "
                         }`}
                       >
                         <RadioGroupItem
-                          value="option-two"
-                          id="option-two"
+                          value="Medium"
+                          id="Medium"
                           onClick={() => {
-                            setSelectedValue("option-two");
+                            setSelectedValue("Medium");
                           }}
                         />
                         <Label
                           className="text-xl raleway-semibold"
-                          htmlFor="option-two"
+                          htmlFor="Medium"
                         >
                           Medium
                         </Label>
                       </div>
                       <div
                         className={`flex items-center space-x-2 border   rounded-[32px] h-[58px] w-[278px] px-5 ${
-                          selectedValue === "option-three"
+                          selectedValue === "Long"
                             ? "bg-[#F15084] text-white"
                             : "border-[#FAC0D3] "
                         }`}
                       >
                         <RadioGroupItem
-                          value="option-three"
+                          value="Long"
                           id="option-three"
                           onClick={() => {
-                            setSelectedValue("option-three");
+                            setSelectedValue("Long");
                           }}
                         />
                         <Label
                           className="text-xl raleway-semibold"
-                          htmlFor="option-three"
+                          htmlFor="Long"
                         >
                           Long
                         </Label>

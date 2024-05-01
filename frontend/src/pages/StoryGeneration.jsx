@@ -24,6 +24,8 @@ import { useNavigate } from "react-router-dom";
 import StoryGenerationLoading from "./StoryGenerationLoading";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  addStoryToHistory,
+  resetCurrentStory,
   sendStoryData,
   setGenerationOptions,
 } from "@/redux/features/storySlice";
@@ -36,7 +38,7 @@ const StoryGeneration = () => {
   const dispatch = useDispatch();
   const handleGenerate = () => {
     const formData = {
-      chapters: form.getValues("chapters"),
+      total_chapters: form.getValues("chapters"),
       imageStyle: form.getValues("select-image-style"),
       language: form.getValues("select-story-language"),
     };
@@ -44,7 +46,9 @@ const StoryGeneration = () => {
     dispatch(setGenerationOptions(formData)); // Sets local state
     dispatch(sendStoryData(currentStory)); // Sends data to API
     console.log(formData);
-    setIsLoading(true);
+    dispatch(addStoryToHistory(currentStory));
+   
+    setIsLoading();
     setTimeout(() => {
       navigate("/dashboard/storypage");
     }, 5000);

@@ -5,10 +5,22 @@ import axios from "axios";
 export const sendStoryData = createAsyncThunk(
   "stories/sendStoryData",
   async (storyData, { rejectWithValue }) => {
+    const { story_explanation, character_explanations, story_length } =
+      storyData.storyDetails;
+    const { total_chapters } = storyData.generationOptions;
+
+    // Form the input object to send to the API
+    const input = {
+      story_explanation,
+      character_explanations,
+      total_chapters,
+      story_length,
+    };
+
     try {
       const response = await axios.post(
-        "https://yourapi.com/stories",
-        storyData
+        `https://6ede-202-166-171-221.ngrok-free.app/api/v1/${storyData.genre}`,
+        { input }
       );
       return response.data;
     } catch (error) {
@@ -22,13 +34,13 @@ const initialState = {
     genre: null,
     storyDetails: {
       storyBookId: "",
-      storyExplanation: "",
-      characterExplanation: "",
-      storyLength: "",
+      story_explanations: "",
+      character_explanations: "",
+      story_length: "",
       image: null,
     },
     generationOptions: {
-      chapters: 1,
+      total_chapters: 1,
       imageStyle: "Auto",
       language: "English",
     },
@@ -68,12 +80,10 @@ export const storiesSlice = createSlice({
         state.loading = true;
       })
       .addCase(sendStoryData.fulfilled, (state, action) => {
-
         state.items.push(action.payload);
         state.loading = false;
       })
       .addCase(sendStoryData.rejected, (state, action) => {
-       
         state.error = action.payload;
         state.loading = false;
       });

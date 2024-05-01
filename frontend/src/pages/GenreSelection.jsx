@@ -7,20 +7,20 @@ import scifi from "../assets/Images/Scifi.png";
 import mystery from "../assets/Images/Mystery.png";
 import automate from "../assets/Images/Automate.png";
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { setGenre } from "@/redux/features/storySlice";
 import { useDispatch } from "react-redux";
 
 const genres = [
-  { name: "Horror", image: horror },
-  { name: "Romance", image: romance },
-  { name: "Comedy", image: comedy },
-  { name: "Fantasy", image: fantasy },
-  { name: "Action", image: action },
-  { name: "Sci-Fi", image: scifi },
-  { name: "Mystery", image: mystery },
-  { name: "Automate", image: automate },
+  { name: "Horror", image: horror, value: "horrorStory" },
+  { name: "Romance", image: romance, value: "romanticStory" },
+  { name: "Comedy", image: comedy, value: "comedyStory" },
+  { name: "Fantasy", image: fantasy, value: "fantasyStory" },
+  { name: "Action", image: action, value: "actionStory" },
+  { name: "Sci-Fi", image: scifi, value: "scifiStory" },
+  { name: "Mystery", image: mystery, value: "mysteryStory" },
+  { name: "Automate", image: automate, value: "automateStory" },
 ];
 
 const GenreSelection = () => {
@@ -31,7 +31,7 @@ const GenreSelection = () => {
 
    const handleNext = () => {
      if (selectedGenre !== null) {
-       dispatch(setGenre(genres[selectedGenre].name));
+       dispatch(setGenre(genres[selectedGenre].value));
        navigate("/create/details");
      } else {
        alert("Please select a genre.");
