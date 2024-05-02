@@ -10,11 +10,11 @@ import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
+import { EyeIcon, EyeOff } from "lucide-react";
 
 const SignUp = () => {
-  
   const [isLoading, setIsLoading] = useState(false);
- const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const to = searchParams.get("to") || "/user";
   const validationSchema = Yup.object().shape({
     fullname: Yup.string().required("Full name is required"),
@@ -36,6 +36,11 @@ const SignUp = () => {
     resolver: yupResolver(validationSchema),
     mode: "onTouched",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleSignUp = async (data) => {
     console.log(data);
@@ -96,14 +101,13 @@ const SignUp = () => {
               </p>
             </div>
             <div className="my-6">
-              <Label className="arvo-bold" htmlFor="fullname">
+              <Label className="text-xl arvo-bold" htmlFor="fullname">
                 Full Name
               </Label>
               <Input
                 type="text"
-                placeholder="Full Name ex: John Doe"
                 id="fullname"
-                className="p-2 border rounded-full"
+                className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
                 {...register("fullname")}
               />
               {errors.fullname && (
@@ -111,13 +115,14 @@ const SignUp = () => {
               )}
             </div>
             <div className="my-6">
-              <Label className="arvo-bold" htmlFor="dob">
+              <Label className="text-xl arvo-bold" htmlFor="dob">
                 Date of birth
               </Label>
               <Input
                 type="date"
+                placeholder=""
                 id="dob"
-                className="p-2 border rounded-full"
+                className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
                 {...register("dob")}
               />
               {errors.dob && (
@@ -125,14 +130,13 @@ const SignUp = () => {
               )}
             </div>
             <div className="my-6">
-              <Label className="arvo-bold" htmlFor="email">
+              <Label className="text-xl arvo-bold" htmlFor="email">
                 Email address
               </Label>
               <Input
                 type="email"
-                placeholder="user@email.com"
                 id="email"
-                className="p-2 border rounded-full"
+                className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
                 {...register("email")}
               />
               {errors.email && (
@@ -140,15 +144,26 @@ const SignUp = () => {
               )}
             </div>
             <div className="my-6">
-              <Label className="arvo-bold" htmlFor="password">
+              <Label className="text-xl arvo-bold" htmlFor="password">
                 Password
               </Label>
               <Input
-                type="password"
-                placeholder="Pa$$word"
+                type={showPassword ? "text" : "password"}
                 id="password"
-                className="p-2 border rounded-full"
+                className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
                 {...register("password")}
+                icon={
+                  <div
+                    onClick={togglePasswordVisibility}
+                    className="cursor-pointer"
+                  >
+                    {showPassword ? (
+                      <EyeIcon size={20} color="#F15084" />
+                    ) : (
+                      <EyeOff size={20} color="#F15084" />
+                    )}
+                  </div>
+                }
               />
               {errors.password && (
                 <p className="text-red-600">{errors.password.message}</p>

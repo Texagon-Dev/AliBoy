@@ -20,9 +20,13 @@ const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const to = searchParams.get("to") || "";
-  
 
-  const form = useForm();
+  const form = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
   const handleLogin = async (data) => {
     try {
@@ -82,13 +86,14 @@ const SignIn = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className=" arvo-bold ">Email address</FormLabel>
+                    <FormLabel className="text-xl arvo-bold ">
+                      Email address
+                    </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="user@email.com"
                         {...field}
                         type="email"
-                        className=" p-2 border rounded-full "
+                        className=" block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
                       />
                     </FormControl>
                   </FormItem>
@@ -101,13 +106,15 @@ const SignIn = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className=" arvo-bold ">Password</FormLabel>
+                    <FormLabel className="text-xl arvo-bold ">
+                      Password
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder=""
                         {...field}
                         type="password"
-                        className=" p-2 border rounded-full "
+                        className=" block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
                       />
                     </FormControl>
                   </FormItem>

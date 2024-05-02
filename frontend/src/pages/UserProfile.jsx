@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, EyeIcon, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
@@ -23,7 +23,7 @@ const UserProfile = () => {
   const form = useForm({
     defaultValues: {
       name: "",
-      dob: null,
+      date: "" ,
       email: "",
       password: "",
     },
@@ -31,6 +31,13 @@ const UserProfile = () => {
   });
 
   const [formError, setFormError] = useState(null);
+
+    const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  
 
   const onSubmit = async (data) => {
     try {
@@ -108,36 +115,12 @@ const UserProfile = () => {
                       <FormLabel className="text-xl lg:text-2xl arvo-bold">
                         Date of Birth
                       </FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "w-full pl-3 text-left rounded-[40px] raleway-semibold text-xl px-4 py-3 h-[50px] border-[#FAC0D3]",
-                                !field.value && "text-black"
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, "PPP")
-                              ) : (
-                                <span className="raleway-semibold text-xl text-primary1-blue">
-                                  12/12/2012
-                                </span>
-                              )}
-                              <CalendarIcon className="ml-auto text-primary1-pink h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
+                      <FormControl>
+                        <Input type="date"
+                          className=" block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl"
+                          {...field}
+                        />
+                    </FormControl>
                     </FormItem>
                   )}
                 />
@@ -179,9 +162,21 @@ const UserProfile = () => {
                         <Input
                           placeholder="Enter Password"
                           {...field}
-                          type="password"
+                          type={showPassword ? "text" : "password"}
                           autoComplete="current-password"
                           className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
+                          icon={
+                            <div
+                              onClick={togglePasswordVisibility}
+                              className="cursor-pointer"
+                            >
+                              {showPassword ? (
+                                <EyeIcon size={20} color="#FBD3C4" />
+                              ) : (
+                                <EyeOff size={20} color="#FBD3C4" />
+                              )}
+                            </div>
+                          }
                         />
                       </FormControl>
                       <FormDescription></FormDescription>
