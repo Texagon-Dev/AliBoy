@@ -19,9 +19,15 @@ export const sendStoryData = createAsyncThunk(
 
     try {
       const response = await axios.post(
-        `https://6ede-202-166-171-221.ngrok-free.app/api/v1/${storyData.genre}`,
-        { input }
+        `https://dcc6-202-166-171-220.ngrok-free.app/api/v1/${storyData.genre}`,
+        { input },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
+      console.log(response)
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

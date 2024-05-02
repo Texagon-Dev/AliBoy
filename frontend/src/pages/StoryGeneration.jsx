@@ -48,7 +48,7 @@ const StoryGeneration = () => {
     console.log(formData);
     dispatch(addStoryToHistory(currentStory));
    
-    setIsLoading();
+    setIsLoading(true);
     setTimeout(() => {
       navigate("/dashboard/storypage");
     }, 5000);
