@@ -19,7 +19,7 @@ export const sendStoryData = createAsyncThunk(
 
     try {
       const response = await axios.post(
-        `https://f3d7-202-166-171-220.ngrok-free.app/api/v1/${storyData.genre}`,
+        `https://d598-202-166-171-220.ngrok-free.app/api/v1/${storyData.genre}`,
         { input },
         {
           headers: {

@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { setPrintingOrder } from "@/redux/features/bookPrintingSlice";
 import calculateOrderPricing from "@/lib/calculateOrderPricing";
@@ -29,22 +29,23 @@ import calculateOrderPricing from "@/lib/calculateOrderPricing";
 const BookPrintingOptions = () => {
   const [searchParams] = useSearchParams();
   const storyBookId = searchParams.get("storyBookId");
+  const orderDetails = useSelector((state) => state.bookPrintingOrders.order);
 
   const form = useForm({
     defaultValues: {
       story_book_id: storyBookId,
-      user_id: "",
-      binding_name: "",
-      title_size: "",
-      quantity: 5,
-      country: "",
-      city_region: "",
-      delivery_address: "",
-      postal_code: "",
-      item_total: 0,
-      discount: 0,
-      shipping_amount: 0,
-      payment_method: "",
+      user_id: orderDetails?.user_id || "",
+      binding_name: orderDetails?.binding_name || "",
+      title_size: orderDetails?.title_size || "",
+      quantity: orderDetails?.quantity || 5,
+      country: orderDetails?.country || "",
+      city_region: orderDetails?.city_region || "",
+      delivery_address: orderDetails?.delivery_address || "",
+      postal_code: orderDetails?.postal_code || "",
+      item_total: orderDetails?.item_total || 0,
+      discount: orderDetails?.discount || 0,
+      shipping_amount: orderDetails?.shipping_amount || 0,
+      payment_method: orderDetails?.payment_method || "",
     },
   });
 

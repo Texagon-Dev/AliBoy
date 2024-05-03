@@ -16,10 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
 
 import { useForm } from "react-hook-form";
-import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import StoryGenerationLoading from "./StoryGenerationLoading";
 import { useDispatch, useSelector } from "react-redux";

@@ -17,14 +17,15 @@ import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import play from "../assets/Images/play.png";
 import upload from "../assets/Images/upload.png";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
-import {  setStoryDetails } from "@/redux/features/storySlice";
-import { useDispatch } from "react-redux";
+import { setStoryDetails } from "@/redux/features/storySlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const StoryDetails = () => {
+  const currentStory = useSelector((state) => state.stories.currentStory);
   const [selectedValue, setSelectedValue] = useState("option-one");
-console.log(selectedValue, "selectedValue")
+  console.log(selectedValue, "selectedValue");
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
 
@@ -66,7 +67,6 @@ console.log(selectedValue, "selectedValue")
     navigate("/create/generate");
   };
 
-
   useEffect(() => {
     return () => {
       if (file) {
@@ -78,8 +78,9 @@ console.log(selectedValue, "selectedValue")
 
   const form = useForm({
     defaultValues: {
-      story_explanation: "",
-      character_explanation: "",
+      story_explanation: currentStory.storyDetails.story_explanation || "",
+      character_explanation:
+        currentStory.storyDetails.character_explanations || "",
       radio_group: "Standard",
       file: file ? URL.createObjectURL(file) : undefined,
     },
@@ -88,36 +89,42 @@ console.log(selectedValue, "selectedValue")
   const storyExplanation = form.watch("story_explanation");
   const characterExplanation = form.watch("character_explanation");
 
+  const handleStoryChange = (event) => {
+    const text = event.target.value;
+    if (text.length <= 3000) {
+      // Only update if within limit
+      form.setValue("story_explanation", text);
+    }
+  };
 
-  
-   const handleStoryChange = (event) => {
-     const text = event.target.value;
-     if (text.length <= 3000) {
-       // Only update if within limit
-       form.setValue("story_explanation", text);
-     }
-   };
-  
-     const handleCharacterChange = (event) => {
-       const text = event.target.value;
-       if (text.length <= 1000) {
-         // Only update if within limit
-         form.setValue("character_explanation", text);
-       }
-     };
+  const handleCharacterChange = (event) => {
+    const text = event.target.value;
+    if (text.length <= 1000) {
+      // Only update if within limit
+      form.setValue("character_explanation", text);
+    }
+  };
 
-   // Helper function to determine what message to display
-   const getCharacterFeedback = () => {
-     const length = storyExplanation.length;
-     if (length > 2950 && length <= 3000) {
-       return "You are reaching the character limit.";
-     } else if (length > 3000) {
-       return "Characters cannot be more than 3000.";
-     }
-     return ""; // No message if under the limit
-   };
+  // Helper function to determine what message to display
+  const getCharacterFeedback = () => {
+    const length = storyExplanation.length;
+    if (length > 2950 && length <= 3000) {
+      return "You are reaching the character limit.";
+    } else if (length > 3000) {
+      return "Characters cannot be more than 3000.";
+    }
+    return ""; // No message if under the limit
+  };
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Update the Redux store whenever form values change
+    const subscription = form.watch((value, { name, type }) => {
+      dispatch(setStoryDetails(value));
+    });
+    return () => subscription.unsubscribe();
+  }, [form.watch, dispatch]);
 
   return (
     <section className="container mx-auto  mb-10 lg:mt-[120px] md:mt-[100px] mt-[80px]">
@@ -266,7 +273,6 @@ console.log(selectedValue, "selectedValue")
                       className="grid gap-x-10 grid-cols-1 lg:grid-cols-3"
                       defaultValue="Standard"
                       value={selectedValue}
-                     
                     >
                       <div
                         className={`flex items-center space-x-2 border   rounded-[32px] h-[58px] w-[278px] px-5 ${

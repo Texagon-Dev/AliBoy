@@ -13,6 +13,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import PdfStoryBookDocument from "@/components/pdf/PdfStoryBookDocument";
 
 
 
@@ -35,7 +37,7 @@ const StoryBookPdfPage = () => {
     if (!storyData || storyData.length === 0) {
       return <div>Loading or no data available...</div>;
     }
-
+ const imageUrl = storyData[0].output['Chapter 1 Image'];
   return (
     <section className="container mx-auto mt-[110px] mb-10">
       <div className="w-full flex justify-center items-center text-4xl text-center flex-col lg:text-[64px] lg:leading-[58px] font-bold mb-10 ">
@@ -63,9 +65,23 @@ const StoryBookPdfPage = () => {
               </h3>
             </div>
             <div className="flex lg:flex-col justify-center items-center gap-x-2 md:flex-row md:items-center md:justify-center  ">
-              <Button className=" rounded-[40px] bg-primary1-pink  lg:w-[209px] px-4 arvo-regular text-[16px] md:w-40 hover:bg-transparent hover:border hover:border-primary1-pink hover:text-primary1-pink">
-                Save Book
-              </Button>
+              <PDFDownloadLink
+                document={<PdfStoryBookDocument storyData={storyData} />}
+                fileName="storybook.pdf"
+                style={{ textDecoration: "none" }}
+              >
+                {({ blob, url, loading, error }) =>
+                  loading ? (
+                    <button className="rounded-[40px] bg-primary1-pink lg:w-[209px] px-4 arvo-regular text-[16px] md:w-40">
+                      Preparing Book...
+                    </button>
+                  ) : (
+                    <Button className="rounded-[40px] bg-primary1-pink lg:w-[209px] px-4 arvo-regular text-[16px] md:w-40 hover:bg-transparent hover:border hover:border-primary1-pink hover:text-primary1-pink">
+                      Save Book
+                    </Button>
+                  )
+                }
+              </PDFDownloadLink>
               <NavLink to="/dashboard/bookprinting">
                 <Button
                   variant="outlined"
@@ -90,7 +106,7 @@ const StoryBookPdfPage = () => {
               }
 
               const slides = splitTextIntoSlides(chapterText);
-              return slides.map((slideContent, slideIndex) => (
+              return slides.map((storyContent, slideIndex) => (
                 <CarouselItem key={slideIndex}>
                   <div
                     className="relative"
@@ -117,7 +133,7 @@ const StoryBookPdfPage = () => {
                       />
 
                       <img
-                        src={storyImage}
+                        src={imageUrl}
                         alt="story image"
                         className="w-[411px] h-[348px] rounded-[16px] absolute top-20 left-14 cursor-pointer"
                       />
@@ -126,31 +142,32 @@ const StoryBookPdfPage = () => {
                         Remove Page
                       </Button>
                     </div>
-
                     <div>
-                      <img
-                        src={regenerate}
-                        alt="story image"
-                        className="absolute top-5 right-16"
-                      />
-                      <div className="text-2xl raleway-regular w-1/3 h-[20%] text-start absolute top-[20%] right-[100px]">
-                        <div>
-                          {/* <h3 className="mb-2 font-bold">
-                            Chapter {index + 1} - Part {slideIndex + 1}
-                          </h3> */}
-                          <p>{slideContent}</p>
-                          <button className="cursor-pointer">
-                            <img
-                              src={edit}
-                              alt="Edit story"
-                              className="h-5 w-5"
-                            />
-                          </button>
+                      <div>
+                        <img
+                          src={regenerate}
+                          alt="story image"
+                          className="absolute top-5 right-16"
+                        />
+                        <div className="text-2xl raleway-regular w-1/3 h-[20%] text-start absolute top-[20%] right-[100px]">
+                          <div>
+                            <h3 className="mb-2 font-bold">
+                              Chapter {index + 1} - Part {slideIndex + 1}
+                            </h3>
+                            <p>{storyContent}</p>
+                            <button className="cursor-pointer">
+                              <img
+                                src={edit}
+                                alt="Edit story"
+                                className="h-5 w-5"
+                              />
+                            </button>
+                          </div>
                         </div>
+                        <span className="absolute raleway-medium text-2xl  bottom-5 right-16">
+                          {slideIndex + 1}
+                        </span>
                       </div>
-                      <span className="absolute raleway-medium text-2xl  bottom-5 right-16">
-                        {slideIndex + 1}
-                      </span>
                     </div>
                   </div>
                 </CarouselItem>
@@ -164,6 +181,8 @@ const StoryBookPdfPage = () => {
         {/* <Button className=" mt-8 rounded-[40px] bg-primary1-pink  lg:w-[209px] px-4 arvo-regular text-[16px] md:w-40 hover:bg-transparent hover:border hover:border-primary1-pink hover:text-primary1-pink">
           Save Book
         </Button> */}
+
+    
       </div>
     </section>
   );
