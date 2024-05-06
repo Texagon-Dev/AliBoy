@@ -28,7 +28,7 @@ const Navbar = () => {
     setMobileDrawerOpen(!mobileDrawerOpen);
   };
   return (
-    <nav className="fixed w-full bg-transparent top-0 z-20 py-3  backdrop-blur-lg">
+    <nav className="fixed w-full bg-transparent top-0 z-50 py-3  backdrop-blur-lg">
       <div className="container lg:w-[1280px] px-4 mx-auto relative lg:text-sm">
         <div className="flex justify-between items-center">
           <ul className="flex items-center flex-shrink-0">
