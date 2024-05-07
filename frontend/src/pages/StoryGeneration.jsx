@@ -41,7 +41,7 @@ const StoryGeneration = () => {
       language: form.getValues("select-story-language"),
     };
 
-    dispatch(setGenerationOptions(formData)); // Sets local state
+    dispatch(setGenerationOptions({formData})); // Sets local state
     const resultAction = await dispatch(sendStoryData(currentStory));
     if (sendStoryData.fulfilled.match(resultAction)) {
       dispatch(addStoryToHistory(currentStory));
