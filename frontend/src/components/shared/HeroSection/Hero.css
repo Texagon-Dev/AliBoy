@@ -1,5 +1,7 @@
 .hero {
     clip-path: circle(114.5% at 51% -64%);
+    /* background-image: url("../../../assets/Images/footerimg.png");
+    background-position: bottom; */
 }
 
 @media screen and (max-width: 1100px) {
