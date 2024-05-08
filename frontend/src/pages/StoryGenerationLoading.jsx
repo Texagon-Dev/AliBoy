@@ -11,7 +11,7 @@ const StoryGenerationLoading = () => {
       <h1 className="text-3xl lg:text-5xl arvo-bold text-primary1-blue mt-4 animate-bounce ">
         Generating Story
       </h1>
-      <p className=" text-xl lg:text-[28px] leading-8  text-primary1-blue mt-8 text-center lg:w-[60%]  raleway-medium">
+      <p className=" text-xl lg:text-[28px] leading-8  text-primary1-blue mt-8 text-center md:w-[60%] w-[70%]  raleway-medium">
         Observe as AI brings your ideas to life! Sit back and witness the magic
         unfold as your story is crafted with precision and creativity
       </p>

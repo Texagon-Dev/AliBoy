@@ -39,9 +39,12 @@ const StoryGeneration = () => {
       total_chapters: form.getValues("chapters"),
       imageStyle: form.getValues("select-image-style"),
       language: form.getValues("select-story-language"),
+      
     };
 
-    dispatch(setGenerationOptions({formData})); // Sets local state
+    console.log(formData)
+
+    dispatch(setGenerationOptions(formData)); // Sets local state
     const resultAction = await dispatch(sendStoryData(currentStory));
     if (sendStoryData.fulfilled.match(resultAction)) {
       dispatch(addStoryToHistory(currentStory));

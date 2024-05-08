@@ -120,11 +120,11 @@ const StoryDetails = () => {
 
   useEffect(() => {
     // Update the Redux store whenever form values change
-    const subscription = form.watch((value, { name, type }) => {
+    const subscription = form.watch((value) => {
       dispatch(setStoryDetails(value));
     });
     return () => subscription.unsubscribe();
-  }, [form.watch, dispatch]);
+  }, [form, dispatch]);
 
   return (
     <section className="container mx-auto  mb-10 lg:mt-[120px] md:mt-[100px] mt-[80px]">
@@ -270,12 +270,12 @@ const StoryDetails = () => {
                   </FormLabel>
                   <FormControl>
                     <RadioGroup
-                      className="grid gap-x-10 grid-cols-1 lg:grid-cols-3"
+                      className="grid gap-x-10 grid-cols-1 lg:grid-cols-3 md:grid-cols-2"
                       defaultValue="Standard"
                       value={selectedValue}
                     >
                       <div
-                        className={`flex items-center space-x-2 border   rounded-[32px] h-[58px] w-[278px] px-5 ${
+                        className={`flex items-center space-x-2 border   rounded-[32px] h-[58px] w-[278px]  px-5 ${
                           selectedValue === "Standard"
                             ? "bg-[#F15084] text-white"
                             : "border-[#FAC0D3] "
@@ -296,7 +296,7 @@ const StoryDetails = () => {
                         </Label>
                       </div>
                       <div
-                        className={`flex items-center space-x-2 border  rounded-[32px] h-[58px] w-[278px] px-5 ${
+                        className={`flex items-center space-x-2 border  rounded-[32px] h-[58px] w-[278px]  px-5 ${
                           selectedValue === "Medium"
                             ? "bg-[#F15084] text-white"
                             : "border-[#FAC0D3] "

@@ -12,18 +12,18 @@ const Footer = () => {
     <section className="back-img mt-[100px]">
       <div className="container pt-20 pb-10">
         <div className=" p-10 bg-primary1-pink rounded-[100px] mt-[100px]">
-          <div className="flex justify-between items-center ">
-            <h1 className="arvo-bold text-[32px] text-white">
+          <div className="flex justify-between items-center text-center flex-wrap">
+            <h1 className="arvo-bold md:text-[32px] text-[24px]  text-white">
               Subscribe Newsletters
             </h1>
 
-            <form className="bg-white flex  items-center rounded-[100px] h-[72px] w-[576px] p-4">
+            <form className="bg-white flex items-center  rounded-[100px] md:h-[72px] md:w-[576px] w-full  p-3  ">
               <Input
                 type="text"
-                className="w-[400px] outline-none border-none focus:ring-0"
+                className="md:w-[400px] w-full outline-none border-none focus:ring-0"
                 placeholder="Enter Email"
               />
-              <Button className="ml-2 w-[204px] h-[56px] rounded-[40px] text-[16px] raleway-400 leading-4">
+              <Button className="ml-2 md:w-[204px] md:h-[56px] w-[120px] h-[40px] rounded-[40px] md:text-[16px] text-[14px] raleway-400 leading-4 ">
                 Subscribe Now
               </Button>
             </form>
@@ -47,7 +47,7 @@ const Footer = () => {
             </ul>
           </div>
           <div>
-            <ul className="flex flex-row gap-10 ">
+            <ul className="flex flex-row gap-10 md:mt-0 mt-4 ">
               <li>
                 <NavLink>
                   <img src={fbIcon} alt="facebook" />
@@ -72,11 +72,11 @@ const Footer = () => {
           </div>
         </div>
         <hr />
-        <div className="flex justify-between items-center mt-8 mb-4 flex-wrap ">
+        <div className="flex justify-between items-center mt-8 mb-4 flex-wrap arvo-regular text-[16px] text-primary1-blue leading-5 ">
           <div>
             <h3>© 2024 Storybook. All rights reserved.</h3>
           </div>
-          <div>
+          <div className="flex gap-4">
             <span>Terms of Service </span>
             <span>Privacy Policy</span>
           </div>

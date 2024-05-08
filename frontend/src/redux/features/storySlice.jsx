@@ -19,7 +19,7 @@ export const sendStoryData = createAsyncThunk(
 
     try {
       const response = await axios.post(
-        `https://db71-202-166-171-220.ngrok-free.app/api/v1/${storyData.genre}`,
+        `https://d776-202-166-171-220.ngrok-free.app/api/v1/${storyData.genre}`,
         { input },
         {
           headers: {
@@ -46,9 +46,9 @@ const initialState = {
       image: null,
     },
     generationOptions: {
-      total_chapters: 2,
-      imageStyle: "Auto",
-      language: "English",
+      total_chapters: "2",
+      imageStyle: "",
+      language: "",
     },
   },
   items: [],
