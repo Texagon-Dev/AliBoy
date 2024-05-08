@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/carousel";
 import { pdf } from "@react-pdf/renderer";
 import PdfStoryBookDocument from "@/components/pdf/PdfStoryBookDocument";
-import uploadPdfToSupabase from "@/lib/uploadpdffile";
+import uploadPdfToSupabase from "@/lib/functions";
 
 const StoryBookPdfPage = () => {
   const storyData = useSelector((state) => state.stories.items);
@@ -56,7 +56,7 @@ const StoryBookPdfPage = () => {
 
     // Assume you have a method to generate a PDF blob
     const pdfBlob = await generatePdfBlob(); // You need to implement this
-    await uploadPdfToSupabase(userId, pdfBlob);
+    await uploadPdfToSupabase(userId, pdfBlob, 'pdf');
   };
 
   return (

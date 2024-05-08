@@ -5,6 +5,7 @@ const initialState = {
   userId: "",
   name: "",
   email: "",
+  avatarUrl: "",
   isLoading: true,
 };
 
@@ -21,13 +22,15 @@ const userSlice = createSlice({
     },
     setUserId: (state, action) => {
       state.userId = action.payload;
-      
     },
     setUserName: (state, action) => {
       state.name = action.payload;
     },
     setUserEmail: (state, action) => {
       state.email = action.payload;
+    },
+    setUserAvatar: (state, action) => {
+      state.avatarUrl = action.payload;
     },
   },
 });
