@@ -14,12 +14,14 @@ const userSlice = createSlice({
   reducers: {
     setSession: (state, action) => {
       state.session = action.payload;
+      state.userId = action.payload ? action.payload.user.id : "";
     },
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
     },
     setUserId: (state, action) => {
       state.userId = action.payload;
+      
     },
     setUserName: (state, action) => {
       state.name = action.payload;

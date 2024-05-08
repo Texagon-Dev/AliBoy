@@ -1,20 +1,29 @@
-import { Document, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
-import React from "react";
+import { Document, Image, Page, StyleSheet, Text } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
   page: {
     flexDirection: "column",
     backgroundColor: "#fff",
-    padding: 10,
+    padding: 20,
+    marginBottom: "20px",
   },
   image: {
     width: "100%",
     padding: 10,
   },
   text: {
-    margin: 12,
+    marginBottom: "20px",
+    paddingBottom: "20px",
     fontSize: 14,
     textAlign: "center",
+  },
+  pageNumbers: {
+    position: "absolute",
+    bottom: 20,
+    left: 0,
+    right: 0,
+    textAlign: "center",
+    fontSize: 12,
   },
 });
 const PdfStoryBookDocument = ({ storyData }) => {
@@ -28,7 +37,7 @@ const PdfStoryBookDocument = ({ storyData }) => {
     return null;
   }
 
-  const chapters = storyData[0].output; // Assuming the first item contains the chapters
+  const chapters = storyData[0].output;
 
   return (
     <Document>
@@ -36,7 +45,16 @@ const PdfStoryBookDocument = ({ storyData }) => {
         <Page size="A4" style={styles.page} key={index}>
           <Text style={styles.text}>{`Chapter ${chapterData.id}`}</Text>
           <Text style={styles.text}>{chapterData.chapter}</Text>
-          <Image style={styles.image} src={chapterData.image} />
+          {chapterData.image && (
+            <Image style={styles.image} src={chapterData.image} />
+          )}
+          <Text
+            style={styles.pageNumbers}
+            render={({ pageNumber, totalPages }) =>
+              `${pageNumber} / ${totalPages}`
+            }
+            fixed
+          />
         </Page>
       ))}
     </Document>
