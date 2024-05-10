@@ -1,33 +1,30 @@
 import StoryCard from "@/components/StoryCard";
 import { Button } from "@/components/ui/button";
 import cardImage from "../assets/Images/cardimage.png";
-import cardImage1 from "../assets/Images/generatingstory.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-
-
-
-const stories = [
-  {
-    storyBookId: "1",
-    title: "Ocean Odyssey",
-    button1: "View Details",
-    button2: "Print Book",
-    image: cardImage,
-  },
-  {
-    storyBookId: "2",
-    title: "Magic World",
-    button1: "View Details",
-    button2: "Print Book",
-    image: cardImage1,
-  },
-];
+import { useEffect } from "react";
+import { fetchStories } from "@/redux/features/userStoriesSlice";
 
 const UserHomePage = () => {
-    const { session } = useSelector((state) => state.user);
+  const { session } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const {
+    details: stories,
+    loading,
+    error,
+  } = useSelector((state) => state.userStories);
 
-	return (
+  useEffect(() => {
+    if (session && session.user) {
+      dispatch(fetchStories(session.user.id));
+    }
+  }, [dispatch, session]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error loading stories: {error}</div>;
+
+  return (
     <section className="container mx-auto w-full mt-[100px] lg:mt-[140px] mb-10 lg:w-[1280px] ">
       <div className="flex flex-col justify-center w-full mx-auto">
         <h1 className="w-full mx-auto text-center lg:text-start text-primary1-blue text-3xl lg:text-5xl md:text-4xl arvo-bold leading-[59px] ">
@@ -49,17 +46,16 @@ const UserHomePage = () => {
         <div className="w-full flex flex-wrap justify-center md:justify-start gap-10">
           {stories.map((story) => (
             <StoryCard
-              key={story.storyBookId}
-              storyBookId={story.storyBookId}
-              image={story.image}
-              title={story.title}
-              button1={story.button1}
-              button2={story.button2}
+              key={story.story_book_id}
+              storyBookId={story.story_book_id}
+              image={story.story_picture || cardImage}
+              title={story.story_name}
+              created_at={story.created_at}
             />
           ))}
         </div>
       </div>
     </section>
   );
-}
-export default UserHomePage
+};
+export default UserHomePage;

@@ -1,105 +1,79 @@
 import supabase from "./supabase";
+
 // 1- FOR UPLOADING PDFS AND IMAGES ON SUPABASE
-async function uploadFileToSupabase(userId, file, fileType, fileName = null) {
-  // Determine the folder based on file type
-  const folder =
-    fileType === "pdf"
-      ? "pdf-documents"
-      : fileType === "image"
-      ? "images"
-      : "profiles";
 
-  // Use provided fileName or default to a timestamp-based name if not provided
-  const safeFileName = fileName || `file_${new Date().getTime()}`;
+export default async function uploadFileToSupabase(
+  userId,
+  pdfBlob,
+  // imageBlob,
+  genre,
+  storyName = "Random Story"
+) {
+  // Helper function to upload a single file
+  const uploadToStorage = async (folder, file) => {
+    const safeFileName = `file_${new Date().getTime()}`;
+    const path = `user_${userId}/${folder}/${safeFileName}`;
 
-  const path = `user_${userId}/${folder}/${safeFileName}`;
+    const { data, error } = await supabase.storage
+      .from("storypdf")
+      .upload(path, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
 
-  const { data, error } = await supabase.storage
-    .from("storypdf")
-    .upload(path, file, {
-      cacheControl: "3600",
-      upsert: false,
-    });
+    if (error) {
+      console.error(`Error uploading file to ${folder}:`, error.message);
+      return null;
+    }
+    return path;
+  };
 
-  if (error) {
-    console.error(`Error uploading ${fileType}:`, error.message);
+  // Upload PDF and Image separately
+  const pdfPath = await uploadToStorage("pdf-documents", pdfBlob);
+  // const imagePath = await uploadToStorage("images", imageBlob);
+
+  if (!pdfPath) {
+    console.error("Failed to upload files");
+    return;
+  }
+
+  // Database entry update
+  const dbData = {
+    uuid: userId,
+    story_name: storyName,
+    tags: genre,
+    pdf_path: pdfPath,
+    // story_picture: imagePath,
+  };
+
+  const { data: userData, error: storyError } = await supabase
+    .from("User_Story_Books")
+    .insert([dbData], { upsert: true });
+
+  if (storyError) {
+    console.error(`Error updating User_Story_Books:`, storyError.message);
     return null;
   }
 
- const { user, storyError } = await supabase
-   .from("User_Story_Books")
-   .insert([
-     {
-       uuid: userId,
-       story_name: "",
-       pdf_path: path,
-       tags: "",
-       story_picture: "",
-     },
-   ]);
-
- if (error) throw error;
-    if (error) {
-      console.error(`Error uploading:`, storyError.message);
-      return null;
-    }
-  
-
-  console.log(`${fileType.toUpperCase()} uploaded successfully:`, data);
-  return data;
-
-  
+  console.log("Files uploaded successfully:", userData);
+  console.log(`${pdfPath.toUpperCase()} Pdf uploaded successfully:`, dbData);
+  return userData;
 }
 
-export default uploadFileToSupabase;
+export const fetchUserStoryBooks = async (userId) => {
+  try {
+    const { data, error } = await supabase
+      .from("User_Story_Books")
+      .select("*") // You can customize this to select specific columns
+      .eq("uuid", userId);
 
+    if (error) {
+      throw error;
+    }
 
-
-
-
-// export async function uploadAvatarToSupabase(userId, file) {
-//   // Assuming fileType is always "image" for avatar uploads
-//   const folder = "avatars";
-//   const fileName = `avatar_${new Date().getTime()}`;
-
-//   const path = `user_${userId}/${folder}/${fileName}`;
-
-//   // Upload file to storage
-//   const { data, error: uploadError } = await supabase.storage
-//     .from("storypdf")
-//     .upload(path, file, {
-//       cacheControl: "3600",
-//       upsert: false,
-//     });
-
-//   if (uploadError) {
-//     console.error("Error uploading image:", uploadError.message);
-//     return null;
-//   }
-
-//   // Get public URL for the uploaded file
-//   const { publicURL, error: urlError } = supabase.storage
-//     .from("storypdf")
-//     .getPublicUrl(path);
-
-//   if (urlError) {
-//     console.error("Error getting public URL:", urlError.message);
-//     return null;
-//   }
-
-//   // Update user profile in the database
-//   const { error: updateError } = await supabase
-//     .from("users")
-//     .update({
-//       profile_image: publicURL,
-//     })
-//     .eq("uuid", userId);
-
-//   if (updateError) {
-//     console.error("Error updating user profile:", updateError.message);
-//     return null;
-//   }
-
-//   console.log("Image uploaded and profile updated successfully:", data);
-//   return data;
-// }
+    return data;
+  } catch (error) {
+    console.error("Error fetching User Story Books:", error.message);
+    return null;
+  }
+};
