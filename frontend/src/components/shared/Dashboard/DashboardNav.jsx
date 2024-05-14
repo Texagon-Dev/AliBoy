@@ -2,8 +2,19 @@ import { Input } from "../../ui/input";
 import logo from "../../../assets/Images/Ellipse.png";
 import { Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchUserProfile} from "@/redux/features/userSlice";
 
 const DashboardNav = () => {
+  const users = useSelector((state) => state.user.users);
+   const userId = useSelector((state) => state.user.userId);
+  const dispatch = useDispatch()
+  console.log(users)
+    useEffect(() => {
+      dispatch(fetchUserProfile(userId));
+    }, [dispatch, userId]);
+
   return (
     <nav className="fixed w-full bg-transparent top-0 z-20 py-3  backdrop-blur-lg">
       <div className="container lg:w-[1440px] px-4 mx-auto relative lg:text-sm">
@@ -29,10 +40,16 @@ const DashboardNav = () => {
               <h4 className="raleway-medium md:text-[16px] text-[12px]">
                 Hello, <span className="font-bold">Samantha</span>
               </h4>
-              <Avatar className="lg:h-[56px] lg:w-[56px] md:h-[48px] md:w-[48px] h-[36px] w-[36px] ">
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+              {users.map((user) => (
+                <div key={user.uuid}>
+                  <Avatar className="lg:h-[56px] lg:w-[56px] md:h-[48px] md:w-[48px] h-[36px] w-[36px] ">
+                    <AvatarImage
+                      src={user.profile_image || "https://github.com/shadcn.png"}
+                    />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </div>
+              ))}
             </div>
           </div>
         </div>
