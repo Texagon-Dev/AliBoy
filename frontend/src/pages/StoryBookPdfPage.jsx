@@ -5,7 +5,7 @@ import storyImage from "../assets/Images/storyImage.png";
 import regenerate from "../assets/Images/refresh.png";
 import edit from "../assets/Images/edit.png";
 import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Carousel,
   CarouselContent,
@@ -15,11 +15,15 @@ import {
 } from "@/components/ui/carousel";
 import { pdf } from "@react-pdf/renderer";
 import PdfStoryBookDocument from "@/components/pdf/PdfStoryBookDocument";
-import uploadPdfToSupabase from "@/lib/functions";
+import uploadFileToSupabase from "@/lib/functions";
+import { regenerateStorySlide } from "@/redux/features/storySlice";
 
 const StoryBookPdfPage = () => {
   const storyData = useSelector((state) => state.stories.items);
   const userId = useSelector((state) => state.user.userId);
+  const genre = useSelector((state) => state.stories.currentStory.genre.name);
+  const dispatch = useDispatch();
+  const storyName = "SciFi";
   const MAX_WORDS_PER_SLIDE = 35;
 
   const splitTextIntoSlides = (text) => {
@@ -28,7 +32,10 @@ const StoryBookPdfPage = () => {
     let slides = [];
     const words = text.split(/\s+/); // Split the text into words
     for (let i = 0; i < words.length; i += MAX_WORDS_PER_SLIDE) {
-      slides.push(words.slice(i, i + MAX_WORDS_PER_SLIDE).join(" ")); // Re-join words to form slide text
+      slides.push({
+        originalText: words.slice(i, i + MAX_WORDS_PER_SLIDE).join(" "),
+        regeneratedText: null, // Initialize with no regenerated text
+      });
     }
     return slides;
   };
@@ -36,6 +43,7 @@ const StoryBookPdfPage = () => {
   if (!storyData || storyData.length === 0) {
     return <div>Loading or no data available...</div>;
   }
+
 
   const generatePdfBlob = async () => {
     try {
@@ -48,15 +56,42 @@ const StoryBookPdfPage = () => {
     }
   };
 
-  const handleUploadPdf = async () => {
-    if (!userId) {
-      console.error("User not logged in");
-      return;
-    }
+   const handleUploadFiles = async () => {
+     if (!userId) {
+       console.error("User not logged in");
+       return;
+     }
 
-    // Assume you have a method to generate a PDF blob
-    const pdfBlob = await generatePdfBlob(); // You need to implement this
-    await uploadPdfToSupabase(userId, pdfBlob, 'pdf');
+     const pdfBlob = await generatePdfBlob();
+     if (!pdfBlob) {
+       console.error("Failed to generate PDF");
+       return;
+     }
+
+  const imageUrl =
+    storyData.length > 0 && storyData[0].output.length > 0
+      ? storyData[0].output[0].image
+      : null;
+
+
+     // Upload PDF and image blobs
+     await uploadFileToSupabase(userId, pdfBlob, imageUrl, genre, storyName);
+   };
+
+  const handleRegenerate = (
+    originalText,
+    storyIndex,
+    chapterIndex,
+    slideIndex
+  ) => {
+    dispatch(
+      regenerateStorySlide({
+        text: originalText,
+        storyIndex,
+        chapterIndex,
+        slideIndex,
+      })
+    );
   };
 
   return (
@@ -88,7 +123,7 @@ const StoryBookPdfPage = () => {
             <div className="flex lg:flex-col justify-center items-center gap-x-2 md:flex-row md:items-center md:justify-center  ">
               <Button
                 className="rounded-[40px] bg-primary1-pink lg:w-[209px] px-4 arvo-regular text-[16px] md:w-40 hover:bg-transparent hover:border hover:border-primary1-pink hover:text-primary1-pink"
-                onClick={handleUploadPdf}
+                onClick={handleUploadFiles}
               >
                 Save Book
               </Button>
@@ -110,10 +145,14 @@ const StoryBookPdfPage = () => {
             {storyData.map(
               (story, storyIndex) =>
                 story.output &&
-                story.output.map((chapterData, index) => {
+                story.output.map((chapterData, chapterIndex) => {
                   const slides = splitTextIntoSlides(chapterData.chapter);
+                  
                   return slides.map((slide, slideIndex) => (
-                    <CarouselItem key={`${storyIndex}-${index}-${slideIndex}`}>
+                    
+                    <CarouselItem
+                      key={`${storyIndex}-${chapterIndex}-${slideIndex}`}
+                    >
                       <div
                         className="relative"
                         style={{
@@ -150,18 +189,31 @@ const StoryBookPdfPage = () => {
                         </div>
                         <div>
                           <div>
-                            <img
-                              src={regenerate}
-                              alt="story image"
-                              className="absolute top-5 right-16"
-                            />
+                           
+                              <img
+                                src={regenerate}
+                                alt="chapter regenerate"
+                                className="absolute top-5 right-16"
+                                onClick={() =>
+                                  handleRegenerate(
+                                    slide.originalText,
+                                    storyIndex,
+                                    chapterIndex,
+                                    slideIndex
+                                  )
+                                }
+                              />
+                        
+
                             <div className="text-2xl raleway-regular w-1/3 h-[20%] text-start absolute top-[20%] right-[100px]">
                               <div>
-                                <h3>
+                                <h3 className="arvo-bold mb-4">
                                   Chapter {chapterData.id} - Part{" "}
                                   {slideIndex + 1}
                                 </h3>
-                                <p>{slide}</p>
+                                <p>
+                                  {slide.regeneratedText || slide.originalText}
+                                </p>
                                 <button className="cursor-pointer">
                                   <img
                                     src={edit}

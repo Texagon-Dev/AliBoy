@@ -19,7 +19,7 @@ export const sendStoryData = createAsyncThunk(
 
     try {
       const response = await axios.post(
-        `https://d776-202-166-171-220.ngrok-free.app/api/v1/${storyData.genre}`,
+        `https://4198-202-166-171-220.ngrok-free.app/api/v1/${storyData.genre.value}`,
         { input },
         {
           headers: {
@@ -27,8 +27,36 @@ export const sendStoryData = createAsyncThunk(
           },
         }
       );
-      console.log(response)
+      console.log(response);
       return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const regenerateStorySlide = createAsyncThunk(
+  "stories/regenerateStorySlide",
+  async (
+    { text, storyIndex, chapterIndex, slideIndex },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await axios.post(
+        "https://4198-202-166-171-220.ngrok-free.app/api/v1/rewriteParagraph",
+        { input: text },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return {
+        data: response.data,
+        storyIndex,
+        chapterIndex,
+        slideIndex,
+      };
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -77,6 +105,7 @@ export const storiesSlice = createSlice({
     },
     addStoryToHistory: (state, action) => {
       state.items.push(action.payload);
+
     },
     resetCurrentStory: (state) => {
       state.currentStory = initialState.currentStory;
@@ -94,7 +123,28 @@ export const storiesSlice = createSlice({
       .addCase(sendStoryData.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = false;
-      });
+      })
+      // .addCase(regenerateStorySlide.fulfilled, (state, action) => {
+      //   const {
+      //     storyIndex,
+      //     chapterIndex,
+      //     slideIndex,
+      //     data: regeneratedText,
+      //   } = action.payload;
+
+      //   const story = state.items[storyIndex];
+      //   if (
+      //     story &&
+      //     story.output &&
+      //     story.output[chapterIndex] &&
+      //     story.output[chapterIndex].slides &&
+      //     story.output[chapterIndex].slides[slideIndex]
+      //   ) {
+      //     story.output[chapterIndex].slides[slideIndex].regeneratedText =
+      //       regeneratedText;
+      //   }
+      // });
+  
   },
 });
 
