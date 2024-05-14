@@ -31,7 +31,7 @@ const GenreSelection = () => {
 
    const handleNext = () => {
      if (selectedGenre !== null) {
-       dispatch(setGenre(genres[selectedGenre].value));
+       dispatch(setGenre(genres[selectedGenre]));
        navigate("/create/details");
      } else {
        alert("Please select a genre.");

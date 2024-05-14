@@ -36,7 +36,9 @@ function App() {
           <Route path="reset-password" element={<ResetPassword />} />
           <Route path="update-password" element={<UpdatePassword />} />
           {/* Dashboard */}
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route element={<ProtectedRoutes />}>
+            <Route path="dashboard" element={<Dashboard />} />
+          </Route>
           <Route path="adminlogin" element={<AdminLoginPage />} />
 
           <Route path="/" element={<RootLayout />}>
@@ -44,8 +46,8 @@ function App() {
             {/* User */}
             <Route element={<ProtectedRoutes />}>
               <Route path="/user" element={<UserHomePage />} />
+              <Route path="user/profile" element={<UserProfile />} />
             </Route>
-            <Route path="user/profile" element={<UserProfile />} />
             {/* Story Creation */}
             <Route path="create/begin" element={<GenreSelection />} />
             <Route path="create/details" element={<StoryDetails />} />
