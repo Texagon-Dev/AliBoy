@@ -23,14 +23,17 @@ import UpdatePassword from "./pages/auth/fc/UpdatePassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoutes from "./lib/ProtectedRoutes";
+import Auth from "./lib/Auth";
+
 
 function App() {
   return (
     <>
+      <Auth />
+
       <BrowserRouter>
         <Routes>
           {/* Auth */}
-
           <Route path="signup" element={<SignUp />} />
           <Route path="signin" element={<SignIn />} />
           <Route path="reset-password" element={<ResetPassword />} />
