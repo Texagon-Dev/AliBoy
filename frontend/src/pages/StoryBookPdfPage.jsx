@@ -16,34 +16,61 @@ import {
 import { pdf } from "@react-pdf/renderer";
 import PdfStoryBookDocument from "@/components/pdf/PdfStoryBookDocument";
 import uploadFileToSupabase from "@/lib/functions";
-import { regenerateStorySlide } from "@/redux/features/storySlice";
+import {
+  regenerateStorySlide,
+  setSlideText,
+} from "@/redux/features/storySlice";
+import StoryEdit from "@/components/StoryEdit";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { useState } from "react";
+
+const SlideEditDialog = ({ open, onClose, slide, onSave }) => {
+  const [editedText, setEditedText] = useState("");
+
+  React.useEffect(() => {
+    if (slide) {
+      setEditedText(slide.regeneratedText || slide.originalText);
+    }
+  }, [slide]);
+
+  const handleSave = () => {
+    onSave(editedText);
+    onClose();
+  };
+
+  return (
+    <Dialog open={open} onClose={onClose} fullWidth>
+      <DialogTitle>Edit Slide</DialogTitle>
+      <DialogContent>
+        <textarea
+          className="w-full h-24 rounded-md border-gray-300 focus:ring-primary1-blue focus:border-primary1-blue sm:text-sm"
+          value={editedText}
+          onChange={(e) => setEditedText(e.target.value)}
+        />
+      </DialogContent>
+
+      <Button onClick={onClose} color="primary">
+        Cancel
+      </Button>
+      <Button onClick={handleSave} color="primary">
+        Save
+      </Button>
+    </Dialog>
+  );
+};
 
 const StoryBookPdfPage = () => {
   const storyData = useSelector((state) => state.stories.items);
   const userId = useSelector((state) => state.user.userId);
   const genre = useSelector((state) => state.stories.currentStory.genre.name);
+  const [editSlideIndex, setEditSlideIndex] = useState(null);
+
   const dispatch = useDispatch();
   const storyName = "SciFi";
-  const MAX_WORDS_PER_SLIDE = 35;
-
-  const splitTextIntoSlides = (text) => {
-    if (!text) return []; // Guard clause to handle undefined or empty strings
-
-    let slides = [];
-    const words = text.split(/\s+/); // Split the text into words
-    for (let i = 0; i < words.length; i += MAX_WORDS_PER_SLIDE) {
-      slides.push({
-        originalText: words.slice(i, i + MAX_WORDS_PER_SLIDE).join(" "),
-        regeneratedText: null, // Initialize with no regenerated text
-      });
-    }
-    return slides;
-  };
 
   if (!storyData || storyData.length === 0) {
     return <div>Loading or no data available...</div>;
   }
-
 
   const generatePdfBlob = async () => {
     try {
@@ -56,27 +83,26 @@ const StoryBookPdfPage = () => {
     }
   };
 
-   const handleUploadFiles = async () => {
-     if (!userId) {
-       console.error("User not logged in");
-       return;
-     }
+  const handleUploadFiles = async () => {
+    if (!userId) {
+      console.error("User not logged in");
+      return;
+    }
 
-     const pdfBlob = await generatePdfBlob();
-     if (!pdfBlob) {
-       console.error("Failed to generate PDF");
-       return;
-     }
+    const pdfBlob = await generatePdfBlob();
+    if (!pdfBlob) {
+      console.error("Failed to generate PDF");
+      return;
+    }
 
-  const imageUrl =
-    storyData.length > 0 && storyData[0].output.length > 0
-      ? storyData[0].output[0].image
-      : null;
+    const imageUrl =
+      storyData.length > 0 && storyData[0].output.length > 0
+        ? storyData[0].output[0].image
+        : null;
 
-
-     // Upload PDF and image blobs
-     await uploadFileToSupabase(userId, pdfBlob, imageUrl, genre, storyName);
-   };
+    // Upload PDF and image blobs
+    await uploadFileToSupabase(userId, pdfBlob, imageUrl, genre, storyName);
+  };
 
   const handleRegenerate = (
     originalText,
@@ -91,6 +117,21 @@ const StoryBookPdfPage = () => {
         chapterIndex,
         slideIndex,
       })
+    );
+  };
+
+  const handleEditSlide = (slideIndex) => {
+    setEditSlideIndex(slideIndex);
+  };
+
+  const handleSaveEditedSlide = (
+    editedText,
+    storyIndex,
+    chapterIndex,
+    slideIndex
+  ) => {
+    dispatch(
+      setSlideText({ editedText, storyIndex, chapterIndex, slideIndex })
     );
   };
 
@@ -146,10 +187,12 @@ const StoryBookPdfPage = () => {
               (story, storyIndex) =>
                 story.output &&
                 story.output.map((chapterData, chapterIndex) => {
-                  const slides = splitTextIntoSlides(chapterData.chapter);
-                  
+                  console.log("Processing chapter:", chapterData);
+                  const slides = chapterData.slides;
+
+                  console.log("Generated slides:", slides);
+
                   return slides.map((slide, slideIndex) => (
-                    
                     <CarouselItem
                       key={`${storyIndex}-${chapterIndex}-${slideIndex}`}
                     >
@@ -189,21 +232,19 @@ const StoryBookPdfPage = () => {
                         </div>
                         <div>
                           <div>
-                           
-                              <img
-                                src={regenerate}
-                                alt="chapter regenerate"
-                                className="absolute top-5 right-16"
-                                onClick={() =>
-                                  handleRegenerate(
-                                    slide.originalText,
-                                    storyIndex,
-                                    chapterIndex,
-                                    slideIndex
-                                  )
-                                }
-                              />
-                        
+                            <img
+                              src={regenerate}
+                              alt="chapter regenerate"
+                              className="absolute top-5 right-16"
+                              onClick={() =>
+                                handleRegenerate(
+                                  slide.originalText,
+                                  storyIndex,
+                                  chapterIndex,
+                                  slideIndex
+                                )
+                              }
+                            />
 
                             <div className="text-2xl raleway-regular w-1/3 h-[20%] text-start absolute top-[20%] right-[100px]">
                               <div>
@@ -211,16 +252,16 @@ const StoryBookPdfPage = () => {
                                   Chapter {chapterData.id} - Part{" "}
                                   {slideIndex + 1}
                                 </h3>
+
                                 <p>
                                   {slide.regeneratedText || slide.originalText}
+                                  {/* <StoryEdit /> */}
+                                  <Button
+                                    onClick={() => handleEditSlide(slideIndex)}
+                                  >
+                                    Edit
+                                  </Button>
                                 </p>
-                                <button className="cursor-pointer">
-                                  <img
-                                    src={edit}
-                                    alt="Edit story"
-                                    className="h-5 w-5"
-                                  />
-                                </button>
                               </div>
                             </div>
                             <span className="absolute raleway-medium text-2xl  bottom-5 right-16">
@@ -242,6 +283,20 @@ const StoryBookPdfPage = () => {
           Save Book
         </Button> */}
       </div>
+
+      <SlideEditDialog
+        open={editSlideIndex !== null}
+        onClose={() => setEditSlideIndex(null)}
+        slide={editSlideIndex !== null ? slides[editSlideIndex] : null}
+        onSave={(editedText) =>
+          handleSaveEditedSlide(
+            editedText,
+            storyIndex,
+            chapterIndex,
+            editSlideIndex
+          )
+        }
+      />
     </section>
   );
 };

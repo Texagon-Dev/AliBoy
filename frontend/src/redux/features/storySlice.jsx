@@ -9,6 +9,8 @@ export const sendStoryData = createAsyncThunk(
       storyData.storyDetails;
     const { total_chapters } = storyData.generationOptions;
 
+    console.log("storyData from slice", storyData);
+
     // Form the input object to send to the API
     const input = {
       story_explanation,
@@ -16,10 +18,11 @@ export const sendStoryData = createAsyncThunk(
       total_chapters,
       story_length,
     };
+    console.log("input from slice", input);
 
     try {
       const response = await axios.post(
-        `https://4198-202-166-171-220.ngrok-free.app/api/v1/${storyData.genre.value}`,
+        `https://51c0-202-166-171-221.ngrok-free.app/api/v1/${storyData.genre.value}`,
         { input },
         {
           headers: {
@@ -43,7 +46,7 @@ export const regenerateStorySlide = createAsyncThunk(
   ) => {
     try {
       const response = await axios.post(
-        "https://4198-202-166-171-220.ngrok-free.app/api/v1/rewriteParagraph",
+        "https://51c0-202-166-171-221.ngrok-free.app/api/v1/rewriteParagraph",
         { input: text },
         {
           headers: {
@@ -74,14 +77,50 @@ const initialState = {
       image: null,
     },
     generationOptions: {
-      total_chapters: "2",
+      total_chapters: "1",
       imageStyle: "",
       language: "",
     },
+   
   },
+
   items: [],
   loading: false,
   error: null,
+};
+
+export const setSlideText =
+  ({ editedText, storyIndex, chapterIndex, slideIndex }) =>
+  (dispatch, getState) => {
+    const { stories } = getState();
+    const updatedItems = [...stories.items]; // Copy the items array
+
+    // Update the slide content with edited text
+    updatedItems[storyIndex].output[chapterIndex].slides[
+      slideIndex
+    ].regeneratedText = editedText;
+
+    // Dispatch the action to update the state
+    dispatch({ type: "stories/setSlideText", payload: updatedItems });
+  };
+
+
+const MAX_WORDS_PER_SLIDE = 35;
+
+const splitTextIntoSlides = (text) => {
+  if (!text) return []; // Guard clause to handle undefined or empty strings
+   if (MAX_WORDS_PER_SLIDE <= 0) return [];
+
+  let slides = [];
+  const words = text.split(/\s+/); // Split the text into words
+  for (let i = 0; i < words.length; i += MAX_WORDS_PER_SLIDE) {
+    slides.push({
+      slideId: i / MAX_WORDS_PER_SLIDE,
+      originalText: words.slice(i, i + MAX_WORDS_PER_SLIDE).join(" "),
+      regeneratedText: null, // Initialize with no regenerated text
+    });
+  }
+  return slides;
 };
 
 export const storiesSlice = createSlice({
@@ -98,6 +137,7 @@ export const storiesSlice = createSlice({
       };
     },
     setGenerationOptions: (state, action) => {
+      console.log("action", action.payload);
       state.currentStory.generationOptions = {
         ...state.currentStory.generationOptions,
         ...action.payload,
@@ -105,7 +145,6 @@ export const storiesSlice = createSlice({
     },
     addStoryToHistory: (state, action) => {
       state.items.push(action.payload);
-
     },
     resetCurrentStory: (state) => {
       state.currentStory = initialState.currentStory;
@@ -117,34 +156,41 @@ export const storiesSlice = createSlice({
         state.loading = true;
       })
       .addCase(sendStoryData.fulfilled, (state, action) => {
-        state.items.push(action.payload);
+        const response = action.payload;
+        console.log(response);
+        response.output.forEach((chapter) => {
+          console.log(chapter);
+          const slides =
+            chapter.slides || splitTextIntoSlides(chapter.chapter);
+          // response.output.chapter.slides = slides;
+          chapter.slides = slides
+         
+
+        });
+       
+
+        state.items.push(response);
         state.loading = false;
       })
       .addCase(sendStoryData.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = false;
       })
-      // .addCase(regenerateStorySlide.fulfilled, (state, action) => {
-      //   const {
-      //     storyIndex,
-      //     chapterIndex,
-      //     slideIndex,
-      //     data: regeneratedText,
-      //   } = action.payload;
+      .addCase(regenerateStorySlide.fulfilled, (state, action) => {
+        const {
+          storyIndex,
+          chapterIndex,
+          slideIndex,
+          data: regeneratedText,
+        } = action.payload;
+        const parentStory = state.items[storyIndex];
+        const story = parentStory.output[chapterIndex];
+        story.slides[slideIndex].regeneratedText = regeneratedText.output;
+        console.log(story);
 
-      //   const story = state.items[storyIndex];
-      //   if (
-      //     story &&
-      //     story.output &&
-      //     story.output[chapterIndex] &&
-      //     story.output[chapterIndex].slides &&
-      //     story.output[chapterIndex].slides[slideIndex]
-      //   ) {
-      //     story.output[chapterIndex].slides[slideIndex].regeneratedText =
-      //       regeneratedText;
-      //   }
-      // });
-  
+        // story.chapter = regeneratedText.output;
+        state.items[storyIndex] = parentStory;
+      });
   },
 });
 
