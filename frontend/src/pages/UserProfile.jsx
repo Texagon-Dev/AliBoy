@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,23 +14,47 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { uploadAvatarToSupabase } from "../lib/functions.jsx";
-
+import {
+  updateUserPassword,
+  updateUserProfile,
+  uploadAvatarToSupabase,
+} from "../lib/functions.jsx";
+import * as yup from "yup";
 import { useRef } from "react";
-import { fetchUserProfile} from "@/redux/features/userSlice.jsx";
-// import { fetchUser } from "@/redux/features/userSlice.jsx";
+import { fetchUserProfile } from "@/redux/features/userSlice.jsx";
+import { toast } from "react-toastify";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const UserProfile = () => {
   const userId = useSelector((state) => state.user.userId);
   const users = useSelector((state) => state.user.users);
+  const [inputType, setInputType] = useState("text");
+  const handleFocus = () => setInputType("date");
+  const handleBlur = () => setInputType("text");
 
   console.log("user Profile", users);
 
+  const schema = yup.object().shape({
+    name: yup
+      .string()
+      .min(5, "Name must be at least 5 characters")
+      .required("Name is required"),
+    dob: yup.string().required("Date of Birth is required"),
+    email: yup
+      .string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    password: yup
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .required("Password is required"),
+  });
 
   const dispatch = useDispatch();
 
   const fileInputRef = useRef(null);
   const form = useForm({
+    resolver: yupResolver(schema),
     defaultValues: {
       name: "",
       dob: "",
@@ -41,44 +64,29 @@ const UserProfile = () => {
     mode: "onBlur", // or "onChange"
   });
 
- 
-
-  // Function to format date of birth to dd/mm/yyyy format
-  const formatDOB = (dob) => {
-    const date = new Date(dob);
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based, so add 1
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
 
- const defaultDob = users.length > 0 ? formatDOB(users[0].metadata.dob) : "";
-  
+  useEffect(() => {
+    console.log("Users:", users);
+    if (users.length > 0) {
+      const userData = users[0];
+      const formattedDob = formatDate(userData.metadata.dob || "");
 
-useEffect(() => {
-  console.log("Users:", users);
-  if (users.length > 0) {
-    const userData = users[0];
-    console.log("UserData:", userData);
-    const dobDate = userData.metadata.dob
-      ? new Date(userData.metadata.dob)
-      : null;
-    console.log("DOB Date:", dobDate);
-    const dobFormatted = dobDate
-      ? `${dobDate.getDate()}/${
-          dobDate.getMonth() + 1
-        }/${dobDate.getFullYear()}`
-      : "";
-    console.log("Formatted DOB:", dobFormatted);
-    const defaultValues = {
-      name: userData.metadata.full_name || "",
-      date: dobFormatted,
-      email: userData.email || "",
-      password: "",
-    };
-    form.reset(defaultValues);
-  }
-}, [users, form]);
+      const defaultValues = {
+        name: userData.metadata.full_name || "",
+        dob: formattedDob,
+        email: userData.email || "",
+        password: userData.password || "",
+      };
+      form.reset(defaultValues);
+    }
+  }, [users, form]);
 
   useEffect(() => {
     dispatch(fetchUserProfile(userId));
@@ -89,9 +97,8 @@ useEffect(() => {
     if (file) {
       await uploadAvatarToSupabase(userId, file);
     }
+    dispatch(fetchUserProfile(userId));
   };
-
-  const [setFormError] = useState(null);
 
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => {
@@ -101,12 +108,25 @@ useEffect(() => {
   const onSubmit = async (data) => {
     try {
       console.log("Form data:", data);
-      setFormError(null);
+
+      if (data.password) {
+        const passwordResult = await updateUserPassword(userId, data.password);
+        if (!passwordResult.success) {
+          throw new Error(passwordResult.error.message);
+        }
+      }
+
+      const profileResult = await updateUserProfile(userId, data);
+      if (!profileResult.success) {
+        throw new Error(profileResult.error.message);
+      }
+
+      // If everything is successful, you can handle any additional logic here
+      toast("Profile updated successfully");
+      console.log("Profile updated successfully");
     } catch (error) {
-      console.error("Form submission error:", error);
-      setFormError(
-        "An error occurred while submitting the form. Please try again."
-      );
+      console.error("Form submission error:", error.message);
+      toast(`Form submission error: ${error.message}`);
     }
   };
 
@@ -165,7 +185,7 @@ useEffect(() => {
                   control={form.control}
                   name="name"
                   autoComplete="username"
-                  render={({ field }) => (
+                  render={({ field, fieldState: { error } }) => (
                     <FormItem>
                       <FormItem className="flex justify-between items-center">
                         <FormLabel className="text-xl lg:text-2xl arvo-bold ">
@@ -180,35 +200,36 @@ useEffect(() => {
                           className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
                         />
                       </FormControl>
-                      <FormDescription></FormDescription>
-                      <FormMessage />
+                      {error && <FormMessage>{error.message}</FormMessage>}
                     </FormItem>
                   )}
                 />
                 <FormField
                   control={form.control}
                   name="dob"
-                  render={({ field }) => (
+                  render={({ field, fieldState: { error } }) => (
                     <FormItem>
                       <FormLabel className="text-xl lg:text-2xl arvo-bold">
                         Date of Birth
                       </FormLabel>
                       <FormControl>
                         <Input
-                          type="date"
+                          type={inputType}
                           value={field.value}
-                         
+                          onFocus={handleFocus}
+                          onBlur={handleBlur}
                           className=" block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl"
                           {...field}
                         />
                       </FormControl>
+                      {error && <FormMessage>{error.message}</FormMessage>}
                     </FormItem>
                   )}
                 />
                 <FormField
                   control={form.control}
                   name="email"
-                  render={({ field }) => (
+                  render={({ field, fieldState: { error } }) => (
                     <FormItem>
                       <FormItem className="flex justify-between items-center">
                         <FormLabel className="text-xl lg:text-2xl arvo-bold ">
@@ -223,16 +244,14 @@ useEffect(() => {
                           className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
                         />
                       </FormControl>
-                      <FormDescription></FormDescription>
-                      <FormMessage />
+                      {error && <FormMessage>{error.message}</FormMessage>}
                     </FormItem>
                   )}
                 />
                 <FormField
                   control={form.control}
                   name="password"
-                  rules={{ required: "Password is required" }} // Add validation rules
-                  render={({ field }) => (
+                  render={({ field, fieldState: { error } }) => (
                     <FormItem>
                       <FormItem className="flex justify-between items-center">
                         <FormLabel className="text-xl lg:text-2xl arvo-bold ">
@@ -260,8 +279,8 @@ useEffect(() => {
                           }
                         />
                       </FormControl>
-                      <FormDescription></FormDescription>
-                      {/* <FormMessage>{form.errors.password?.message}</FormMessage> */}
+
+                      {error && <FormMessage>{error.message}</FormMessage>}
                     </FormItem>
                   )}
                 />

@@ -25,16 +25,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { setPrintingOrder } from "@/redux/features/bookPrintingSlice";
 import calculateOrderPricing from "@/lib/calculateOrderPricing";
+import { upsertBookPrintingOrder } from "@/lib/functions";
 
 const BookPrintingOptions = () => {
   const [searchParams] = useSearchParams();
   const storyBookId = searchParams.get("storyBookId");
   const orderDetails = useSelector((state) => state.bookPrintingOrders.order);
+  const userId = useSelector((state) => state.user.userId);
 
   const form = useForm({
     defaultValues: {
+      printing_id: "1",
       story_book_id: storyBookId,
-      user_id: orderDetails?.user_id || "",
+      uuid: orderDetails?.userId || "",
       binding_name: orderDetails?.binding_name || "",
       title_size: orderDetails?.title_size || "",
       quantity: orderDetails?.quantity || 5,
@@ -46,6 +49,7 @@ const BookPrintingOptions = () => {
       discount: orderDetails?.discount || 0,
       shipping_amount: orderDetails?.shipping_amount || 0,
       payment_method: orderDetails?.payment_method || "",
+      order_status: "pending" | "Dispatch",
     },
   });
 
@@ -68,6 +72,15 @@ const BookPrintingOptions = () => {
     console.log(orderDetails);
     navigate("/dashboard/checkout");
   };
+
+    const handlePlaceOrder = async () => {
+      try {
+        await upsertBookPrintingOrder(form.getValues(userId));
+        onSubmit(form.getValues());
+      } catch (error) {
+        console.error("Error placing order:", error.message);
+      }
+    };
 
   return (
     <section className="container mx-auto w-full mt-[80px] lg:mt-[120px] mb-10 lg:w-[1280px]">
@@ -117,7 +130,7 @@ const BookPrintingOptions = () => {
                   <div className="flex w-full flex-col">
                     <Form {...form}>
                       <form
-                        onSubmit={form.handleSubmit(onSubmit)}
+                        onSubmit={form.handleSubmit(handlePlaceOrder)}
                         className=" space-y-6"
                       >
                         <FormField

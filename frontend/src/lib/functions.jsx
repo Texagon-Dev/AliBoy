@@ -1,4 +1,3 @@
-
 import supabase from "./supabase";
 
 // 1- FOR UPLOADING PDFS AND IMAGES TO SUPABASE AND INSERTING DATA TO SUPABASE
@@ -140,26 +139,111 @@ export async function uploadAvatarToSupabase(userId, file) {
     return null;
   }
 
- 
   console.log("Image uploaded and profile updated successfully:", uploadData);
   return uploadData;
 }
 
 // 4- FOR USERS FROM SUPABASE
 export const fetchUsers = async (userId) => {
+  if (!userId) {
+    return null;
+  }
+
+  console.log("Fetching users for userId:", userId);
+
   try {
     const { data, error } = await supabase
       .from("users")
-      .select("*") // You can customize this to select specific columns
+      .select("*")
       .eq("uuid", userId);
 
     if (error) {
+      console.error("Supabase error:", error.message);
       throw error;
     }
 
+    console.log("Fetched users data:", data);
     return data;
   } catch (error) {
     console.error("Error fetching User Story Books:", error.message);
     return null;
   }
 };
+
+  export const updateUserPassword = async (userId, newPassword) => {
+    try {
+      const { error } = await supabase.auth.updateUser({
+        id: userId,
+        password: newPassword,
+      });
+      if (error) throw error;
+      return { success: true };
+    } catch (error) {
+      console.error("Error updating password:", error);
+      return { success: false, error };
+    }
+  };
+
+  export const updateUserProfile = async (userId, data) => {
+    try {
+      const updates = {
+        email: data.email,
+        user_metadata: {
+          full_name: data.name,
+          dob: data.dob,
+        },
+      };
+
+      const { error } = await supabase.auth.updateUser({
+        id: userId,
+        ...updates,
+      });
+      if (error) throw error;
+      return { success: true };
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+      return { success: false, error };
+    }
+  };
+
+
+export async function upsertBookPrintingOrder(form, userId) {
+  try {
+    const { data, error } = await supabase
+      .from("Book_Printing_Orders")
+      .upsert([
+        {
+          printing_id: form?.printing_id,
+          story_book_id: form?.story_book_id || null,
+          uuid: form?.userId || null,
+          binding_name: form?.binding_name || null,
+          title_size: form?.title_size || null,
+          quantity: form?.quantity || null,
+          country: form?.country || null,
+          city_region: form?.city_region || null,
+          delivery_address: form?.delivery_address || null,
+          postal_code: form?.postal_code || null,
+          item_total: form?.item_total || null,
+          discount: form?.discount || null,
+          shipping_amount: form?.shipping_amount || null,
+          payment_method: form?.payment_method || null,
+          order_status: form?.order_status || null,
+        },
+      ])
+      .eq("uuid", userId);
+
+    if (error) {
+      // Handle error
+      console.error("Error upserting data:", error.message);
+    } else {
+      // Handle success
+      console.log("Data upserted successfully:", data);
+    }
+  } catch (error) {
+    // Handle any unexpected errors
+    console.error("Unexpected error:", error.message);
+  }
+}
+
+
+

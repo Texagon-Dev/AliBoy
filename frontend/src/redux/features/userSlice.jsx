@@ -14,6 +14,11 @@ const initialState = {
 export const fetchUserProfile = (userId) => async (dispatch) => {
   try {
     const users = await fetchUsers(userId);
+
+    if (!users || users.length === 0) {
+      return;
+    }
+
     dispatch(setUsers(users));
   } catch (error) {
     console.error("Error fetching users:", error.message);
@@ -27,6 +32,7 @@ const userSlice = createSlice({
     setSession: (state, action) => {
       state.session = action.payload;
       state.userId = action.payload ? action.payload.user.id : "";
+      state.avatarUrl = action.payload ? action.payload.profile_image : "";
     },
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
@@ -45,8 +51,12 @@ const userSlice = createSlice({
       state.metadata = action.payload;
     },
     setUsers: (state, action) => {
-      state.users = action.payload;
+      const users = action.payload || [];
+      state.users = users;
       state.isLoading = false;
+      if (users.length > 0) {
+        state.avatarUrl = users[0].profile_image;
+      }
     },
   },
 });
