@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { useEffect } from "react";
 import { fetchStories } from "@/redux/features/userStoriesSlice";
+import Loading from "@/components/shared/Loading/Loading";
 
 const UserHomePage = () => {
   const { session } = useSelector((state) => state.user);
@@ -21,7 +22,7 @@ const UserHomePage = () => {
     }
   }, [dispatch, session]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div><Loading/></div>;
   if (error) return <div>Error loading stories: {error}</div>;
 
   return (

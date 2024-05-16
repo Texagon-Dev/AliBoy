@@ -5,18 +5,38 @@ import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchUserProfile} from "@/redux/features/userSlice";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { NavLink, useNavigate } from "react-router-dom";
+import supabase from "@/lib/supabase";
+import { toast } from "react-toastify";
 
 const DashboardNav = () => {
   const users = useSelector((state) => state.user.users);
-   const userId = useSelector((state) => state.user.userId);
+  const userId = useSelector((state) => state.user.userId);
+ 
   const dispatch = useDispatch()
   console.log(users)
     useEffect(() => {
       dispatch(fetchUserProfile(userId));
     }, [dispatch, userId]);
 
+
+    const navigate = useNavigate();
+
+    const handleSignout = async () => {
+      try {
+        await supabase.auth.signOut();
+        navigate("/signin");
+        toast.info("Sign out successful");
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error("Error signing out:", error.message);
+        }
+      }
+    };
+
   return (
-    <nav className="fixed w-full bg-transparent top-0 z-20 py-3  backdrop-blur-lg">
+    <nav className="fixed w-screen bg-transparent top-0 z-20 py-3  backdrop-blur-lg">
       <div className="container lg:w-[1440px] px-4 mx-auto relative lg:text-sm">
         <div className="flex justify-between items-center">
           <div className="flex justify-center items-center md:gap-10 gap-4">
@@ -37,19 +57,43 @@ const DashboardNav = () => {
           </div>
           <div className=" border-l-2 py-1 ml-4 ">
             <div className="ml-4 flex gap-4 items-center justify-center">
-              <h4 className="raleway-medium md:text-[16px] text-[12px]">
-                Hello, <span className="font-bold">Samantha</span>
-              </h4>
-              {users.map((user) => (
-                <div key={user.uuid}>
-                  <Avatar className="lg:h-[56px] lg:w-[56px] md:h-[48px] md:w-[48px] h-[36px] w-[36px] ">
-                    <AvatarImage
-                      src={user.profile_image || "https://github.com/shadcn.png"}
-                    />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </div>
-              ))}
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <div className="flex items-center gap-4">
+                    {users.map((user) => (
+                      <div
+                        key={user.uuid}
+                        className="ml-4 flex items-center justify-center gap-4"
+                      >
+                        <h4 className="raleway-medium text-[12px] md:text-[24px]">
+                          Hello,{" "}
+                          <span className="font-bold">
+                            {user.metadata.full_name.split(" ")[0]}
+                          </span>
+                        </h4>
+                        <Avatar className="lg:h-[56px] lg:w-[56px] md:h-[48px] md:w-[48px] h-[36px] w-[36px]">
+                          <AvatarImage
+                            src={user.profile_image || "https://github.com/shadcn.png"}
+                          />
+                          <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                      </div>
+                    ))}
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <NavLink to="/user/profile">User Profile</NavLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <NavLink to="#" onClick={handleSignout}>
+                      Logout
+                    </NavLink>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>

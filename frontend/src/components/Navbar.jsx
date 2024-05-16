@@ -1,34 +1,53 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/Images/Ellipse.png";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import supabase from "@/lib/supabase";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { fetchUserProfile } from "@/redux/features/userSlice";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 const Navbar = () => {
-   const { session } = useSelector((state) => state.user);
+  const { session } = useSelector((state) => state.user);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
- const handleSignout = async () => {
-   try {
-     await supabase.auth.signOut();
-     navigate("/signin");
-     toast.info("Sign out successful");
-   } catch (error) {
-     if (error instanceof Error) {
-       console.error("Error signing out:", error.message);
-     }
-   }
- };
+  const handleSignout = async () => {
+    try {
+      await supabase.auth.signOut();
+      navigate("/signin");
+      toast.info("Sign out successful");
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error signing out:", error.message);
+      }
+    }
+  };
+
+  const users = useSelector((state) => state.user.users);
+  const userId = useSelector((state) => state.user.userId);
+  const dispatch = useDispatch();
+  console.log(users);
+  useEffect(() => {
+    dispatch(fetchUserProfile(userId));
+  }, [dispatch, userId]);
+
 
   const toggleNavbar = () => {
     setMobileDrawerOpen(!mobileDrawerOpen);
   };
   return (
-    <nav className="fixed w-full bg-transparent top-0 z-50 py-3  backdrop-blur-lg">
+    <nav className="fixed w-screen bg-transparent top-0 z-50 py-3  backdrop-blur-lg">
       <div className="container lg:w-[1280px] px-4 mx-auto relative lg:text-sm">
         <div className="flex justify-between items-center">
           <ul className="flex items-center flex-shrink-0">
@@ -67,9 +86,41 @@ const Navbar = () => {
               <NavLink to="/pricing">Pricing</NavLink>
             </li>
             {session && session.user ? (
-              <li>
-                <NavLink onClick={handleSignout}>Logout</NavLink>
-              </li>
+              <>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <div className="ml-4 flex gap-4 items-center justify-center">
+                      <h4 className="raleway-medium md:text-[24px] text-[12px]">
+                        Hello,{" "}
+                        <span className="font-bold">
+                          {session.user.user_metadata.full_name.split(" ")[0]}
+                        </span>
+                      </h4>
+                      {users.map((user) => (
+                        <div
+                          key={user.uuid}>
+                          <Avatar className="lg:h-[38px] lg:w-[38px] md:h-[36px] md:w-[36px] h-[36px] w-[36px] ">
+                            <AvatarImage
+                              src={user.profile_image || "https://github.com/shadcn.png"}
+                            />
+                            <AvatarFallback>CN</AvatarFallback>
+                          </Avatar>
+                        </div>
+                      ))}                    </div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <NavLink to={"./user/profile"}>User Profile</NavLink>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      {" "}
+                      <NavLink onClick={handleSignout}>Logout</NavLink>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
             ) : (
               <li>
                 <NavLink to="/signup">Signup</NavLink>
