@@ -10,28 +10,28 @@ import ytIcon from "../../../assets/Images/Youtube.png"
 const Footer = () => {
   return (
     <section className="back-img mt-[100px]">
-      <div className="container pt-20 pb-10">
-        <div className=" p-10 bg-primary1-pink rounded-[100px] mt-[100px]">
-          <div className="flex justify-between items-center text-center flex-wrap">
-            <h1 className="arvo-bold md:text-[32px] text-[24px]  text-white">
+      <div className="container md:pt-20 md:pb-10 pt-10 pb-5">
+        <div className=" md:p-10 py-10  bg-primary1-pink md:rounded-[100px] rounded-[100px] mt-[100px]">
+          <div className="flex md:justify-between items-center justify-center flex-wrap">
+            <h1 className="arvo-bold md:text-[32px] text-[20px] text-center mb-5 text-white">
               Subscribe Newsletters
             </h1>
 
-            <form className="bg-white flex items-center  rounded-[100px] md:h-[72px] md:w-[576px] w-full  p-3  ">
+            <form className="md:bg-white md:flex md:items-center md:flex-row  flex flex-col justify-center items-center gap-2  rounded-[100px]  md:h-[72px] md:w-[576px] w-[280px] h-[60px] p-3  ">
               <Input
                 type="text"
-                className="md:w-[400px] w-full outline-none border-none focus:ring-0"
+                className="md:w-[400px] w-[250px] outline-none border-none focus:border-none focus:outline-none focus-visible:ring-white  focus:ring-0"
                 placeholder="Enter Email"
               />
-              <Button className="ml-2 md:w-[204px] md:h-[56px] w-[120px] h-[40px] rounded-[40px] md:text-[16px] text-[14px] raleway-400 leading-4 ">
-                Subscribe Now
+              <Button className="md:ml-2 md:w-[204px] md:h-[56px] w-[120px] h-[40px] rounded-[40px] md:text-[16px] text-[14px] md:bg-primary1-pink md:text-white bg-white text-primary1-pink raleway-400 leading-4 ">
+                Subscribe
               </Button>
             </form>
           </div>
         </div>
-        <div className="flex justify-between items-center my-8 flex-wrap ">
+        <div className="flex justify-between md:flex-row flex-col items-center my-8 flex-wrap ">
           <div>
-            <ul className="flex flex-row lg:gap-20 gap-8 arvo-regular">
+            <ul className="flex flex-row lg:gap-20 gap-4 arvo-regular text-[14px]">
               <li>
                 <NavLink>Create Story</NavLink>
               </li>
@@ -47,7 +47,7 @@ const Footer = () => {
             </ul>
           </div>
           <div>
-            <ul className="flex flex-row gap-10 md:mt-0 mt-4 ">
+            <ul className="flex md:flex-row  gap-10 md:mt-0 mt-4 justify-center ">
               <li>
                 <NavLink>
                   <img src={fbIcon} alt="facebook" />
@@ -72,7 +72,7 @@ const Footer = () => {
           </div>
         </div>
         <hr />
-        <div className="flex justify-between items-center mt-8 mb-4 flex-wrap arvo-regular text-[16px] text-primary1-blue leading-5 ">
+        <div className="flex justify-between flex-col items-center mt-8 mb-4 flex-wrap arvo-regular text-[16px] text-primary1-blue leading-5 ">
           <div>
             <h3>© 2024 Storybook. All rights reserved.</h3>
           </div>
