@@ -79,12 +79,12 @@ const TestimonialSection = () => {
             >
               <div className="relative z-20 pt-[50px] p-6 rounded-3xl  ">
                 <img
-                  className="absolute top-[-40px] left-1/2 transform -translate-x-1/2"
+                  className="absolute top-[-40px]  left-1/2 transform -translate-x-1/2"
                   src={slide.avatar}
                   alt="avatar"
                 />
 
-                <div className="flex flex-col justify-center items-center mt-5 z-30">
+                <div className="flex flex-col justify-center items-center md:mt-5 mt-8 z-30">
                   <h1 className="arvo-bold text-2xl">{slide.name}</h1>
                   <span className="raleway-normal text-[16px]">
                     {slide.userName}

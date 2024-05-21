@@ -15,28 +15,55 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
+const styles = {
+  pageContainer: "bg-primary1-pink h-screen overflow-hidden",
+  sectionContainer: "container",
+  mainWrapper: "flex justify-center items-center h-screen",
+  contentWrapper: "flex flex-col justify-center items-center gap-8",
+  logoContainer: "md:h-[124px] md:w-[124px] h-[80px] w-[80px]",
+  formContainer:
+    "md:w-[500px] md:h-[600px] bg-white rounded-[24px] p-10 h-[70%] w-[95vw]",
+  title: "arvo-bold text-3xl text-primary1-blue mb-4",
+  description: "raleway-regular md:text-xl text-[16px] text-[#C7C8CC]",
+  form: "mt-4 space-y-10",
+  input:
+    "block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl input-placeholder",
+  rememberMeContainer: "flex items-center my-6 space-x-2",
+  rememberMeLabel:
+    "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+  loginButton: "w-full rounded-full h-[50px] text-[16px]",
+  signUpLink:
+    "md:my-6 my-2 text-center text-muted md:text-[16px] text-[14px] ",
+};
+
 const AdminLoginPage = () => {
   const form = useForm();
   return (
-    <div className="bg-primary1-pink w-full h-full pb-[53px]">
-      <section className="container">
-        <div className="pt-[50px]">
-          <div className="flex flex-col justify-center items-center gap-8 ">
+    <div className={styles.pageContainer}>
+      <section className={styles.sectionContainer}>
+        <div className={styles.mainWrapper}>
+          <div className={styles.contentWrapper}>
             <div>
-              <img src={AdminLoginLogo} alt="Admin Login" />
+              <img
+                src={AdminLoginLogo}
+                alt="Admin Login"
+                className={styles.logoContainer}
+              />
             </div>
-            <div className="w-[500px] h-[660px] bg-white rounded-[24px] p-10">
+
+            <div className={styles.formContainer}>
               <div>
-                <h1 className="arvo-bold text-3xl text-primary1-blue mb-4">
-                  Account Login
-                </h1>
-                <p className="raleway-regular text-xl text-[#C7C8CC]">
+                <h1 className={styles.title}>Account Login</h1>
+                <p className={styles.description}>
                   If you are already a member you can login with your email
                   address and password.
                 </p>
-                <div className="mt-4">
+                <div className={styles.form}>
                   <Form {...form}>
-                    <form onSubmit={form.handleSubmit()} className="space-y-10">
+                    <form
+                      onSubmit={form.handleSubmit()}
+                      className={styles.form}
+                    >
                       <FormField
                         control={form.control}
                         name="email"
@@ -52,7 +79,7 @@ const AdminLoginPage = () => {
                               <Input
                                 {...field}
                                 type="email"
-                                className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl input-placeholder "
+                                className={styles.input}
                               />
                             </FormControl>
                             <FormDescription></FormDescription>
@@ -76,30 +103,28 @@ const AdminLoginPage = () => {
                                 {...field}
                                 type="password"
                                 autoComplete="current-password"
-                                className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
+                                className={styles.input}
                               />
                             </FormControl>
                             <FormDescription></FormDescription>
                           </FormItem>
                         )}
                       />
-                      <div className="flex items-center my-6 space-x-2">
+                      <div className={styles.rememberMeContainer}>
                         <Checkbox />
                         <Label
                           htmlFor="terms"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          className={styles.rememberMeLabel}
                         >
                           Remember me
                         </Label>
                       </div>
 
-                      <Button className="w-full rounded-full">Login</Button>
+                      <Button className={styles.loginButton}>Login</Button>
 
-                      <p className="my-6 text-center text-muted">
+                      <p className={styles.signUpLink}>
                         Already have an account ?{" "}
-                        <Link to="/signup" className="text-primary">
-                          Sign Up here
-                        </Link>
+                        <Link to="/signup" className="text-primary">Sign Up here</Link>
                       </p>
                     </form>
                   </Form>

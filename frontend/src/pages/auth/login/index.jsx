@@ -11,10 +11,34 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link, NavLink, useSearchParams } from "react-router-dom";
 import supabase from "@/lib/supabase";
-
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+
+const styles = {
+  pageContainer: "grid h-screen grid-cols-2",
+  leftSection:
+    "relative hidden px-12 md:grid bg-primary size-full place-content-center",
+  leftSectionTitle:
+    "absolute text-3xl text-white arvo-bold top-5 left-5 md:text-4xl",
+  leftSectionImage: "object-contain m-auto",
+  rightSection:
+    "container flex flex-col items-start justify-center col-span-2 text-left size-full md:col-span-1",
+  form: "w-full max-w-lg mx-auto my-12 md:my-auto",
+  sectionSpacing: "mb-8 space-y-4 leading-relaxed",
+  sectionTitle: "text-4xl arvo-bold",
+  sectionDescription: "text-xl text-muted",
+  inputContainer: "my-6",
+  inputLabel: "text-xl arvo-bold",
+  inputField:
+    "block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl",
+  checkboxContainer: "flex justify-between items-center",
+  checkboxLabel:
+    "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+  forgotPasswordLink: "text-gray-400 raleway-medium text-[14px] cursor-pointer",
+  loginButton: "w-full rounded-full h-[50px] text-[16px]",
+  signUpLink: "my-6 text-center text-muted",
+};
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -52,61 +76,60 @@ const SignIn = () => {
   };
 
   return (
-    <div className="grid h-screen grid-cols-2">
+    <div className={styles.pageContainer}>
       {/* LEFT IMAGE SECTION */}
-      <section className="relative hidden px-12 md:grid bg-primary size-full place-content-center ">
-        <h2 className="absolute text-6xl text-white arvo-bold top-5 left-5">
-          LOGO
-        </h2>
+      <section className={styles.leftSection}>
+        <h2 className={styles.leftSectionTitle}>LOGO</h2>
         <img
           width={612}
           height={612}
           src="/src/assets/images/login.png"
           alt="signup"
-          className="object-contain m-auto "
+          className={styles.leftSectionImage}
         />
       </section>
+
       {/* RIGHT FORM SECTION */}
-      <section className="container flex flex-col items-start justify-center col-span-2 text-left size-full md:col-span-1 ">
+      <section className={styles.rightSection}>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleLogin)}
-            className="w-full max-w-lg mx-auto my-12 md:my-auto "
+            className={styles.form}
           >
-            <div className="mb-8 space-y-4 leading-relaxed">
-              <h1 className="text-4xl arvo-bold">Account Login</h1>
-              <p className="text-xl text-muted">
+            <div className={styles.sectionSpacing}>
+              <h1 className={styles.sectionTitle}>Account Login</h1>
+              <p className={styles.sectionDescription}>
                 If you are already a member you can login with your email
                 address and password.
               </p>
             </div>
-            <div className="my-6">
+            <div className={styles.inputContainer}>
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xl arvo-bold ">
+                    <FormLabel className={styles.inputLabel}>
                       Email address
                     </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         type="email"
-                        className=" block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
+                        className={styles.inputField}
                       />
                     </FormControl>
                   </FormItem>
                 )}
               />
             </div>
-            <div className="my-6">
+            <div className={styles.inputContainer}>
               <FormField
                 control={form.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xl arvo-bold ">
+                    <FormLabel className={styles.inputLabel}>
                       Password
                     </FormLabel>
                     <FormControl>
@@ -114,25 +137,22 @@ const SignIn = () => {
                         placeholder=""
                         {...field}
                         type="password"
-                        className=" block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
+                        className={styles.inputField}
                       />
                     </FormControl>
                   </FormItem>
                 )}
               />
             </div>
-            <div className="flex justify-between items-center">
+            <div className={styles.checkboxContainer}>
               <div className="flex items-center my-6 space-x-2">
                 <Checkbox />
-                <Label
-                  htmlFor="terms"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
+                <Label htmlFor="terms" className={styles.checkboxLabel}>
                   Remember me
                 </Label>
               </div>
               <NavLink to="/reset-password">
-                <div className="text-gray-400 raleway-medium text-[14px] cursor-pointer">
+                <div className={styles.forgotPasswordLink}>
                   Forgot Password?
                 </div>
               </NavLink>
@@ -140,13 +160,13 @@ const SignIn = () => {
 
             <Button
               disabled={isLoading}
-              className="w-full rounded-full"
+              className={styles.loginButton}
               type="submit"
             >
               Login
             </Button>
 
-            <p className="my-6 text-center text-muted">
+            <p className={styles.signUpLink}>
               Already have an account ?{" "}
               <Link to="/signup" className="text-primary">
                 Sign Up here

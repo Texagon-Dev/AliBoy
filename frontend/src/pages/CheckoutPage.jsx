@@ -28,6 +28,39 @@ import { useEffect, useState } from "react";
 import { setPrintingOrder } from "@/redux/features/bookPrintingSlice";
 import calculateOrderPricing from "@/lib/calculateOrderPricing";
 
+const styles = {
+  container:
+    "container mx-auto w-full mt-[80px] lg:mt-[120px] mb-10 lg:w-[1280px]",
+  button:
+    "bg-transparent text-primary1-blue text-sm lg:text-2xl arvo-bold hover:bg-transparent p-0 flex justify-start items-center gap-2",
+  leftIcon: "lg:h-[30px] lg:w-[30px] h-6 w-6",
+  title:
+    "text-primary1-blue text-center lg:mt-2 mt-0 text-3xl lg:text-[64px] md:text-4xl  arvo-bold leading-[79px] w-full",
+  flexRow: "lg:flex lg:flex-row md:flex-col gap-2 md:mt-16 mt-6",
+  imageContainer: "lg:w-[30%] w-full hidden lg:flex mb-4",
+  imagePositioning:
+    "lg:w-[244px] lg:h-[396px] md:w-[200px] md:h-[200px]  w-[150px] h-[150px]  relative ",
+  image: "object-cover object-center w-full h-full rounded-3xl",
+  textContainer:
+    "md:w-[70%] md:ml-4 md:flex md:flex-col md:justify-center w-full",
+  itemTitle: "md:text-[32px] md:leading-[39px] text-2xl arvo-bold",
+  removeLink:
+    "text-[16px] underline arvo-regular text-center text-[#FF0000] mt-5 w-[30%]",
+  selectedOptions: "text-xl lg:text-2xl arvo-bold",
+  itemsTotal: "text-xl lg:text-2xl arvo-bold",
+  paymentMethod: "text-xl lg:text-2xl arvo-bold md:w-[350px]",
+  formControl: "h-[40px] rounded-[40px] raleway-semibold text-xl",
+  checkoutButton:
+    "md:w-[356px] md:h-[64px] arvo-regular rounded-[88px] text-2xl w-[300px] h-[50px] hover:bg-transparent hover:text-primary1-pink hover:border hover:border-primary1-pink",
+  orderSummaryContainer:
+    "md:w-[468px] md:h-[396px] w-[350px] h-[380px] bg-secondary1-pink rounded-[24px]",
+  orderSummaryTitle: "text-[32px] leading-[39px] arvo-bold",
+  summaryItem: "text-[#6B6D6E] raleway-medium text-xl",
+  summaryValue: "text-primary1-blue raleway-bold text-xl",
+  totalLabel: "text-[#404040] text-[25px] leading-[30px] arvo-bold",
+  totalPrice: "text-[#404040] text-[25px] leading-[30px] arvo-bold",
+};
+
 
 const CheckoutPage = () => {
   const dispatch = useDispatch();
@@ -54,19 +87,19 @@ const CheckoutPage = () => {
     console.log(confirmedOrder);
     dispatch(createCustomerOrder(confirmedOrder));
     dispatch(setPrintingOrder(null));
-    navigate("/dashboard");
+    navigate("/user");
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <section className="container mx-auto w-full mt-[80px] lg:mt-[120px] mb-10 lg:w-[1280px]">
+        <section className={styles.container}>
           <div className="w-full  mb-8 ">
             <div>
-              <Button className="bg-transparent text-primary1-blue text-sm lg:text-2xl arvo-bold hover:bg-transparent p-0 flex justify-start items-center gap-2 ">
+              <Button className={styles.button}>
                 <NavLink className="flex" to="/dashboard">
                   <img
-                    className="lg:h-[30px] lg:w-[30px] h-6 w-6  "
+                    className={styles.leftIcon}
                     src={lefticon}
                     alt="go to dashboard icon"
                   />{" "}
@@ -75,25 +108,25 @@ const CheckoutPage = () => {
               </Button>
             </div>
             <div className="md-mt-8 mt-2">
-              <h1 className="text-primary1-blue text-center lg:mt-2 mt-0 text-3xl lg:text-[64px] md:text-4xl  arvo-bold leading-[79px] w-full   ">
+              <h1 className={styles.title}>
                 My Order
               </h1>
             </div>
-            <div className="lg:flex lg:flex-row md:flex-col  gap-2 md:mt-16 mt-6">
+            <div className={styles.flexRow}>
               <div className="lg:w-2/3">
                 <div className="flex gap-5 w-full justify-center mb-8">
-                  <div className="lg:w-[30%] w-full hidden lg:flex mb-4">
-                    <div className="lg:w-[244px] lg:h-[396px] md:w-[200px] md:h-[200px]  w-[150px] h-[150px]  relative ">
+                  <div className={styles.imageContainer}>
+                    <div className={styles.imagePositioning}>
                       <img
                         src={storyImage}
                         alt="story image"
-                        className="object-cover	object-center  w-full h-full rounded-3xl"
+                        className={styles.image}
                       />
                     </div>
                   </div>
 
-                  <div className="md:w-[70%] md:ml-4 md:flex md:flex-col md:justify-center w-full">
-                    <h1 className="md:text-[32px] md:leading-[39px] text-2xl arvo-bold">
+                  <div className={styles.textContainer}>
+                    <h1 className={styles.itemTitle}>
                       {" "}
                       The Journey Of Dreams
                     </h1>

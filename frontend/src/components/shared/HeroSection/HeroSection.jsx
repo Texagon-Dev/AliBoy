@@ -7,7 +7,7 @@ const HeroSection = () => {
     <>
       <section className=" lg:min-h-[1080px] md:min-h-[700px]  max-h-max  hero relative  bg-[#FBD3C4]  ">
         <div className="container  ">
-          <div className="flex lg:justify-start lg:text-start justify-center text-center gap-4 items-center lg:pt-[200px] md:pt-[180px] pt-[100px] pb-[10px] pl-[44px]  ">
+          <div className="flex lg:justify-start lg:text-start justify-center text-center gap-4 items-center lg:pt-[200px] md:pt-[180px] pt-[100px] pb-[10px] lg:pl-[44px]  ">
             <div className="space-y-4 w-full p-2 lg:w-1/2 lg:p-4">
               <h1 className="  lg:leading-[84px] text-white  text-4xl md:text-5xl lg:text-[68px] arvo-bold">
                 Unleash Your Imagination with AI Story Creation

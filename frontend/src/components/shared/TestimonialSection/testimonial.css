@@ -44,7 +44,7 @@
 @media (max-width: 580px) {
   .swiper {
     height: 600px;
-    width: 300px;
+    width: 250px;
   }
 
   .swiper-button-prev:after {

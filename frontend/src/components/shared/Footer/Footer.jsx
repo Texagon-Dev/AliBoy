@@ -10,9 +10,9 @@ import ytIcon from "../../../assets/Images/Youtube.png"
 const Footer = () => {
   return (
     <section className="back-img mt-[100px]">
-      <div className="container md:pt-20 md:pb-10 pt-10 pb-5">
-        <div className=" md:p-10 py-10  bg-primary1-pink md:rounded-[100px] rounded-[100px] mt-[100px]">
-          <div className="flex md:justify-between items-center justify-center flex-wrap">
+      <div className="container lg:pt-20 lg:pb-10 pt-10 pb-10">
+        <div className=" md:p-10 py-10  bg-primary1-pink md:rounded-[100px] rounded-[100px] md:mt-[100px] mt-[50px]">
+          <div className="flex lg:justify-between items-center justify-center flex-wrap">
             <h1 className="arvo-bold md:text-[32px] text-[20px] text-center mb-5 text-white">
               Subscribe Newsletters
             </h1>
@@ -71,8 +71,8 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <hr />
-        <div className="flex justify-between flex-col items-center mt-8 mb-4 flex-wrap arvo-regular text-[16px] text-primary1-blue leading-5 ">
+        <hr className="border-[#0F151B]" />
+        <div className="flex md:justify-between md:flex-row justify-center  mt-8 mb-4 flex-wrap arvo-regular text-[16px] text-primary1-blue leading-5 ">
           <div>
             <h3>© 2024 Storybook. All rights reserved.</h3>
           </div>
