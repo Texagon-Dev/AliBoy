@@ -1,14 +1,67 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import dayjs from "dayjs";
 
 // Mock base URL (you might want to replace this with an actual API endpoint)
 const BASE_URL = "https://myapi.com/api/cutomer-orders";
 
 const ORDERS = [
-  { id: 1, name: "Product A", quantity: 5, status: "Dispatched" },
-  { id: 2, name: "Product B", quantity: 10, status: "Printing" },
-  { id: 3, name: "Product C", quantity: 8, status: "Pending" },
-  { id: 4, name: "Product D", quantity: 3, status: "Delivered" },
+  {
+    id: 1,
+    name: "Product A",
+    quantity: 5,
+    status: "Dispatched",
+    date: dayjs().subtract(10, "day").toISOString(),
+    revenue: 50,
+  },
+  {
+    id: 2,
+    name: "Product B",
+    quantity: 10,
+    status: "Printing",
+    date: dayjs().subtract(5, "day").toISOString(),
+    revenue: 100,
+  },
+  {
+    id: 3,
+    name: "Product C",
+    quantity: 8,
+    status: "Pending",
+    date: dayjs().subtract(20, "day").toISOString(),
+    revenue: 80,
+  },
+  {
+    id: 4,
+    name: "Product D",
+    quantity: 3,
+    status: "Delivered",
+    date: dayjs().subtract(15, "day").toISOString(),
+    revenue: 30,
+  },
+  {
+    id: 5,
+    name: "Product E",
+    quantity: 7,
+    status: "Canceled",
+    date: dayjs().subtract(25, "day").toISOString(),
+    revenue: 70,
+  },
+  {
+    id: 6,
+    name: "Product D",
+    quantity: 3,
+    status: "Delivered",
+    date: dayjs().subtract(15, "day").toISOString(),
+    revenue: 30,
+  },
+  {
+    id: 7,
+    name: "Product E",
+    quantity: 7,
+    status: "Canceled",
+    date: dayjs().subtract(25, "day").toISOString(),
+    revenue: 70,
+  },
 ];
 
 const ORDER = { id: 1, name: "Product A", quantity: 5, status: "Dispatched" };

@@ -12,11 +12,17 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export function DatePickerForDashboard({ className }) {
-  const [date, setDate] = React.useState({
-    from: new Date(2024, 0, 20),
-    to: addDays(new Date(2024, 0, 20), 20),
-  });
+export function DatePickerForDashboard({ dateRange, setDateRange, className }) {
+  // const [date, setDate] = React.useState({
+  //   from: new Date(2024, 0, 20),
+  //   to: addDays(new Date(2024, 0, 20), 20),
+  // });
+
+  const [date, setDate] = React.useState(dateRange);
+
+  React.useEffect(() => {
+    setDateRange(date);
+  }, [date, setDateRange]);
 
   return (
     <Popover>
@@ -31,7 +37,7 @@ export function DatePickerForDashboard({ className }) {
             <div
               id="date"
               className={cn(
-                "border-none w-[151px] bg-transparent h-[20px] text-[] text-center raleway-regular text-xs p-0 ",
+                "border-none w-auto bg-transparent h-[20px]  text-center raleway-regular text-xs p-0 ",
                 !date && "text-muted-foreground"
               )}
             >

@@ -42,7 +42,7 @@ const DashboardTable = () => {
 
   return (
     <div className="overflow-x-auto overflow-auto mt-8 md:h-[460px] ">
-      <div className="p-4 border border-[#FAC0D3]  rounded-[24px] mb-8">
+      <div className="p-4 border border-[#FAC0D3]  rounded-[24px] mb-8 ">
         <h1 className="arvo-bold md:text-4xl text-3xl leading-[16px]  mt-4 mb-4">
           Customer Orders
         </h1>
@@ -64,34 +64,36 @@ const DashboardTable = () => {
               </TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {orders.map((order) => (
-              <TableRow
-                key={order.id}
-                className="flex justify-between items-center"
-              >
-                <TableCell className="md:w-[300px] w-[150px] md:text-2xl raleway-regular px-0">
-                  {order.name}
-                </TableCell>
-                <TableCell className="md:w-[300px] w-[150px]   md:text-2xl    raleway-regular px-0">
-                  {" "}
-                  {order.quantity}
-                </TableCell>
-                <TableCell
-                  className="md:w-[150px] w-[100px] md:text-2xl  raleway-regular px-0 "
-                  style={{ color: statusColors[order.status] }}
+         
+            <TableBody>
+              {orders.map((order) => (
+                <TableRow
+                  key={order.id}
+                  className="flex justify-between items-center"
                 >
-                  {" "}
-                  {order.status}
-                </TableCell>
-                <TableCell className="md:w-[150px] w-[100px]  text-primary1-pink raleway-regular md:text-2xl">
-                  <Dialog >
-                   <DashboardOrderDetails/>
-                  </Dialog>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+                  <TableCell className="md:w-[300px] w-[150px] md:text-2xl raleway-regular px-0">
+                    {order.name}
+                  </TableCell>
+                  <TableCell className="md:w-[300px] w-[150px]   md:text-2xl    raleway-regular px-0">
+                    {" "}
+                    {order.quantity}
+                  </TableCell>
+                  <TableCell
+                    className="md:w-[150px] w-[100px] md:text-2xl  raleway-regular px-0 "
+                    style={{ color: statusColors[order.status] }}
+                  >
+                    {" "}
+                    {order.status}
+                  </TableCell>
+                  <TableCell className="md:w-[150px] w-[100px]  text-primary1-pink raleway-regular md:text-2xl">
+                    <Dialog>
+                      <DashboardOrderDetails />
+                    </Dialog>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          
         </Table>
       </div>
     </div>
