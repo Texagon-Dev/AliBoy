@@ -16,7 +16,7 @@ const StoryCard = ({ storyBookId, image, title, created_at }) => {
     return date.toLocaleDateString(); 
   };
   return (
-    <Card>
+    <Card className="h-auto">
       <CardHeader>
         <img
           src={image}
@@ -32,9 +32,11 @@ const StoryCard = ({ storyBookId, image, title, created_at }) => {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col lg:flex-col md:justify-center md:items-center justify-center  gap-4 ">
-          <Button className=" rounded-[40px] bg-primary1-pink  lg:w-[209px] lg:h-[40px] px-4 arvo-regular text-[16px] md:w-40 hover:bg-transparent hover:border hover:border-primary1-pink hover:text-primary1-pink">
-            View Details
-          </Button>
+          <NavLink to={`/dashboard/editstorybook?storyBookId=${storyBookId}`}>
+            <Button className=" rounded-[40px] bg-primary1-pink  lg:w-[209px] lg:h-[40px] px-4 arvo-regular text-[16px] md:w-40 hover:bg-transparent hover:border hover:border-primary1-pink hover:text-primary1-pink">
+              View Details
+            </Button>
+          </NavLink>
           <NavLink to={`/dashboard/bookprinting?storyBookId=${storyBookId}`}>
             <Button
               variant="outlined"
