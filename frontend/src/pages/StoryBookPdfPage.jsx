@@ -4,7 +4,7 @@ import rectangle from "../assets/Images/rectangle.png";
 import storyImage from "../assets/Images/storyImage.png";
 import regenerate from "../assets/Images/refresh.png";
 import edit from "../assets/Images/edit.png";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Carousel,
@@ -18,55 +18,43 @@ import PdfStoryBookDocument from "@/components/pdf/PdfStoryBookDocument";
 import uploadFileToSupabase from "@/lib/functions";
 import {
   regenerateStorySlide,
-  setSlideText,
+  updateSlideText,
 } from "@/redux/features/storySlice";
 import StoryEdit from "@/components/StoryEdit";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useState } from "react";
-
-const SlideEditDialog = ({ open, onClose, slide, onSave }) => {
-  const [editedText, setEditedText] = useState("");
-
-  React.useEffect(() => {
-    if (slide) {
-      setEditedText(slide.regeneratedText || slide.originalText);
-    }
-  }, [slide]);
-
-  const handleSave = () => {
-    onSave(editedText);
-    onClose();
-  };
-
-  return (
-    <Dialog open={open} onClose={onClose} fullWidth>
-      <DialogTitle>Edit Slide</DialogTitle>
-      <DialogContent>
-        <textarea
-          className="w-full h-24 rounded-md border-gray-300 focus:ring-primary1-blue focus:border-primary1-blue sm:text-sm"
-          value={editedText}
-          onChange={(e) => setEditedText(e.target.value)}
-        />
-      </DialogContent>
-
-      <Button onClick={onClose} color="primary">
-        Cancel
-      </Button>
-      <Button onClick={handleSave} color="primary">
-        Save
-      </Button>
-    </Dialog>
-  );
-};
+import { Input } from "@/components/ui/input";
+import { toast } from "react-toastify";
 
 const StoryBookPdfPage = () => {
   const storyData = useSelector((state) => state.stories.items);
+  console.log("StoryData", storyData);
   const userId = useSelector((state) => state.user.userId);
   const genre = useSelector((state) => state.stories.currentStory.genre.name);
-  const [editSlideIndex, setEditSlideIndex] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editableStoryName, setEditableStoryName] = useState(
+    storyData && storyData[0]?.story_name
+      ? storyData[0].story_name.replace(/"/g, "")
+      : "Default Story Name"
+  );
+
+  const metadata1 = useSelector((state) => state.user.metadata);
+
+  const navigate = useNavigate();
+  const handleSave = (indexData, editedText) => {
+    dispatch(
+      updateSlideText({
+        storyIndex: indexData.storyIndex,
+        chapterIndex: indexData.chapterIndex,
+        slideIndex: indexData.slideIndex,
+        text: editedText,
+      })
+    );
+  };
 
   const dispatch = useDispatch();
-  const storyName = "SciFi";
+
+  const finalStoryName =
+    editableStoryName || storyData[0]?.story_name || "Default Story Name";
 
   if (!storyData || storyData.length === 0) {
     return <div>Loading or no data available...</div>;
@@ -95,13 +83,43 @@ const StoryBookPdfPage = () => {
       return;
     }
 
-    const imageUrl =
-      storyData.length > 0 && storyData[0].output.length > 0
-        ? storyData[0].output[0].image
-        : null;
+    // const toBase64 = (url) => {
+    //   return fetch(url)
+    //     .then((response) => response.blob())
+    //     .then((blob) => {
+    //       return new Promise((resolve, reject) => {
+    //         const reader = new FileReader();
+    //         reader.onloadend = () => resolve(reader.result);
+    //         reader.onerror = reject;
+    //         reader.readAsDataURL(blob);
+    //       });
+    //     });
+    // };
+
+    // const imageUrl = storyData.output > 0 ? storyData.output[0].image : null;
+    // console.log(imageUrl);
+    // let base64Image = null;
+
+    const image = storyImage;
+
+    // if (image) {
+    //   base64Image = await toBase64(image);
+    // }
+
+    const metadata = storyData[0].output;
 
     // Upload PDF and image blobs
-    await uploadFileToSupabase(userId, pdfBlob, imageUrl, genre, storyName);
+    await uploadFileToSupabase(
+      userId,
+      pdfBlob,
+      image,
+      genre,
+      finalStoryName,
+      metadata
+    );
+    toast.success("Story Saved Successfully. Navigating to User Home Page... ");
+
+    navigate("/user");
   };
 
   const handleRegenerate = (
@@ -117,21 +135,6 @@ const StoryBookPdfPage = () => {
         chapterIndex,
         slideIndex,
       })
-    );
-  };
-
-  const handleEditSlide = (slideIndex) => {
-    setEditSlideIndex(slideIndex);
-  };
-
-  const handleSaveEditedSlide = (
-    editedText,
-    storyIndex,
-    chapterIndex,
-    slideIndex
-  ) => {
-    dispatch(
-      setSlideText({ editedText, storyIndex, chapterIndex, slideIndex })
     );
   };
 
@@ -151,13 +154,35 @@ const StoryBookPdfPage = () => {
           </Button>
           <div className="flex flex-col lg:flex-row lg:justify-center">
             <div className="lg:w-4/5 flex flex-col justify-center">
-              <h1 className="text-primary1-blue text-3xl lg:text-5xl md:text-4xl arvo-bold leading-[59px] w-full lg:ml-[100px]   ">
-                Ocean Odyssey
-              </h1>
+              {isEditing ? (
+                <div className="flex justify-center">
+                  <Input
+                    type="text"
+                    value={editableStoryName}
+                    onChange={(e) => setEditableStoryName(e.target.value)}
+                    onBlur={() => setIsEditing(false)}
+                    className="text-primary1-blue text-xl lg:text-4xl md:text-2xl arvo-bold md:leading-[59px] w-full lg:ml-[100px] text-center flex justify-center items-center"
+                  />
+                </div>
+              ) : (
+                <>
+                  <div className="text-primary1-blue text-2xl lg:text-4xl md:text-4xl arvo-bold md:leading-[59px] w-full lg:ml-[100px] cursor-pointer flex justify-center items-center  flex-wrap">
+                    <h1 className="break-words w-[80%] flex items-center justify-center ">
+                      {editableStoryName}
+                      <img
+                        src={edit}
+                        alt=""
+                        className="h-5 w-5 ml-2 cursor-pointer"
+                        onClick={() => setIsEditing(true)}
+                      />
+                    </h1>
+                  </div>
+                </>
+              )}
               <h3 className=" text-xl lg:text-[28px] leading-8 arvo-bold py-6  lg:ml-[100px] w-full">
                 Created By:{" "}
                 <span className="text-primary1-pink raleway-bold">
-                  John Doe
+                  {metadata1.full_name}
                 </span>
               </h3>
             </div>
@@ -221,9 +246,9 @@ const StoryBookPdfPage = () => {
                           />
 
                           <img
-                            src={chapterData.image}
+                            src={/*{chapterData.image ||}*/ storyImage}
                             alt={`Chapter ${chapterData.id}`}
-                            className="w-[411px] h-[348px] rounded-[16px] absolute top-20 left-14 cursor-pointer"
+                            className="w-[411px] h-[348px] rounded-[16px] absolute top-20 left-14 cursor-pointer text-xs"
                           />
 
                           <Button className="absolute bottom-12 left-[200px] bg-transparent hover:bg-transparent border border-[#FF0000] text-[#FF0000] rounded-[32px] h-10 px-4 arvo-regular">
@@ -246,21 +271,30 @@ const StoryBookPdfPage = () => {
                               }
                             />
 
-                            <div className="text-2xl raleway-regular w-1/3 h-[20%] text-start absolute top-[20%] right-[100px]">
+                            <div className="text-2xl raleway-regular w-1/3 h-[20%] text-start absolute top-[14%] right-[100px]">
                               <div>
                                 <h3 className="arvo-bold mb-4">
-                                  Chapter {chapterData.id} - Part{" "}
-                                  {slideIndex + 1}
+                                  Chapter {chapterData.id} -{" "}
+                                  {chapterData["chapter name"]}
                                 </h3>
 
                                 <p>
-                                  {slide.regeneratedText || slide.originalText}
-                                  {/* <StoryEdit /> */}
-                                  <Button
-                                    onClick={() => handleEditSlide(slideIndex)}
-                                  >
-                                    Edit
-                                  </Button>
+                                  {slide.regeneratedText ||
+                                    slide.originalText ||
+                                    slide.editedText}
+                                  <StoryEdit
+                                    text={
+                                      slide.regeneratedText ||
+                                      slide.originalText ||
+                                      slide.editedText
+                                    }
+                                    indexData={{
+                                      storyIndex,
+                                      chapterIndex,
+                                      slideIndex,
+                                    }}
+                                    onSave={handleSave}
+                                  />
                                 </p>
                               </div>
                             </div>
@@ -278,25 +312,7 @@ const StoryBookPdfPage = () => {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
-
-        {/* <Button className=" mt-8 rounded-[40px] bg-primary1-pink  lg:w-[209px] px-4 arvo-regular text-[16px] md:w-40 hover:bg-transparent hover:border hover:border-primary1-pink hover:text-primary1-pink">
-          Save Book
-        </Button> */}
       </div>
-
-      <SlideEditDialog
-        open={editSlideIndex !== null}
-        onClose={() => setEditSlideIndex(null)}
-        slide={editSlideIndex !== null ? slides[editSlideIndex] : null}
-        onSave={(editedText) =>
-          handleSaveEditedSlide(
-            editedText,
-            storyIndex,
-            chapterIndex,
-            editSlideIndex
-          )
-        }
-      />
     </section>
   );
 };

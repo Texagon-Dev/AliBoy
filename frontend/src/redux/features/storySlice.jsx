@@ -22,7 +22,7 @@ export const sendStoryData = createAsyncThunk(
 
     try {
       const response = await axios.post(
-        `https://51c0-202-166-171-221.ngrok-free.app/api/v1/${storyData.genre.value}`,
+        `https://711c-202-166-171-221.ngrok-free.app/api/v1/${storyData.genre.value}`,
         { input },
         {
           headers: {
@@ -46,7 +46,7 @@ export const regenerateStorySlide = createAsyncThunk(
   ) => {
     try {
       const response = await axios.post(
-        "https://51c0-202-166-171-221.ngrok-free.app/api/v1/rewriteParagraph",
+        "https://711c-202-166-171-221.ngrok-free.app/api/v1/rewriteParagraph",
         { input: text },
         {
           headers: {
@@ -68,7 +68,10 @@ export const regenerateStorySlide = createAsyncThunk(
 
 const initialState = {
   currentStory: {
-    genre: null,
+    genre: {
+      name: "",
+      value: "",
+     },
     storyDetails: {
       storyBookId: "",
       story_explanations: "",
@@ -77,39 +80,21 @@ const initialState = {
       image: null,
     },
     generationOptions: {
-      total_chapters: "1",
+      total_chapters: "3",
       imageStyle: "",
       language: "",
     },
-   
   },
-
   items: [],
   loading: false,
   error: null,
 };
 
-export const setSlideText =
-  ({ editedText, storyIndex, chapterIndex, slideIndex }) =>
-  (dispatch, getState) => {
-    const { stories } = getState();
-    const updatedItems = [...stories.items]; // Copy the items array
-
-    // Update the slide content with edited text
-    updatedItems[storyIndex].output[chapterIndex].slides[
-      slideIndex
-    ].regeneratedText = editedText;
-
-    // Dispatch the action to update the state
-    dispatch({ type: "stories/setSlideText", payload: updatedItems });
-  };
-
-
 const MAX_WORDS_PER_SLIDE = 35;
 
 const splitTextIntoSlides = (text) => {
   if (!text) return []; // Guard clause to handle undefined or empty strings
-   if (MAX_WORDS_PER_SLIDE <= 0) return [];
+  if (MAX_WORDS_PER_SLIDE <= 0) return [];
 
   let slides = [];
   const words = text.split(/\s+/); // Split the text into words
@@ -149,6 +134,16 @@ export const storiesSlice = createSlice({
     resetCurrentStory: (state) => {
       state.currentStory = initialState.currentStory;
     },
+    updateSlideText: (state, action) => {
+      const { storyIndex, chapterIndex, slideIndex, text } = action.payload;
+      const parentStory = state.items[storyIndex];
+      const story = parentStory.output[chapterIndex];
+      story.slides[slideIndex].originalText = text;
+      story.slides[slideIndex].regeneratedText = text;
+      console.log(story);
+
+      state.items[storyIndex] = parentStory;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -160,14 +155,13 @@ export const storiesSlice = createSlice({
         console.log(response);
         response.output.forEach((chapter) => {
           console.log(chapter);
-          const slides =
-            chapter.slides || splitTextIntoSlides(chapter.chapter);
+          const slides = chapter.slides || splitTextIntoSlides(chapter.story);
           // response.output.chapter.slides = slides;
-          chapter.slides = slides
-         
-
+          chapter.slides = slides;
         });
+
        
+        console.log("edited", response);
 
         state.items.push(response);
         state.loading = false;
@@ -188,7 +182,6 @@ export const storiesSlice = createSlice({
         story.slides[slideIndex].regeneratedText = regeneratedText.output;
         console.log(story);
 
-        // story.chapter = regeneratedText.output;
         state.items[storyIndex] = parentStory;
       });
   },
@@ -200,6 +193,7 @@ export const {
   setGenerationOptions,
   addStoryToHistory,
   resetCurrentStory,
+  updateSlideText,
 } = storiesSlice.actions;
 
 export default storiesSlice.reducer;
