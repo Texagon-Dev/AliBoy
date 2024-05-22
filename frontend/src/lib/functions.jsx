@@ -1,3 +1,4 @@
+import { setUserAvatar } from "@/redux/features/userSlice";
 import supabase from "./supabase";
 
 // 1- FOR UPLOADING PDFS AND IMAGES TO SUPABASE AND INSERTING DATA TO SUPABASE
@@ -7,7 +8,8 @@ export default async function uploadFileToSupabase(
   pdfBlob,
   imageBlob,
   genre,
-  storyName = "Random Story"
+  storyName,
+  metadata
 ) {
   // Helper function to upload a single file
   const uploadToStorage = async (folder, file) => {
@@ -64,6 +66,7 @@ export default async function uploadFileToSupabase(
     tags: genre,
     pdf_path: pdfPublicUrl,
     story_picture: imagePublicUrl, // Use the public URL of the image as story picture
+    metadata: metadata,
   };
 
   const { data: userData, error: storyError } = await supabase
@@ -99,8 +102,25 @@ export const fetchUserStoryBooks = async (userId) => {
   }
 };
 
+export const deleteUserStoryBook = async (storybookId) => {
+  try {
+    const { error } = await supabase
+      .from("User_Story_Books")
+      .delete()
+      .eq("story_book_id", storybookId);
+
+    if (error) {
+      throw error;
+    }
+
+    console.log("User story book deleted successfully");
+  } catch (error) {
+    console.error("Error deleting User Story Book:", error.message);
+  }
+};
+
 // 3- FOR UPLOADING AVATAR AND UPDATING USER TABLE
-export async function uploadAvatarToSupabase(userId, file) {
+export async function uploadAvatarToSupabase(userId, file, dispatch) {
   const folder = "avatars";
   const fileName = `avatar_${new Date().getTime()}`;
   const path = `user_${userId}/${folder}/${fileName}`;
@@ -139,12 +159,14 @@ export async function uploadAvatarToSupabase(userId, file) {
     return null;
   }
 
+  dispatch(setUserAvatar(publicURL));
+
   console.log("Image uploaded and profile updated successfully:", uploadData);
   return uploadData;
 }
 
 // 4- FOR USERS FROM SUPABASE
-export const fetchUsers = async (userId) => {
+export const fetchUser = async (userId) => {
   if (!userId) {
     return null;
   }
@@ -170,64 +192,79 @@ export const fetchUsers = async (userId) => {
   }
 };
 
-  export const updateUserPassword = async (userId, newPassword) => {
-    try {
-      const { error } = await supabase.auth.updateUser({
-        id: userId,
-        password: newPassword,
-      });
-      if (error) throw error;
-      return { success: true };
-    } catch (error) {
-      console.error("Error updating password:", error);
-      return { success: false, error };
-    }
-  };
+export const updateUserPassword = async (userId, newPassword) => {
+  try {
+    const { error } = await supabase.auth.updateUser({
+      id: userId,
+      password: newPassword,
+    });
+    if (error) throw error;
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating password:", error);
+    return { success: false, error };
+  }
+};
 
-  export const updateUserProfile = async (userId, data) => {
-    try {
-      const updates = {
+export const updateUserProfile = async (userId, data) => {
+  try {
+    const { data: userData, error } = await supabase
+      .from("users")
+      .update({
         email: data.email,
-        user_metadata: {
+        metadata: {
+          ...data.metadata,
           full_name: data.name,
           dob: data.dob,
         },
-      };
+      })
+      .eq("uuid", userId);
 
-      const { error } = await supabase.auth.updateUser({
-        id: userId,
-        ...updates,
-      });
-      if (error) throw error;
-      return { success: true };
-    } catch (error) {
-      console.error("Error updating user profile:", error);
-      return { success: false, error };
-    }
-  };
+    if (error) throw error;
+    return { success: true, data: userData };
+  } catch (error) {
+    console.error("Error updating user profile:", error.message);
+    return { success: false, error: error.message };
+  }
+};
 
-
-export async function upsertBookPrintingOrder(form, userId) {
+export async function upsertBookPrintingOrder(userId, orderData) {
+  console.log("userId", userId, "orderData", orderData);
   try {
+    const {
+      story_book_id,
+      binding_name,
+      title_size,
+      quantity,
+      country,
+      city_region,
+      delivery_address,
+      postal_code,
+      item_total,
+      discount,
+      shipping_amount,
+      payment_method,
+      order_status,
+    } = orderData;
+
     const { data, error } = await supabase
       .from("Book_Printing_Orders")
       .upsert([
         {
-          printing_id: form?.printing_id,
-          story_book_id: form?.story_book_id || null,
-          uuid: form?.userId || null,
-          binding_name: form?.binding_name || null,
-          title_size: form?.title_size || null,
-          quantity: form?.quantity || null,
-          country: form?.country || null,
-          city_region: form?.city_region || null,
-          delivery_address: form?.delivery_address || null,
-          postal_code: form?.postal_code || null,
-          item_total: form?.item_total || null,
-          discount: form?.discount || null,
-          shipping_amount: form?.shipping_amount || null,
-          payment_method: form?.payment_method || null,
-          order_status: form?.order_status || null,
+          story_book_id: parseInt(story_book_id),
+          uuid: userId, // Corrected here to use userId passed to function
+          binding_name: binding_name,
+          title_size: title_size,
+          quantity: quantity,
+          country: country,
+          city_region: city_region,
+          delivery_address: delivery_address,
+          postal_code: postal_code,
+          item_total: item_total,
+          discount: discount,
+          shipping_amount: shipping_amount,
+          payment_method: payment_method,
+          order_status: order_status,
         },
       ])
       .eq("uuid", userId);
@@ -244,6 +281,3 @@ export async function upsertBookPrintingOrder(form, userId) {
     console.error("Unexpected error:", error.message);
   }
 }
-
-
-
