@@ -35,21 +35,20 @@ const BookPrintingOptions = () => {
 
   const form = useForm({
     defaultValues: {
-      printing_id: "1",
       story_book_id: storyBookId,
-      uuid: orderDetails?.userId || "",
-      binding_name: orderDetails?.binding_name || "",
-      title_size: orderDetails?.title_size || "",
-      quantity: orderDetails?.quantity || 5,
-      country: orderDetails?.country || "",
-      city_region: orderDetails?.city_region || "",
-      delivery_address: orderDetails?.delivery_address || "",
-      postal_code: orderDetails?.postal_code || "",
+      uuid: userId,
+      binding_name: orderDetails?.binding_name ,
+      title_size: orderDetails?.title_size ,
+      quantity: orderDetails?.quantity || 0,
+      country: orderDetails?.country ,
+      city_region: orderDetails?.city_region ,
+      delivery_address: orderDetails?.delivery_address ,
+      postal_code: orderDetails?.postal_code ,
       item_total: orderDetails?.item_total || 0,
       discount: orderDetails?.discount || 0,
       shipping_amount: orderDetails?.shipping_amount || 0,
-      payment_method: orderDetails?.payment_method || "",
-      order_status: "pending" | "Dispatch",
+      payment_method: orderDetails?.payment_method ,
+      order_status: "",
     },
   });
 
@@ -69,18 +68,9 @@ const BookPrintingOptions = () => {
 
   const onSubmit = (orderDetails) => {
     dispatch(setPrintingOrder(orderDetails));
-    console.log(orderDetails);
-    navigate("/dashboard/checkout");
+    // console.log(orderDetails);
+    navigate(`/dashboard/checkout?storyBookId=${storyBookId}`);
   };
-
-    const handlePlaceOrder = async () => {
-      try {
-        await upsertBookPrintingOrder(form.getValues(userId));
-        onSubmit(form.getValues());
-      } catch (error) {
-        console.error("Error placing order:", error.message);
-      }
-    };
 
   return (
     <section className="container mx-auto w-full mt-[80px] lg:mt-[120px] mb-10 lg:w-[1280px]">
@@ -130,7 +120,7 @@ const BookPrintingOptions = () => {
                   <div className="flex w-full flex-col">
                     <Form {...form}>
                       <form
-                        onSubmit={form.handleSubmit(handlePlaceOrder)}
+                        onSubmit={form.handleSubmit(onSubmit)}
                         className=" space-y-6"
                       >
                         <FormField

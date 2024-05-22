@@ -27,6 +27,7 @@ import { createCustomerOrder } from "@/redux/features/customerOrdersSlice";
 import { useEffect, useState } from "react";
 import { setPrintingOrder } from "@/redux/features/bookPrintingSlice";
 import calculateOrderPricing from "@/lib/calculateOrderPricing";
+import { upsertBookPrintingOrder } from "@/lib/functions";
 
 const styles = {
   container:
@@ -66,6 +67,7 @@ const CheckoutPage = () => {
   const dispatch = useDispatch();
 
   const order = useSelector((state) => state.bookPrintingOrders.order);
+    const userId = useSelector((state) => state.user.userId);
 
   const form = useForm({
     defaultValues: order,
@@ -85,10 +87,13 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const onSubmit = (confirmedOrder) => {
     console.log(confirmedOrder);
+    upsertBookPrintingOrder(userId, confirmedOrder);
     dispatch(createCustomerOrder(confirmedOrder));
     dispatch(setPrintingOrder(null));
     navigate("/user");
   };
+
+  
 
   return (
     <Form {...form}>
