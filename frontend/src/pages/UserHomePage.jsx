@@ -8,7 +8,9 @@ import { fetchStories } from "@/redux/features/userStoriesSlice";
 import Loading from "@/components/shared/Loading/Loading";
 
 const UserHomePage = () => {
-  const { session } = useSelector((state) => state.user);
+    const userId = useSelector((state) => state.user.userId);
+    const metadata1 = useSelector((state) => state.user.metadata);
+  
   const dispatch = useDispatch();
   const {
     details: stories,
@@ -17,10 +19,10 @@ const UserHomePage = () => {
   } = useSelector((state) => state.userStories);
 
   useEffect(() => {
-    if (session && session.user) {
-      dispatch(fetchStories(session.user.id));
+    if (userId) {
+      dispatch(fetchStories(userId));
     }
-  }, [dispatch, session]);
+  }, [dispatch, userId]);
 
   if (loading) return <div><Loading/></div>;
   if (error) return <div>Error loading stories: {error}</div>;
@@ -28,9 +30,11 @@ const UserHomePage = () => {
   return (
     <section className="container mx-auto w-screen mt-[100px] lg:mt-[140px] mb-10 lg:w-[1280px] ">
       <div className="flex flex-col justify-center w-full mx-auto">
-        <h1 className="w-full mx-auto text-center lg:text-start text-primary1-blue text-3xl lg:text-5xl md:text-4xl arvo-bold leading-[59px] ">
-          Hello! {session.user.user_metadata.full_name}
-        </h1>
+      
+            <h1 className="w-full mx-auto text-center lg:text-start text-primary1-blue text-3xl lg:text-5xl md:text-4xl arvo-bold leading-[59px] ">
+              Hello! {metadata1.full_name}
+            </h1>
+       
         <div className="flex flex-col lg:flex-row lg:justify-between mb-8 lg:text-start justify-center ">
           <p className=" text-xl lg:text-[28px] leading-8 text-[#6B6D6E] lg:w-[70%] raleway-medium py-4 ">
             Effortlessly navigate, organize, and craft your unique stories with
@@ -57,21 +61,13 @@ const UserHomePage = () => {
               <StoryCard
                 key={story.story_book_id}
                 storyBookId={story.story_book_id}
-                image={story.story_picture || cardImage}
+                image={/*{story.story_picture ||}*/ cardImage}
                 title={story.story_name}
                 created_at={story.created_at}
-             
               />
             ))}
           </div>
-          
         </div>
-       
-
-  
-  
-
-
       </div>
     </section>
   );

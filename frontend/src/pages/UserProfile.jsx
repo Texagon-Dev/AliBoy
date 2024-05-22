@@ -28,6 +28,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 const UserProfile = () => {
   const userId = useSelector((state) => state.user.userId);
   const users = useSelector((state) => state.user.users);
+  const avatarUrl = useSelector((state) => state.user.avatarUrl);
   const [inputType, setInputType] = useState("text");
   const handleFocus = () => setInputType("date");
   const handleBlur = () => setInputType("text");
@@ -64,19 +65,19 @@ const UserProfile = () => {
     mode: "onBlur", // or "onChange"
   });
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based, so add 1
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
+  // const formatDate = (dateString) => {
+  //   const date = new Date(dateString);
+  //   const day = String(date.getDate()).padStart(2, "0");
+  //   const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based, so add 1
+  //   const year = date.getFullYear();
+  //   return `${day}/${month}/${year}`;
+  // };
 
   useEffect(() => {
     console.log("Users:", users);
     if (users.length > 0) {
       const userData = users[0];
-      const formattedDob = formatDate(userData.metadata.dob || "");
+      const formattedDob = userData.metadata.dob || "";
 
       const defaultValues = {
         name: userData.metadata.full_name || "",
@@ -95,7 +96,7 @@ const UserProfile = () => {
   const handleAvatarChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      await uploadAvatarToSupabase(userId, file);
+      await uploadAvatarToSupabase(userId, file, dispatch);
     }
     dispatch(fetchUserProfile(userId));
   };
@@ -146,16 +147,13 @@ const UserProfile = () => {
       <div className="flex md:flex-row flex-col">
         <div className="w-[40%] mx-auto">
           <div className="flex items-center justify-center flex-col mb-10">
-            {users.map((user) => (
-              <div key={user.uuid}>
-                <Avatar className="lg:h-[248px] lg:w-[248px] h-[200px] w-[200px]">
-                  <AvatarImage
-                    src={user.profile_image || "https://github.com/shadcn.png"}
-                  />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </div>
-            ))}
+            <Avatar className="lg:h-[248px] lg:w-[248px] h-[200px] w-[200px]">
+              <AvatarImage
+                src={avatarUrl || "https://github.com/shadcn.png"}
+              />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+
             <input
               type="file"
               accept="image/*"

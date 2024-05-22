@@ -1,4 +1,4 @@
-import { fetchUsers } from "@/lib/functions";
+import { fetchUser } from "@/lib/functions";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -13,15 +13,24 @@ const initialState = {
 
 export const fetchUserProfile = (userId) => async (dispatch) => {
   try {
-    const users = await fetchUsers(userId);
+    const users = await fetchUser(userId);
 
     if (!users || users.length === 0) {
       return;
     }
 
+    const user = users[0]; // Assuming there is only one user with the given userId
+    const { metadata, email, profile_image } = user;
+
+    // Dispatch actions to update the state
     dispatch(setUsers(users));
+    dispatch(setUserMetadata(metadata));
+    dispatch(setUserEmail(email));
+    dispatch(setUserAvatar(profile_image));
+    dispatch(setIsLoading(false));
   } catch (error) {
     console.error("Error fetching users:", error.message);
+    dispatch(setIsLoading(false)); // Ensure loading state is reset on error
   }
 };
 
@@ -32,7 +41,7 @@ const userSlice = createSlice({
     setSession: (state, action) => {
       state.session = action.payload;
       state.userId = action.payload ? action.payload.user.id : "";
-      state.avatarUrl = action.payload ? action.payload.profile_image : "";
+      
     },
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
@@ -54,9 +63,7 @@ const userSlice = createSlice({
       const users = action.payload || [];
       state.users = users;
       state.isLoading = false;
-      if (users.length > 0) {
-        state.avatarUrl = users[0].profile_image;
-      }
+   
     },
   },
 });
