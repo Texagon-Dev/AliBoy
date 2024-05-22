@@ -12,6 +12,7 @@ import DashboardOrderDetails from "./DashboardOrderDetails";
 import { useSelector,  useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { fetchCustomerOrders } from "@/redux/features/customerOrdersSlice";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 
 const DashboardTable = () => {
@@ -41,13 +42,14 @@ const DashboardTable = () => {
 
 
   return (
-    <div className="overflow-x-auto overflow-auto mt-8 md:h-[460px] ">
+    <div className="mt-8 md:h-[460px] ">
       <div className="p-4 border border-[#FAC0D3]  rounded-[24px] mb-8 ">
         <h1 className="arvo-bold md:text-4xl text-3xl leading-[16px]  mt-4 mb-4">
           Customer Orders
         </h1>
         <Table>
           {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
+
           <TableHeader>
             <TableRow className="flex justify-between items-center ">
               <TableHead className="md:w-[300px] w-[150px]  arvo-regular  text-start text-primary1-blue  lg:text-[28px] md:text-2xl   tracking-[5%] leading-[16px] py-2 px-0 ">
@@ -64,7 +66,7 @@ const DashboardTable = () => {
               </TableHead>
             </TableRow>
           </TableHeader>
-         
+          <ScrollArea className="h-[300px] w-full  border p-4">
             <TableBody>
               {orders.map((order) => (
                 <TableRow
@@ -93,7 +95,7 @@ const DashboardTable = () => {
                 </TableRow>
               ))}
             </TableBody>
-          
+          </ScrollArea>
         </Table>
       </div>
     </div>

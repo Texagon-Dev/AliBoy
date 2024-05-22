@@ -13,8 +13,8 @@ const DashboardCards = () => {
   const users = useSelector((state) => state.user.users);
   const { orders, status } = useSelector((state) => state.customerOrders);
   const [dateRange, setDateRange] = useState({
-    from: dayjs().subtract(30, "day").toDate(),
-    to: new Date(),
+    from: dayjs().subtract(30, "day").startOf("day").toDate(),
+    to: dayjs().endOf("day").toDate(),
   });
 
   const daysInRange =
@@ -25,8 +25,8 @@ const DashboardCards = () => {
   const filteredOrders = orders.filter((order) => {
     const orderDate = dayjs(order.date);
     return (
-      orderDate.isAfter(dayjs(dateRange.from).subtract(1, "day")) &&
-      orderDate.isBefore(dayjs(dateRange.to).add(1, "day"))
+      orderDate.isAfter(dayjs(dateRange.from)) &&
+      orderDate.isBefore(dayjs(dateRange.to))
     );
   });
 
@@ -41,8 +41,23 @@ const DashboardCards = () => {
     filteredOrders.filter((order) => order.status === "Canceled").length;
 
   // Calculate metrics for the previous 30 days
+  const previousRange = {
+    from: dayjs(dateRange.from).subtract(30, "day").toDate(),
+    to: dayjs(dateRange.from).subtract(1, "day").endOf("day").toDate(),
+  };
+
+  const previousOrders = orders.filter((order) => {
+    const orderDate = dayjs(order.date);
+    return (
+      orderDate.isAfter(dayjs(previousRange.from).subtract(1, "day")) &&
+      orderDate.isBefore(dayjs(previousRange.to).add(1, "day"))
+    );
+  });
+
+
+  // Calculate metrics for the previous equivalent period
   // const previousRange = {
-  //   from: dayjs(dateRange.from).subtract(30, "day").toDate(),
+  //   from: dayjs(dateRange.from).subtract(daysInRange, "day").toDate(),
   //   to: dayjs(dateRange.from).subtract(1, "day").toDate(),
   // };
 
@@ -53,21 +68,6 @@ const DashboardCards = () => {
   //     orderDate.isBefore(dayjs(previousRange.to).add(1, "day"))
   //   );
   // });
-
-
-  // Calculate metrics for the previous equivalent period
-  const previousRange = {
-    from: dayjs(dateRange.from).subtract(daysInRange, "day").toDate(),
-    to: dayjs(dateRange.from).subtract(1, "day").toDate(),
-  };
-
-  const previousOrders = orders.filter((order) => {
-    const orderDate = dayjs(order.date);
-    return (
-      orderDate.isAfter(dayjs(previousRange.from).subtract(1, "day")) &&
-      orderDate.isBefore(dayjs(previousRange.to).add(1, "day"))
-    );
-  });
 
   const getPreviousTotalRevenue = () =>
     previousOrders.reduce((acc, order) => acc + order.revenue, 0);
