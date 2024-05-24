@@ -5,29 +5,20 @@ import axios from "axios";
 export const sendStoryData = createAsyncThunk(
   "stories/sendStoryData",
   async (storyData, { rejectWithValue }) => {
-    const { story_explanation, character_explanations, story_length } =
-      storyData.storyDetails;
-    const { total_chapters } = storyData.generationOptions;
-
     console.log("storyData from slice", storyData);
-
-    // Form the input object to send to the API
-    const input = {
-      story_explanation,
-      character_explanations,
-      total_chapters,
-      story_length,
+    const { genre, ...restOfData } = storyData;
+    const payload = {
+      ...restOfData
     };
-    console.log("input from slice", input);
-
+    // Form the input object to send to the API
     try {
       const response = await axios.post(
-        `https://711c-202-166-171-221.ngrok-free.app/api/v1/${storyData.genre.value}`,
-        { input },
+        `https://711c-202-166-171-221.ngrok-free.app/api/v1/${genre}`,
+        { payload },
         {
           headers: {
-            "Content-Type": "application/json",
-          },
+            "Content-Type": "application/json"
+          }
         }
       );
       console.log(response);
@@ -50,15 +41,15 @@ export const regenerateStorySlide = createAsyncThunk(
         { input: text },
         {
           headers: {
-            "Content-Type": "application/json",
-          },
+            "Content-Type": "application/json"
+          }
         }
       );
       return {
         data: response.data,
         storyIndex,
         chapterIndex,
-        slideIndex,
+        slideIndex
       };
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -70,24 +61,24 @@ const initialState = {
   currentStory: {
     genre: {
       name: "",
-      value: "",
-     },
+      value: ""
+    },
     storyDetails: {
       storyBookId: "",
       story_explanations: "",
       character_explanations: "",
       story_length: "",
-      image: null,
+      image: null
     },
     generationOptions: {
       total_chapters: "3",
       imageStyle: "",
-      language: "",
-    },
+      language: ""
+    }
   },
   items: [],
   loading: false,
-  error: null,
+  error: null
 };
 
 const MAX_WORDS_PER_SLIDE = 35;
@@ -102,7 +93,7 @@ const splitTextIntoSlides = (text) => {
     slides.push({
       slideId: i / MAX_WORDS_PER_SLIDE,
       originalText: words.slice(i, i + MAX_WORDS_PER_SLIDE).join(" "),
-      regeneratedText: null, // Initialize with no regenerated text
+      regeneratedText: null // Initialize with no regenerated text
     });
   }
   return slides;
@@ -118,14 +109,14 @@ export const storiesSlice = createSlice({
     setStoryDetails: (state, action) => {
       state.currentStory.storyDetails = {
         ...state.currentStory.storyDetails,
-        ...action.payload,
+        ...action.payload
       };
     },
     setGenerationOptions: (state, action) => {
       console.log("action", action.payload);
       state.currentStory.generationOptions = {
         ...state.currentStory.generationOptions,
-        ...action.payload,
+        ...action.payload
       };
     },
     addStoryToHistory: (state, action) => {
@@ -143,7 +134,7 @@ export const storiesSlice = createSlice({
       console.log(story);
 
       state.items[storyIndex] = parentStory;
-    },
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -160,7 +151,6 @@ export const storiesSlice = createSlice({
           chapter.slides = slides;
         });
 
-       
         console.log("edited", response);
 
         state.items.push(response);
@@ -175,7 +165,7 @@ export const storiesSlice = createSlice({
           storyIndex,
           chapterIndex,
           slideIndex,
-          data: regeneratedText,
+          data: regeneratedText
         } = action.payload;
         const parentStory = state.items[storyIndex];
         const story = parentStory.output[chapterIndex];
@@ -184,7 +174,7 @@ export const storiesSlice = createSlice({
 
         state.items[storyIndex] = parentStory;
       });
-  },
+  }
 });
 
 export const {
@@ -193,7 +183,7 @@ export const {
   setGenerationOptions,
   addStoryToHistory,
   resetCurrentStory,
-  updateSlideText,
+  updateSlideText
 } = storiesSlice.actions;
 
 export default storiesSlice.reducer;
