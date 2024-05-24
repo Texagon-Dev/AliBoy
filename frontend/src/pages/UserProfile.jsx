@@ -27,7 +27,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 const UserProfile = () => {
   const userId = useSelector((state) => state.user.userId);
-  const users = useSelector((state) => state.user.users);
+  const users = useSelector((state) => state.user.user);
   const avatarUrl = useSelector((state) => state.user.avatarUrl);
   const [inputType, setInputType] = useState("text");
   const handleFocus = () => setInputType("date");
@@ -65,28 +65,18 @@ const UserProfile = () => {
     mode: "onBlur", // or "onChange"
   });
 
-  // const formatDate = (dateString) => {
-  //   const date = new Date(dateString);
-  //   const day = String(date.getDate()).padStart(2, "0");
-  //   const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based, so add 1
-  //   const year = date.getFullYear();
-  //   return `${day}/${month}/${year}`;
-  // };
-
   useEffect(() => {
     console.log("Users:", users);
-    if (users.length > 0) {
-      const userData = users[0];
-      const formattedDob = userData.metadata.dob || "";
 
-      const defaultValues = {
-        name: userData.metadata.full_name || "",
-        dob: formattedDob,
-        email: userData.email || "",
-        password: userData.password || "",
-      };
-      form.reset(defaultValues);
-    }
+    const formattedDob = users.metadata.dob || "";
+
+    const defaultValues = {
+      name: users.metadata.full_name || "",
+      dob: formattedDob,
+      email: users.email || "",
+      password: users.password || "",
+    };
+    form.reset(defaultValues);
   }, [users, form]);
 
   useEffect(() => {
@@ -148,9 +138,7 @@ const UserProfile = () => {
         <div className="w-[40%] mx-auto">
           <div className="flex items-center justify-center flex-col mb-10">
             <Avatar className="lg:h-[248px] lg:w-[248px] h-[200px] w-[200px]">
-              <AvatarImage
-                src={avatarUrl || "https://github.com/shadcn.png"}
-              />
+              <AvatarImage src={avatarUrl || "https://github.com/shadcn.png"} />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
 

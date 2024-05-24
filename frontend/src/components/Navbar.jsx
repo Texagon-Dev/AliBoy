@@ -34,14 +34,13 @@ const Navbar = () => {
     }
   };
 
-  const users = useSelector((state) => state.user.users);
+  const users = useSelector((state) => state.user.user);
   const userId = useSelector((state) => state.user.userId);
   const dispatch = useDispatch();
   console.log(users);
   useEffect(() => {
     dispatch(fetchUserProfile(userId));
   }, [dispatch, userId]);
-
 
   const toggleNavbar = () => {
     setMobileDrawerOpen(!mobileDrawerOpen);
@@ -96,17 +95,22 @@ const Navbar = () => {
                           {session.user.user_metadata.full_name.split(" ")[0]}
                         </span>
                       </h4>
-                      {users.map((user) => (
-                        <div
-                          key={user.uuid}>
+                      {users ? (
+                        <div key={users.uuid}>
                           <Avatar className="lg:h-[38px] lg:w-[38px] md:h-[36px] md:w-[36px] h-[36px] w-[36px] ">
                             <AvatarImage
-                              src={user.profile_image || "https://github.com/shadcn.png"}
+                              src={
+                                users.profile_image ||
+                                "https://github.com/shadcn.png"
+                              }
                             />
                             <AvatarFallback>CN</AvatarFallback>
                           </Avatar>
                         </div>
-                      ))}                    </div>
+                      ) : (
+                        ""
+                      )}{" "}
+                    </div>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
