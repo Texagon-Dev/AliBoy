@@ -102,6 +102,21 @@ export const fetchUserStoryBooks = async (userId) => {
   }
 };
 
+export const fetchStoryBooks = async () => {
+  try {
+    const { data, error } = await supabase.from("User_Story_Books").select("*"); // You can customize this to select specific columns
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching User Story Books:", error.message);
+    return null;
+  }
+};
+
 export const deleteUserStoryBook = async (storybookId) => {
   try {
     const { error } = await supabase
@@ -178,6 +193,24 @@ export const fetchUser = async (userId) => {
       .from("users")
       .select("*")
       .eq("uuid", userId);
+
+    if (error) {
+      console.error("Supabase error:", error.message);
+      throw error;
+    }
+
+    console.log("Fetched users data:", data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching User Story Books:", error.message);
+    return null;
+  }
+};
+
+// 4- FOR USERS FROM SUPABASE
+export const fetchUsers = async () => {
+  try {
+    const { data, error } = await supabase.from("users").select("*");
 
     if (error) {
       console.error("Supabase error:", error.message);
@@ -278,6 +311,45 @@ export async function upsertBookPrintingOrder(userId, orderData) {
     }
   } catch (error) {
     // Handle any unexpected errors
+    console.error("Unexpected error:", error.message);
+  }
+}
+
+export async function fetchAllBookPrintingOrders() {
+  try {
+    const { data, error } = await supabase
+      .from("Book_Printing_Orders")
+      .select("*");
+
+    if (error) {
+      console.error("Error fetching data:", error.message);
+      return null;
+    } else {
+      console.log("Data fetched successfully:", data);
+      return data;
+    }
+  } catch (error) {
+    console.error("Unexpected error:", error.message);
+    return null;
+  }
+}
+
+export async function updateBookPrintingOrderStatus(orderId, updatedData) {
+  console.log("orderId", orderId, "updatedData", updatedData);
+  try {
+    const { order_status } = updatedData;
+
+    const { data, error } = await supabase
+      .from("Book_Printing_Orders")
+      .update({ order_status })
+      .eq("printing_id", orderId); // Assuming 'printing_id' is the primary key
+
+    if (error) {
+      console.error("Error updating data:", error.message);
+    } else {
+      console.log("Data updated successfully:", data);
+    }
+  } catch (error) {
     console.error("Unexpected error:", error.message);
   }
 }

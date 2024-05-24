@@ -5,13 +5,16 @@ import deliveredicon from "../../../assets/Images/deliveredicon.png";
 import cancelledicon from "../../../assets/Images/cancelledicon.png";
 import down from "../../../assets/Images/downtrend.png";
 import up from "../../../assets/Images/uptrend1.png";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { useState } from "react";
+import Loading from "../Loading/Loading";
 
 const DashboardCards = () => {
-  const users = useSelector((state) => state.user.users);
+  const users = useSelector((state) => state.user.user);
   const { orders, status } = useSelector((state) => state.customerOrders);
+  console.log("orders", orders);
+  
   const [dateRange, setDateRange] = useState({
     from: dayjs().subtract(30, "day").startOf("day").toDate(),
     to: dayjs().endOf("day").toDate(),
@@ -20,10 +23,16 @@ const DashboardCards = () => {
   const daysInRange =
     dayjs(dateRange.to).diff(dayjs(dateRange.from), "day") + 1;
 
-
+    if (status === "loading") {
+      return (
+        <div>
+          <Loading />
+        </div>
+      );
+    }
   // Filter orders based on the selected date range
   const filteredOrders = orders.filter((order) => {
-    const orderDate = dayjs(order.date);
+    const orderDate = dayjs(order.created_at);
     return (
       orderDate.isAfter(dayjs(dateRange.from)) &&
       orderDate.isBefore(dayjs(dateRange.to))
@@ -33,12 +42,12 @@ const DashboardCards = () => {
   // Calculate metrics for the current date range
 
   const getTotalRevenue = () =>
-    filteredOrders.reduce((acc, order) => acc + order.revenue, 0);
+    filteredOrders.reduce((acc, order) => acc + order.item_total, 0);
   const getTotalOrders = () => filteredOrders.length;
   const getTotalDelivered = () =>
-    filteredOrders.filter((order) => order.status === "Delivered").length;
+    filteredOrders.filter((order) => order.order_status === "Delivered").length;
   const getTotalCanceled = () =>
-    filteredOrders.filter((order) => order.status === "Canceled").length;
+    filteredOrders.filter((order) => order.order_status === "Cancelled").length;
 
   // Calculate metrics for the previous 30 days
   const previousRange = {
@@ -47,13 +56,12 @@ const DashboardCards = () => {
   };
 
   const previousOrders = orders.filter((order) => {
-    const orderDate = dayjs(order.date);
+    const orderDate = dayjs(order.created_at);
     return (
       orderDate.isAfter(dayjs(previousRange.from).subtract(1, "day")) &&
       orderDate.isBefore(dayjs(previousRange.to).add(1, "day"))
     );
   });
-
 
   // Calculate metrics for the previous equivalent period
   // const previousRange = {
@@ -70,12 +78,12 @@ const DashboardCards = () => {
   // });
 
   const getPreviousTotalRevenue = () =>
-    previousOrders.reduce((acc, order) => acc + order.revenue, 0);
+    previousOrders.reduce((acc, order) => acc + order.item_total, 0);
   const getPreviousTotalOrders = () => previousOrders.length;
   const getPreviousTotalDelivered = () =>
-    previousOrders.filter((order) => order.status === "Delivered").length;
+    previousOrders.filter((order) => order.order_status === "Delivered").length;
   const getPreviousTotalCanceled = () =>
-    previousOrders.filter((order) => order.status === "Canceled").length;
+    previousOrders.filter((order) => order.order_status === "Cancelled").length;
 
   // Calculate percentage changes
   const calculatePercentageChange = (current, previous) => {
@@ -100,24 +108,18 @@ const DashboardCards = () => {
     getPreviousTotalCanceled()
   );
 
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
+
 
   return (
     <div className="md:mt-[100px] mt-[80px]">
       <div className="flex md:flex-row flex-col mb-8 md:justify-between justify-center items-center ">
         <div className="flex flex-col lg:mt-4 md:mt-0 mt-2 md:justify-start justify-center   ">
           <h1 className="arvo-bold text-[44px] leading-[54.3px]">Dashboard</h1>
-          {users.map((user) => (
-            <p
-              key={user.uuid}
-              className="text-xl raleway-medium text-[#6B6D6E] lg:w-full md:w-2/3 md:mb-0 mb-4"
-            >
-              Hi, {user.metadata.full_name.split(" ")[0]}. Welcome back to Story
-              Book Admin!
-            </p>
-          ))}
+
+          <p className="text-xl raleway-medium text-[#6B6D6E] lg:w-full md:w-2/3 md:mb-0 mb-4">
+            Hi, {users.metadata.full_name.split(" ")[0]}. Welcome back to Story
+            Book Admin!
+          </p>
         </div>
         <div className="border w-[293px] h-[62px] rounded-[40px] border-[#FAC0D3] flex gap-2 items-center justify-center">
           <div className="flex gap-2 items-center justify-center">

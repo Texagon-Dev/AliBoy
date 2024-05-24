@@ -1,4 +1,4 @@
-import { fetchUser } from "@/lib/functions";
+import { fetchUser, fetchUsers } from "@/lib/functions";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -7,29 +7,46 @@ const initialState = {
   metadata: {},
   email: "",
   users: [],
+  user: {},
   avatarUrl: "",
   isLoading: true,
 };
 
 export const fetchUserProfile = (userId) => async (dispatch) => {
   try {
-    const users = await fetchUser(userId);
+    const user = await fetchUser(userId);
 
-    if (!users || users.length === 0) {
+    if (!user || user.length === 0) {
       return;
     }
 
-    const user = users[0]; // Assuming there is only one user with the given userId
-    const { metadata, email, profile_image } = user;
+    const singleUser = user[0]; // Assuming there is only one user with the given userId
+    const { metadata, email, profile_image } = singleUser;
 
     // Dispatch actions to update the state
-    dispatch(setUsers(users));
+    dispatch(setUser(singleUser));
     dispatch(setUserMetadata(metadata));
     dispatch(setUserEmail(email));
     dispatch(setUserAvatar(profile_image));
     dispatch(setIsLoading(false));
   } catch (error) {
-    console.error("Error fetching users:", error.message);
+    console.error("Error fetching user:", error.message);
+    dispatch(setIsLoading(false)); // Ensure loading state is reset on error
+  }
+};
+export const fetchAllUsers = () => async (dispatch) => {
+  try {
+    const users = await fetchUsers();
+
+    if (!users || users.length === 0) {
+      return;
+    }
+
+    // Dispatch actions to update the state
+    dispatch(setUsers(users));
+    dispatch(setIsLoading(false));
+  } catch (error) {
+    console.error("Error fetching user:", error.message);
     dispatch(setIsLoading(false)); // Ensure loading state is reset on error
   }
 };
@@ -41,7 +58,6 @@ const userSlice = createSlice({
     setSession: (state, action) => {
       state.session = action.payload;
       state.userId = action.payload ? action.payload.user.id : "";
-      
     },
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
@@ -63,7 +79,11 @@ const userSlice = createSlice({
       const users = action.payload || [];
       state.users = users;
       state.isLoading = false;
-   
+    },
+    setUser: (state, action) => {
+      const user = action.payload || [];
+      state.user = user;
+      state.isLoading = false;
     },
   },
 });
@@ -76,6 +96,7 @@ export const {
   setUserAvatar,
   setUserMetadata,
   setUsers,
+  setUser,
 } = userSlice.actions;
 
 export default userSlice.reducer;

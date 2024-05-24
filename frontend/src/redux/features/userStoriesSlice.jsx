@@ -1,11 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchUserStoryBooks } from "@/lib/functions";
+import { fetchStoryBooks, fetchUserStoryBooks } from "@/lib/functions";
 
 export const fetchStories = createAsyncThunk(
   "stories/fetchStories",
   async (userId, { rejectWithValue }) => {
     try {
       const response = await fetchUserStoryBooks(userId);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchStoriesBook = createAsyncThunk(
+  "stories/fetchStoriesBook",
+  async ( { rejectWithValue }) => {
+    try {
+      const response = await fetchStoryBooks();
+      console.log(response)
       return response;
     } catch (error) {
       return rejectWithValue(error.response.data);

@@ -1,125 +1,100 @@
+// ordersSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import dayjs from "dayjs";
+import { fetchAllBookPrintingOrders, fetchStoryBooks, updateBookPrintingOrderStatus } from "@/lib/functions";
 
-// Mock base URL (you might want to replace this with an actual API endpoint)
-const BASE_URL = "https://myapi.com/api/cutomer-orders";
 
-const ORDERS = [
-  {
-    id: 1,
-    name: "Product A",
-    quantity: 5,
-    status: "Dispatched",
-    date: dayjs().subtract(10, "day").toISOString(),
-    revenue: 50,
-  },
-  {
-    id: 2,
-    name: "Product B",
-    quantity: 10,
-    status: "Printing",
-    date: dayjs().subtract(5, "day").toISOString(),
-    revenue: 100,
-  },
-  {
-    id: 3,
-    name: "Product C",
-    quantity: 8,
-    status: "Pending",
-    date: dayjs().subtract(20, "day").toISOString(),
-    revenue: 80,
-  },
-  {
-    id: 4,
-    name: "Product D",
-    quantity: 3,
-    status: "Delivered",
-    date: dayjs().subtract(15, "day").toISOString(),
-    revenue: 30,
-  },
-  {
-    id: 5,
-    name: "Product E",
-    quantity: 7,
-    status: "Canceled",
-    date: dayjs().subtract(25, "day").toISOString(),
-    revenue: 70,
-  },
-  {
-    id: 6,
-    name: "Product D",
-    quantity: 3,
-    status: "Delivered",
-    date: dayjs().subtract(15, "day").toISOString(),
-    revenue: 30,
-  },
-  {
-    id: 7,
-    name: "Product E",
-    quantity: 7,
-    status: "Canceled",
-    date: dayjs().subtract(25, "day").toISOString(),
-    revenue: 70,
-  },
-];
 
-const ORDER = { id: 1, name: "Product A", quantity: 5, status: "Dispatched" };
+// Thunk to fetch orders and include user names and story names
+export const fetchOrders = createAsyncThunk(
+  "orders/fetchOrders",
+  async (_, { getState }) => {
+    // Fetch orders
+    const response = await fetchAllBookPrintingOrders();
 
-// Async thunks
-export const fetchCustomerOrders = createAsyncThunk(
-  "customerOrders/fetchCustomerOrders",
-  async () => {
-    // we can do api call here
-    // const response = await axios.get(BASE_URL);
-    // return response.data;
-    return ORDERS;
+    // Fetch users from state
+    const { users } = getState().user;
+
+    // Fetch story books
+    const storyBooks = await fetchStoryBooks();
+    console.log("storyBook", storyBooks);
+
+    // Map story books by story_id for quick lookup
+    const storyBooksMap = storyBooks.reduce((acc, story) => {
+      acc[story.story_book_id] = story.story_name;
+      return acc;
+    }, {});
+
+    // Combine orders with user names and story names
+    const ordersWithUserNamesAndStoryNames = response.map((order) => {
+      const user = users.find((user) => user.uuid === order.uuid);
+      return {
+        ...order,
+        user: user,
+        user_name: user ? user.metadata.full_name : "Unknown User",
+        story_name: storyBooksMap[order.story_book_id] || "Unknown Story",
+        order_status: order.order_status || "Pending",
+      };
+    });
+    console.log(
+      "ordersWithUserNamesAndStoryNames",
+      ordersWithUserNamesAndStoryNames
+    );
+    return ordersWithUserNamesAndStoryNames;
   }
 );
 
-export const fetchCustomerOrder = createAsyncThunk(
-  "customerOrders/fetchCustomerOrderDetails",
-  async (orderId) => {
-    // const response = await axios.post(BASE_URL, orderId);
-    // return response.data;
-    console.log(orderId);
-    return ORDER;
-  }
-);
-export const createCustomerOrder = createAsyncThunk(
-  "customerOrders/createCustomerOrder",
-  async (data) => {
-    const response = await axios.post(BASE_URL, data);
-    return response.data;
+export const updateOrderStatus = createAsyncThunk(
+  "orders/updateOrderStatus",
+  async ({ orderId, status }, { dispatch }) => {
+    await updateBookPrintingOrderStatus(orderId, { order_status: status });
+    return { orderId, status };
   }
 );
 
-const customerOrderSlice = createSlice({
-  name: "customerOrders",
+const ordersSlice = createSlice({
+  name: "orders",
   initialState: {
     orders: [],
-    order: null,
     status: "idle",
     error: null,
   },
-  reducers: {},
+  reducers: {
+    updateLocalOrderStatus: (state, action) => {
+      const { orderId, status } = action.payload;
+      const existingOrder = state.orders.find(
+        (order) => order.printing_id === orderId
+      );
+      if (existingOrder) {
+        existingOrder.order_status = status;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCustomerOrders.pending, (state) => {
+      .addCase(fetchOrders.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchCustomerOrders.fulfilled, (state, action) => {
+      .addCase(fetchOrders.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.orders = action.payload;
       })
-      .addCase(fetchCustomerOrders.rejected, (state, action) => {
+      .addCase(fetchOrders.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })
-      .addCase(fetchCustomerOrder.fulfilled, (state, action) => {
-        state.orders.push(action.payload);
+      .addCase(updateOrderStatus.fulfilled, (state, action) => {
+        const { orderId, status } = action.payload;
+        const existingOrder = state.orders.find(
+          (order) => order.printing_id === orderId
+        );
+        if (existingOrder) {
+          existingOrder.order_status = status;
+        }
       });
   },
 });
 
-export default customerOrderSlice.reducer;
+
+export const { updateLocalOrderStatus } = ordersSlice.actions;
+
+export default ordersSlice.reducer;

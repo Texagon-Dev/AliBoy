@@ -25,7 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { setPrintingOrder } from "@/redux/features/bookPrintingSlice";
 import calculateOrderPricing from "@/lib/calculateOrderPricing";
-import { upsertBookPrintingOrder } from "@/lib/functions";
+
 
 const BookPrintingOptions = () => {
   const [searchParams] = useSearchParams();
@@ -60,13 +60,14 @@ const BookPrintingOptions = () => {
     setOrderPricing(calculateOrderPricing(form.getValues()));
   }, [form, watchQuantity]);
 
-  const { unitPrice, subTotal } = orderPricing;
+  const { unitPrice, subTotal,  } = orderPricing;
 
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
   const onSubmit = (orderDetails) => {
+    
     dispatch(setPrintingOrder(orderDetails));
     // console.log(orderDetails);
     navigate(`/dashboard/checkout?storyBookId=${storyBookId}`);

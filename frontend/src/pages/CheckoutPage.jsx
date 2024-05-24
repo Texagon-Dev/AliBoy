@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useDispatch, useSelector } from "react-redux";
-import { createCustomerOrder } from "@/redux/features/customerOrdersSlice";
+
 import { useEffect, useState } from "react";
 import { setPrintingOrder } from "@/redux/features/bookPrintingSlice";
 import calculateOrderPricing from "@/lib/calculateOrderPricing";
@@ -86,9 +86,16 @@ const CheckoutPage = () => {
 
   const navigate = useNavigate();
   const onSubmit = (confirmedOrder) => {
+        const grandTotalAmount = grandTotal; // Assign itemsTotal to grandTotal
+
+        // Update orderDetails with grandTotal
+        const updatedOrderDetails = {
+          ...confirmedOrder,
+          item_total: grandTotalAmount,
+        };
     console.log(confirmedOrder);
-    upsertBookPrintingOrder(userId, confirmedOrder);
-    dispatch(createCustomerOrder(confirmedOrder));
+    upsertBookPrintingOrder(userId, updatedOrderDetails);
+    // dispatch(setCustomerOrder(confirmedOrder));
     dispatch(setPrintingOrder(null));
     navigate("/user");
   };

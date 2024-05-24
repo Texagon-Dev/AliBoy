@@ -1,4 +1,4 @@
-import {  DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -11,10 +11,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 
+const DashboardOrderDetails = ({ order }) => {
+  const form = useForm({
+    defaultValues: {
+      name: order?.user?.user_name || "",
+      email: order?.user?.email || "",
+    },
+  });
 
-const DashboardOrderDetails = () => {
-	const form = useForm();
-	return (
+  return (
     <>
       <DialogTrigger>View</DialogTrigger>
       <DialogContent className="bg-white ">
@@ -42,10 +47,11 @@ const DashboardOrderDetails = () => {
                           </FormItem>
                           <FormControl>
                             <Input
-                              placeholder="Joe Doe"
+                              placeholder={order?.user_name}
                               {...field}
                               type="name"
                               className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
+                              disabled
                             />
                           </FormControl>
                           <FormDescription></FormDescription>
@@ -67,10 +73,11 @@ const DashboardOrderDetails = () => {
                           </FormItem>
                           <FormControl>
                             <Input
-                              placeholder="xyz@gmail.com"
+                              placeholder="Email"
                               {...field}
                               type="email"
                               className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
+                              disabled
                             />
                           </FormControl>
                           <FormDescription></FormDescription>
@@ -91,10 +98,11 @@ const DashboardOrderDetails = () => {
                           </FormItem>
                           <FormControl>
                             <Input
-                              placeholder="Street Address"
+                              placeholder={order?.delivery_address}
                               {...field}
                               type="address"
                               className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
+                              disabled
                             />
                           </FormControl>
                           <FormDescription></FormDescription>
@@ -115,10 +123,11 @@ const DashboardOrderDetails = () => {
                           </FormItem>
                           <FormControl>
                             <Input
-                              placeholder="$11.59"
+                              placeholder={`$${order?.item_total}`}
                               {...field}
                               type="text"
                               className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
+                              disabled
                             />
                           </FormControl>
                           <FormDescription></FormDescription>
@@ -139,10 +148,11 @@ const DashboardOrderDetails = () => {
                           </FormItem>
                           <FormControl>
                             <Input
-                              placeholder="Printing"
+                              placeholder={order?.order_status}
                               {...field}
                               type="text"
                               className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
+                              disabled
                             />
                           </FormControl>
                           <FormDescription></FormDescription>
@@ -166,10 +176,11 @@ const DashboardOrderDetails = () => {
                         </FormItem>
                         <FormControl>
                           <Input
-                            placeholder="The Journey of Dreams"
+                            placeholder={order?.story_name}
                             {...field}
                             type="text"
                             className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
+                            disabled
                           />
                         </FormControl>
                         <FormDescription></FormDescription>
@@ -190,10 +201,11 @@ const DashboardOrderDetails = () => {
                         </FormItem>
                         <FormControl>
                           <Input
-                            placeholder="Standard"
+                            placeholder={order?.title_size}
                             {...field}
                             type="text"
                             className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
+                            disabled
                           />
                         </FormControl>
                         <FormDescription></FormDescription>
@@ -214,10 +226,11 @@ const DashboardOrderDetails = () => {
                         </FormItem>
                         <FormControl>
                           <Input
-                            placeholder="Perfect Bound"
+                            placeholder={order?.binding_name}
                             {...field}
                             type="text"
                             className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
+                            disabled
                           />
                         </FormControl>
                         <FormDescription></FormDescription>
@@ -238,10 +251,11 @@ const DashboardOrderDetails = () => {
                         </FormItem>
                         <FormControl>
                           <Input
-                            placeholder="05"
+                            placeholder={order?.quantity}
                             {...field}
                             type="text"
                             className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
+                            disabled
                           />
                         </FormControl>
                         <FormDescription></FormDescription>
@@ -257,5 +271,5 @@ const DashboardOrderDetails = () => {
       </DialogContent>
     </>
   );
-}
-export default DashboardOrderDetails
+};
+export default DashboardOrderDetails;
