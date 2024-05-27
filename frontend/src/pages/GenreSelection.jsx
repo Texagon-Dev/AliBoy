@@ -54,7 +54,7 @@ const genres = [
 const styles = {
   container: "container mx-auto lg:mt-[120px] md:mt-[100px] mt-[80px] mb-8",
   mainWrapper: "w-full flex justify-center items-center text-center flex-col",
-  contentWrapper: "w-full lg:w-[80%] mb-8",
+  contentWrapper: "w-full lg:w-[80%] flex justify-center items-center flex-col mb-8",
   title:
     "text-primary1-blue text-2xl lg:text-5xl md:text-4xl arvo-bold md:leading-[59px]",
   description:

@@ -22,7 +22,7 @@ const CreateBookSection = () => {
           <h1 className="text-xl leading-5 tracking-tighter mb-4 arvo-bold">
             Receive Your Masterpiece
           </h1>
-          <p className="lg:px-24 md:px-18 text-center raleway-normal text-[#6B6D6E]">
+          <p className="xl:px-24 md:px-18 text-center raleway-normal text-[#6B6D6E]">
             Sit back and relax as we craft and deliver the hard copy of your
             personalized storybook right to your doorstep.
           </p>
@@ -32,7 +32,7 @@ const CreateBookSection = () => {
           <h1 className="text-xl mb-4  leading-5 tracking-tighter arvo-bold ">
             See Your Imagination Unfold
           </h1>
-          <p className="lg:px-24 md:px-18 text-center raleway-normal text-[#6B6D6E]">
+          <p className="xl:px-24 md:px-18 text-center raleway-normal text-[#6B6D6E]">
             Watch as your ideas transform into captivating stories, brought to
             life by our AI-powered platform
           </p>
@@ -42,7 +42,7 @@ const CreateBookSection = () => {
           <h1 className="text-[20px] mb-4  leading-5 tracking-tighter arvo-bold">
             Receive Your Masterpiece
           </h1>
-          <p className="lg:px-24 md:px-18 text-center raleway-normal text-[#6B6D6E]">
+          <p className="xl:px-24 md:px-18 text-center raleway-normal text-[#6B6D6E]">
             Sit back and relax as we craft and deliver the hard copy of your
             personalized storybook right to your doorstep.
           </p>

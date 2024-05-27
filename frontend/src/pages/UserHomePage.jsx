@@ -28,7 +28,7 @@ const UserHomePage = () => {
   if (error) return <div>Error loading stories: {error}</div>;
 
   return (
-    <section className="container mx-auto w-screen mt-[100px] lg:mt-[140px] mb-10 lg:w-[1280px] ">
+    <section className="container mx-auto w-screen mt-[100px] lg:mt-[140px] mb-10  ">
       <div className="flex flex-col justify-center w-full mx-auto">
       
             <h1 className="w-full mx-auto text-center lg:text-start text-primary1-blue text-3xl lg:text-5xl md:text-4xl arvo-bold leading-[59px] ">

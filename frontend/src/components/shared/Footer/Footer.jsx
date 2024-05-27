@@ -11,9 +11,9 @@ const Footer = () => {
   return (
     <section className="back-img mt-[100px]">
       <div className="container lg:pt-20 lg:pb-10 pt-10 pb-10">
-        <div className=" md:p-10 py-10  bg-primary1-pink md:rounded-[100px] rounded-[100px] md:mt-[100px] mt-[50px]">
-          <div className="flex lg:justify-between items-center justify-center flex-wrap">
-            <h1 className="arvo-bold md:text-[32px] text-[20px] text-center mb-5 text-white">
+        <div className=" md:p-10 py-10  bg-primary1-pink bg-none md:rounded-[100px] rounded-[100px] md:mt-[100px] mt-[50px]">
+          <div className="flex lg:justify-between align-center items-center justify-center md:flex-row flex-col flex-wrap">
+            <h1 className="arvo-bold md:text-[32px]  text-[20px] text-center lg:mb-0 mb-5 text-white">
               Subscribe Newsletters
             </h1>
 

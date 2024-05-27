@@ -45,15 +45,20 @@ const Navbar = () => {
   const toggleNavbar = () => {
     setMobileDrawerOpen(!mobileDrawerOpen);
   };
+
   return (
-    <nav className="fixed w-screen bg-transparent top-0 z-50 py-3  backdrop-blur-lg">
-      <div className="container lg:w-[1280px] px-4 mx-auto relative lg:text-sm">
+    <nav className="fixed w-screen bg-transparent top-0 z-50 px-4 py-3 backdrop-blur-lg">
+      <div className="container 2xl:px-4 md:px-10 px-5 mx-auto relative lg:text-sm">
         <div className="flex justify-between items-center">
           <ul className="flex items-center flex-shrink-0">
             <li>
               <NavLink
                 to="/create/begin"
-                className="hidden lg:flex text-2xl leading-7 tracking-tight mr-8 raleway-medium"
+                className={({ isActive }) =>
+                  `hidden lg:flex text-2xl leading-7 tracking-tight mr-8 raleway-medium ${
+                    isActive ? "text-primary1-pink " : ""
+                  }`
+                }
               >
                 Create Story
               </NavLink>
@@ -61,7 +66,11 @@ const Navbar = () => {
             <li>
               <NavLink
                 to="/dashboard"
-                className="hidden lg:flex text-2xl leading-7 tracking-tight raleway-medium"
+                className={({ isActive }) =>
+                  `hidden lg:flex text-2xl leading-7 tracking-tight raleway-medium ${
+                    isActive ? "text-primary1-pink " : ""
+                  }`
+                }
               >
                 Dashboard
               </NavLink>
@@ -69,7 +78,11 @@ const Navbar = () => {
             <li>
               <NavLink
                 to="/"
-                className="lg:hidden md:flex text-2xl leading-7  tracking-tight"
+                className={({ isActive }) =>
+                  `lg:hidden md:flex text-2xl leading-7 tracking-tight ${
+                    isActive ? "text-primary1-blue " : ""
+                  }`
+                }
               >
                 Logo
               </NavLink>
@@ -77,12 +90,19 @@ const Navbar = () => {
           </ul>
           <div className="hidden lg:flex justify-center space-x-12 items-center">
             <NavLink to="/">
-              <img className="h-10 w-10 mr-2 " src={logo} alt="Logo" />
+              <img className="h-10 w-10 mr-2" src={logo} alt="Logo" />
             </NavLink>
           </div>
-          <ul className="hidden lg:flex ml-14 space-x-12 text-2xl leading-7">
+          <ul className={`" hidden lg:flex space-x-12 text-2xl leading-7" ${session ? "" : "ml-[100px]"}`}>
             <li>
-              <NavLink to="/pricing">Pricing</NavLink>
+              <NavLink
+                to="/pricing"
+                className={({ isActive }) =>
+                  `${isActive ? "text-primary1-pink " : ""}`
+                }
+              >
+                Pricing
+              </NavLink>
             </li>
             {session && session.user ? (
               <>
@@ -97,7 +117,7 @@ const Navbar = () => {
                       </h4>
                       {users ? (
                         <div key={users.uuid}>
-                          <Avatar className="lg:h-[38px] lg:w-[38px] md:h-[36px] md:w-[36px] h-[36px] w-[36px] ">
+                          <Avatar className="lg:h-[38px] lg:w-[38px] md:h-[36px] md:w-[36px] h-[36px] w-[36px]">
                             <AvatarImage
                               src={
                                 users.profile_image ||
@@ -127,7 +147,14 @@ const Navbar = () => {
               </>
             ) : (
               <li>
-                <NavLink to="/signup">Signup</NavLink>
+                <NavLink
+                  to="/signup"
+                  className={({ isActive }) =>
+                    `${isActive ? "text-primary1-pink " : ""}`
+                  }
+                >
+                  Signup
+                </NavLink>
               </li>
             )}
           </ul>
@@ -141,21 +168,56 @@ const Navbar = () => {
           <div className="fixed right-0 top-[54px] z-800 bg-white w-full p-12 flex flex-col justify-center items-center lg:hidden text-2xl leading-7">
             <ul>
               <li className="py-4">
-                <NavLink to="/create">Create Story</NavLink>
+                <NavLink
+                  to="/create"
+                  className={({ isActive }) =>
+                    `${isActive ? "text-primary1-pink " : ""}`
+                  }
+                >
+                  Create Story
+                </NavLink>
               </li>
               <li className="py-4">
-                <NavLink to="/dashboard">Dashboard</NavLink>
+                <NavLink
+                  to="/dashboard"
+                  className={({ isActive }) =>
+                    `${isActive ? "text-primary1-pink " : ""}`
+                  }
+                >
+                  Dashboard
+                </NavLink>
               </li>
               <li className="py-4">
-                <NavLink to="/pricing">Pricing</NavLink>
+                <NavLink
+                  to="/pricing"
+                  className={({ isActive }) =>
+                    `${isActive ? "text-primary1-pink " : ""}`
+                  }
+                >
+                  Pricing
+                </NavLink>
               </li>
               {session && session.user ? (
                 <li className="py-4">
-                  <NavLink onClick={handleSignout}>Logout</NavLink>
+                  <NavLink
+                    onClick={handleSignout}
+                    className={({ isActive }) =>
+                      `${isActive ? "text-primary1-pink " : ""}`
+                    }
+                  >
+                    Logout
+                  </NavLink>
                 </li>
               ) : (
                 <li className="py-4">
-                  <NavLink to="/signup">Signup</NavLink>
+                  <NavLink
+                    to="/signup"
+                    className={({ isActive }) =>
+                      `${isActive ? "text-primary1-pink " : ""}`
+                    }
+                  >
+                    Signup
+                  </NavLink>
                 </li>
               )}
             </ul>
@@ -165,4 +227,5 @@ const Navbar = () => {
     </nav>
   );
 };
+
 export default Navbar;

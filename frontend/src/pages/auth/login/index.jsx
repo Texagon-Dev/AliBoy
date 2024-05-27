@@ -14,6 +14,7 @@ import supabase from "@/lib/supabase";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { EyeIcon, EyeOff } from "lucide-react";
 
 const styles = {
   pageContainer: "grid h-screen grid-cols-2",
@@ -51,6 +52,11 @@ const SignIn = () => {
       password: "",
     },
   });
+
+   const [showPassword, setShowPassword] = useState(false);
+   const togglePasswordVisibility = () => {
+     setShowPassword(!showPassword);
+   };
 
   const handleLogin = async (data) => {
     try {
@@ -136,8 +142,20 @@ const SignIn = () => {
                       <Input
                         placeholder=""
                         {...field}
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         className={styles.inputField}
+                        icon={
+                          <div
+                            onClick={togglePasswordVisibility}
+                            className="cursor-pointer"
+                          >
+                            {showPassword ? (
+                              <EyeIcon size={20} color="#F15084" />
+                            ) : (
+                              <EyeOff size={20} color="#F15084" />
+                            )}
+                          </div>
+                        }
                       />
                     </FormControl>
                   </FormItem>

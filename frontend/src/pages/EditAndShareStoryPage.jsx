@@ -18,7 +18,7 @@ const EditAndShareStoryPage = () => {
   const storyBookId = searchParams.get("storyBookId");
   console.log("myID:", storyBookId);
   const userId = useSelector((state) => state.user.userId);
-     const metadata1 = useSelector((state) => state.user.metadata);
+  const metadata1 = useSelector((state) => state.user.metadata);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -55,7 +55,12 @@ const EditAndShareStoryPage = () => {
   }
 
   const specificStory = filteredStories[0];
-  const { story_name, metadata, tags: storyTags, created_at } = specificStory || {};
+  const {
+    story_name,
+    metadata,
+    tags: storyTags,
+    created_at,
+  } = specificStory || {};
 
   console.log("filteredStories", specificStory);
 
@@ -72,14 +77,12 @@ const EditAndShareStoryPage = () => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString();
-  }
+  };
 
   const urlToShare = window.location.href;
 
-  
-
   return (
-    <section className="container mx-auto w-full mt-[100px] lg:mt-[140px] mb-10 lg:w-[1280px]">
+    <section className="container mx-auto w-full mt-[100px] lg:mt-[140px] mb-10 ">
       <div className="w-full  mb-8 ">
         <div>
           <Button className="bg-transparent text-primary1-blue text-sm lg:text-2xl arvo-bold hover:bg-transparent p-0 flex justify-start gap-2 ">
@@ -93,9 +96,9 @@ const EditAndShareStoryPage = () => {
             </NavLink>
           </Button>
         </div>
-        <div className="flex flex-col justify-center  lg:flex-row  gap-8 mt-10 w-full">
+        <div className="flex flex-col justify-center  lg:flex-row  gap-8 mt-10 w-full lg:w-[1280px]">
           <div className="w-1/2">
-            <div className="lg:w-[525px] lg:h-[507px] md:w-[400px] md:h-[400px]  w-[300px] h-[300px]  relative ">
+            <div className="lg:w-[635px] lg:h-[657px] md:w-[400px] md:h-[400px]  w-[300px] h-[300px]  relative ">
               <img
                 src={storyImage}
                 alt="story image"
@@ -152,10 +155,12 @@ const EditAndShareStoryPage = () => {
                       {chapter.slides.length > 0 && (
                         <div key={chapter.slides[0].slideId}>
                           {chapter.slides[0].originalText ||
-                          chapter.slides[0].regeneratedText ? (
+                          chapter.slides[0].regeneratedText ||
+                          chapter.slides[0].editedText ? (
                             (chapter.slides[0].originalText
                               ? chapter.slides[0].originalText
-                              : chapter.slides[0].regeneratedText
+                              : chapter.slides[0].regeneratedText ||
+                                chapter.slides[0].editedText
                             )
                               .split("\n")
                               .slice(0, 5)
@@ -192,7 +197,7 @@ const EditAndShareStoryPage = () => {
                     </Button>
                   ))}
               </div>
-                 {metadata && metadata.length > 0 ? (
+              {metadata && metadata.length > 0 ? (
                 <NavLink
                   to={`/dashboard/completestorybook?storyBookId=${storyBookId}`}
                 >
