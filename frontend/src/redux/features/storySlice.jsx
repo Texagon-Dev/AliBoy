@@ -5,23 +5,31 @@ import axios from "axios";
 export const sendStoryData = createAsyncThunk(
   "stories/sendStoryData",
   async (storyData, { rejectWithValue }) => {
+    const { story_explanation, character_explanations, story_length } =
+      storyData.storyDetails;
+    const { total_chapters } = storyData.generationOptions;
+
     console.log("storyData from slice", storyData);
-    const { genre, ...restOfData } = storyData;
-    const payload = {
-      ...restOfData
-    };
+
+    // Form the input object to send to the API
+    const input = {
+      story_explanation,
+      character_explanations,
+      total_chapters,
+      story_length,
+    }
     // Form the input object to send to the API
     try {
       const response = await axios.post(
-        `https://711c-202-166-171-221.ngrok-free.app/api/v1/${genre}`,
-        { payload },
+        `https://195d-202-166-171-219.ngrok-free.app/api/v1/${storyData.genre.value}`,
+        { input },
         {
           headers: {
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         }
       );
-      console.log(response);
+      console.log(response );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -37,12 +45,12 @@ export const regenerateStorySlide = createAsyncThunk(
   ) => {
     try {
       const response = await axios.post(
-        "https://711c-202-166-171-221.ngrok-free.app/api/v1/rewriteParagraph",
+        "https://195d-202-166-171-219.ngrok-free.app/api/v1/rewriteParagraph",
         { input: text },
         {
           headers: {
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         }
       );
       return {
@@ -78,7 +86,8 @@ const initialState = {
   },
   items: [],
   loading: false,
-  error: null
+  error: null,
+  
 };
 
 const MAX_WORDS_PER_SLIDE = 35;
@@ -140,6 +149,7 @@ export const storiesSlice = createSlice({
     builder
       .addCase(sendStoryData.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(sendStoryData.fulfilled, (state, action) => {
         const response = action.payload;
@@ -157,7 +167,7 @@ export const storiesSlice = createSlice({
         state.loading = false;
       })
       .addCase(sendStoryData.rejected, (state, action) => {
-        state.error = action.payload;
+        state.error = true;
         state.loading = false;
       })
       .addCase(regenerateStorySlide.fulfilled, (state, action) => {

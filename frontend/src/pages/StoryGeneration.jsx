@@ -6,7 +6,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -14,7 +14,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@/components/ui/select";
 
 import { useForm } from "react-hook-form";
@@ -25,37 +25,35 @@ import {
   addStoryToHistory,
   resetCurrentStory,
   sendStoryData,
-  setGenerationOptions
+  setGenerationOptions,
 } from "@/redux/features/storySlice";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 const StoryGeneration = () => {
   const navigate = useNavigate();
   const currentStory = useSelector((state) => state.stories.currentStory);
-  const { story_explanation, character_explanations, story_length } =
-    currentStory.storyDetails;
+
   const loading = useSelector((state) => state.stories.loading);
+  const error = useSelector((state) => state.stories.error);
 
   const dispatch = useDispatch();
-  const handleGenerate = async () => {
+
+  const handleOnChange = () => {
     const formData = {
       total_chapters: form.getValues("chapters"),
       imageStyle: form.getValues("select-image-style"),
-      language: form.getValues("select-story-language")
+      language: form.getValues("select-story-language"),
     };
 
     console.log(formData);
 
-    dispatch(setGenerationOptions(formData)); // Sets local state
+    dispatch(setGenerationOptions(formData));
+  };
+  const handleGenerate = async () => {
+    // Sets local state
     console.log(currentStory, "current story");
-    const resultAction = await dispatch(
-      sendStoryData({
-        total_chapters: formData?.total_chapters,
-        story_explanation,
-        character_explanations,
-        story_length,
-        genre: currentStory?.genre.value
-      })
-    );
+    const resultAction = await dispatch(sendStoryData(currentStory));
     console.log(resultAction, "result action from story generation");
     if (sendStoryData.fulfilled.match(resultAction)) {
       dispatch(addStoryToHistory(currentStory));
@@ -65,9 +63,15 @@ const StoryGeneration = () => {
 
   const form = useForm({
     defaultValues: {
-      chapters: 1
-    }
+      chapters: 1,
+    },
   });
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Something went wrong please try again");
+    }
+  }, [error]);
 
   if (loading) {
     return <StoryGenerationLoading />;
@@ -93,7 +97,8 @@ const StoryGeneration = () => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit()}
-              className="lg:w-[68%] w-full space-y-6">
+              className="lg:w-[68%] w-full space-y-6"
+            >
               <FormField
                 control={form.control}
                 name="chapters"
@@ -108,8 +113,13 @@ const StoryGeneration = () => {
                       <Input
                         {...field}
                         type="number"
-                        className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl  "
+                        className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl custom-number-input"
                         min="1"
+                        max="7"
+                        onChange={(e) => {
+                          field.onChange(e); // Ensure the field value is updated
+                          handleOnChange(); // Call your custom function
+                        }}
                       />
                     </FormControl>
                     <FormDescription></FormDescription>
@@ -129,7 +139,8 @@ const StoryGeneration = () => {
                     </FormItem>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}>
+                      defaultValue={field.value}
+                    >
                       <FormControl className=" w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl">
                         <SelectTrigger>
                           <SelectValue placeholder="Auto" />
@@ -158,7 +169,8 @@ const StoryGeneration = () => {
                     </FormItem>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}>
+                      defaultValue={field.value}
+                    >
                       <FormControl className=" w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl ">
                         <SelectTrigger>
                           <SelectValue placeholder="English" />
@@ -178,7 +190,8 @@ const StoryGeneration = () => {
               <div className="flex justify-center">
                 <Button
                   onClick={handleGenerate}
-                  className="bg-[#F15084] w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6 arvo-regular">
+                  className="bg-[#F15084] w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6 arvo-regular"
+                >
                   Generate
                 </Button>
               </div>
