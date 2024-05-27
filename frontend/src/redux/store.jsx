@@ -15,10 +15,10 @@ const persistConfig = {
 };
 
 const rootReducer = {
-  bookPrintingOrders: bookPrintingOrderReducer,
-  customerOrders: customerOrdersReducer,
+  bookPrintingOrders: persistReducer(persistConfig,bookPrintingOrderReducer),
+  customerOrders: persistReducer(persistConfig,customerOrdersReducer),
   user: persistReducer(persistConfig, userReducer), // Wrap user reducer
-  userStories: userStoriesReducer,
+  userStories: persistReducer(persistConfig,userStoriesReducer),
   stories: persistReducer(persistConfig,storiesReducer),
 };
 

@@ -28,6 +28,7 @@ const StoryDetails = () => {
   console.log(selectedValue, "selectedValue");
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
+  const [isNextButtonEnabled, setIsNextButtonEnabled] = useState(false);
 
   const onDrop = useCallback((acceptedFiles, fileRejections) => {
     console.log(acceptedFiles, "Accepted files: ");
@@ -108,10 +109,10 @@ const StoryDetails = () => {
   // Helper function to determine what message to display
   const getCharacterFeedback = () => {
     const length = storyExplanation.length;
-    if (length > 2950 && length <= 3000) {
+    if (length > 2950 && length < 3000) {
       return "You are reaching the character limit.";
-    } else if (length > 3000) {
-      return "Characters cannot be more than 3000.";
+    } else if (length >= 3000) {
+      return "You have reached the 3000 character limit.";
     }
     return ""; // No message if under the limit
   };
@@ -126,10 +127,18 @@ const StoryDetails = () => {
     return () => subscription.unsubscribe();
   }, [form, dispatch]);
 
+   useEffect(() => {
+     const isFormValid =
+       storyExplanation.length > 0 &&
+       characterExplanation.length > 0 &&
+       selectedValue.length > 0;
+     setIsNextButtonEnabled(isFormValid);
+   }, [storyExplanation, characterExplanation, selectedValue]);
+
   return (
     <section className="container mx-auto  mb-10 lg:mt-[120px] md:mt-[100px] mt-[80px]">
-      <div className="w-full flex justify-center items-center text-4xl text-center flex-col lg:text-[64px] lg:leading-[58px] font-bold mb-10">
-        <div className="w-full  mb-8">
+      <div className="w-full flex justify-center  items-center text-4xl text-center flex-col lg:text-[64px] lg:leading-[58px] font-bold mb-10">
+        <div className="w-full   mb-8">
           <h1 className="text-primary1-blue text-3xl lg:text-5xl md:text-4xl arvo-bold leading-[59px] ">
             Craft Your Story
           </h1>
@@ -145,7 +154,7 @@ const StoryDetails = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="lg:w-[68%] w-full space-y-6"
+            className="lg:w-[78%] w-full space-y-6"
           >
             <FormField
               control={form.control}
@@ -165,14 +174,14 @@ const StoryDetails = () => {
                           </div>
                         </DialogTrigger>
 
-                        <DialogContent className=" flex justify-center p-10 ">
+                        <DialogContent className=" flex justify-center p-10 lg:h-2/3 lg:w-2/3 md:h-[60%] sm:h-[60%] sm:w-[80%] h-[40%] w-full">
                           <iframe
                             src="https://www.youtube.com/watch?v=gmn8tacmiys"
                             origin="https://www.youtube.com"
                             style={{
                               borderRadius: "24px",
-                              width: "1040px",
-                              height: "576px",
+                              width: "100%",
+                              height: "100%",
                             }}
                           ></iframe>
                         </DialogContent>
@@ -194,10 +203,10 @@ const StoryDetails = () => {
                         <p className="text-[#9D8780] lg:text-[16px] raleway-medium">
                           Suggestions:
                         </p>
-                        <span className="border border-primary1-pink px-2 rounded-lg lg:text-[12px] text-primary1-pink">
+                        <span className="border border-primary1-pink md:px-2 px-1 rounded-lg md:text-[12px] text-[8px]  text-primary1-pink">
                           Lorem ipsum delour ...
                         </span>
-                        <span className="hidden lg:flex border border-primary1-pink px-2 rounded-lg lg:text-[12px] text-primary1-pink">
+                        <span className="hidden lg:flex border border-primary1-pink px-2 rounded-lg lg:text-[12px]  text-primary1-pink">
                           Lorem ipsum delour ...
                         </span>
                         <span className=" hidden lg:flex border border-primary1-pink px-2 rounded-lg lg:text-[12px] text-primary1-pink">
@@ -206,9 +215,11 @@ const StoryDetails = () => {
                       </div>
                       <div>
                         <p className="text-red-500">{getCharacterFeedback()}</p>
-                        <span className="text-[#C7C8CC] lg:text-[16px] raleway-medium">
-                          {storyExplanation.length}/3000
-                        </span>
+                        {!getCharacterFeedback() && (
+                          <span className="text-[#C7C8CC] lg:text-[16px] raleway-medium">
+                            {storyExplanation.length}/3000
+                          </span>
+                        )}
                       </div>
                     </div>
                   </FormDescription>
@@ -239,7 +250,7 @@ const StoryDetails = () => {
                         <p className="text-[#9D8780] lg:text-[16px] raleway-medium">
                           Suggestions:
                         </p>
-                        <span className="  border border-primary1-pink px-2 rounded-lg lg:text-[12px]   text-primary1-pink">
+                        <span className=" border border-primary1-pink md:px-2 px-1 rounded-lg md:text-[12px] text-[8px]  text-primary1-pink">
                           Lorem ipsum delour ...
                         </span>
                         <span className="hidden lg:flex border border-primary1-pink px-2 rounded-lg text-[12px] text-primary1-pink">
@@ -393,7 +404,10 @@ const StoryDetails = () => {
             />
             {/* <NavLink to="/create/generate" className="flex justify-center"> */}
             <div className="flex justify-center">
-              <Button className="bg-primary1-pink w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6 arvo-regular">
+              <Button
+                className="bg-primary1-pink w-[232px] h-[56px] rounded-full hover:bg-[bg-[#F15084]] text-2xl leading-7 mt-6 arvo-regular"
+                disabled={!isNextButtonEnabled}
+              >
                 Next
               </Button>
             </div>

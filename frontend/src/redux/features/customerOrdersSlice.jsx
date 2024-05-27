@@ -1,8 +1,10 @@
 // ordersSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchAllBookPrintingOrders, fetchStoryBooks, updateBookPrintingOrderStatus } from "@/lib/functions";
-
-
+import {
+  fetchAllBookPrintingOrders,
+  fetchStoryBooks,
+  updateBookPrintingOrderStatus,
+} from "@/lib/functions";
 
 // Thunk to fetch orders and include user names and story names
 export const fetchOrders = createAsyncThunk(
@@ -59,7 +61,7 @@ const ordersSlice = createSlice({
     error: null,
   },
   reducers: {
-    updateLocalOrderStatus: (state, action) => {
+    updateRealTimeOrderStatus: (state, action) => {
       const { orderId, status } = action.payload;
       const existingOrder = state.orders.find(
         (order) => order.printing_id === orderId
@@ -94,7 +96,6 @@ const ordersSlice = createSlice({
   },
 });
 
-
-export const { updateLocalOrderStatus } = ordersSlice.actions;
+export const { updateRealTimeOrderStatus } = ordersSlice.actions;
 
 export default ordersSlice.reducer;
