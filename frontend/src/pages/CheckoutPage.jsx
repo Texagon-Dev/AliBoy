@@ -67,21 +67,28 @@ const CheckoutPage = () => {
   const dispatch = useDispatch();
 
   const order = useSelector((state) => state.bookPrintingOrders.order);
+    const totalSlides = useSelector(
+      (state) => state.bookPrintingOrders.totalSlides
+    );
     const userId = useSelector((state) => state.user.userId);
 
   const form = useForm({
     defaultValues: order,
   });
 
+  
+
   const [orderPricing, setOrderPricing] = useState(
-    calculateOrderPricing(form.getValues())
+    calculateOrderPricing(form.getValues(), totalSlides)
   );
   const watchQuantity = form.watch("quantity");
   useEffect(() => {
-    setOrderPricing(calculateOrderPricing(form.getValues()));
-  }, [form, watchQuantity]);
+    setOrderPricing(calculateOrderPricing(form.getValues(), totalSlides));
+  }, [form, watchQuantity, totalSlides]);
 
-  const { unitPrice, subTotal, grandTotal, discountPrice, shippingPrice } =
+
+
+  const { unitPrice, subTotal, grandTotal, discountPrice = 0, shippingPrice =0 } =
     orderPricing;
 
   const navigate = useNavigate();
@@ -94,11 +101,17 @@ const CheckoutPage = () => {
           item_total: grandTotalAmount,
         };
     console.log(confirmedOrder);
+
+    if (!confirmedOrder.payment_method) {
+      alert("Please select a payment method.");
+      return;
+    }
     upsertBookPrintingOrder(userId, updatedOrderDetails);
     // dispatch(setCustomerOrder(confirmedOrder));
     dispatch(setPrintingOrder(null));
-    navigate("/user");
+    navigate("/dashboard/checkout-success");
   };
+
 
   
 

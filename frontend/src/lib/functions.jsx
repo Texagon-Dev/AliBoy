@@ -9,7 +9,8 @@ export default async function uploadFileToSupabase(
   imageBlob,
   genre,
   storyName,
-  metadata
+  metadata,
+  totalSlides
 ) {
   // Helper function to upload a single file
   const uploadToStorage = async (folder, file) => {
@@ -67,6 +68,7 @@ export default async function uploadFileToSupabase(
     pdf_path: pdfPublicUrl,
     story_picture: imagePublicUrl, // Use the public URL of the image as story picture
     metadata: metadata,
+    total_slides: totalSlides,
   };
 
   const { data: userData, error: storyError } = await supabase

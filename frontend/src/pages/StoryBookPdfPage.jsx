@@ -21,7 +21,7 @@ import {
   updateSlideText,
 } from "@/redux/features/storySlice";
 import StoryEdit from "@/components/StoryEdit";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-toastify";
 
@@ -31,6 +31,7 @@ const StoryBookPdfPage = () => {
   const userId = useSelector((state) => state.user.userId);
   const genre = useSelector((state) => state.stories.currentStory.genre.name);
   const [isEditing, setIsEditing] = useState(false);
+
   const [editableStoryName, setEditableStoryName] = useState(
     storyData && storyData[0]?.story_name
       ? storyData[0].story_name.replace(/"/g, "")
@@ -56,9 +57,12 @@ const StoryBookPdfPage = () => {
   const finalStoryName =
     editableStoryName || storyData[0]?.story_name || "Default Story Name";
 
-  if (!storyData || storyData.length === 0) {
-    return <div>Loading or no data available...</div>;
-  }
+  useEffect(() => {
+    if (!storyData || storyData.length === 0) {
+      toast.error("No story data available. Please Try Generating Story Again");
+      navigate("/create/begin");
+    }
+  }, [storyData, navigate]);
 
   const generatePdfBlob = async () => {
     try {
@@ -74,6 +78,8 @@ const StoryBookPdfPage = () => {
   const handleUploadFiles = async () => {
     if (!userId) {
       console.error("User not logged in");
+      toast.error("Please sign in to continue.");
+      navigate("/signin");
       return;
     }
 
@@ -115,7 +121,8 @@ const StoryBookPdfPage = () => {
       image,
       genre,
       finalStoryName,
-      metadata
+      metadata, 
+      totalSlides
     );
     toast.success("Story Saved Successfully. Navigating to User Home Page... ");
 
@@ -137,6 +144,16 @@ const StoryBookPdfPage = () => {
       })
     );
   };
+
+  const totalSlides =
+    storyData?.reduce((total, story) => {
+      return (
+        total +
+        (story.output?.reduce((chapterTotal, chapter) => {
+          return chapterTotal + (chapter.slides?.length || 0);
+        }, 0) || 0)
+      );
+    }, 0) || 0;
 
   return (
     <section className="container mx-auto mt-[110px] mb-10">
@@ -271,14 +288,14 @@ const StoryBookPdfPage = () => {
                               }
                             />
 
-                            <div className="text-2xl raleway-regular w-1/3 h-[20%] text-start absolute top-[14%] right-[100px]">
+                            <div className="text-2xl raleway-regular w-1/3 h-[20%] text-start absolute top-[14%] right-[100px]  text-ellipsis">
                               <div>
                                 <h3 className="arvo-bold mb-4">
                                   Chapter {chapterData.id} -{" "}
                                   {chapterData["chapter name"]}
                                 </h3>
 
-                                <p>
+                                <p className="whitespace-pre-wrap">
                                   {slide.regeneratedText ||
                                     slide.originalText ||
                                     slide.editedText}
@@ -299,7 +316,7 @@ const StoryBookPdfPage = () => {
                               </div>
                             </div>
                             <span className="absolute raleway-medium text-2xl  bottom-5 right-16">
-                              {slideIndex + 1}
+                              {slideIndex + 1} 
                             </span>
                           </div>
                         </div>

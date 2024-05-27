@@ -1,5 +1,7 @@
-export default function calculateOrderPricing(order) {
-	const unitPrice = 0.4;
+export default function calculateOrderPricing(order, totalSlides) {
+	const pricePerSlide = 2; // Define the price per slide
+
+  const unitPrice = pricePerSlide * totalSlides;
 
   const discountPrice = order.discount
 	const shippingPrice = order.shipping_amount
