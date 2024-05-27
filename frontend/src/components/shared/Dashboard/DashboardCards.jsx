@@ -23,13 +23,7 @@ const DashboardCards = () => {
   const daysInRange =
     dayjs(dateRange.to).diff(dayjs(dateRange.from), "day") + 1;
 
-    if (status === "loading") {
-      return (
-        <div>
-          <Loading />
-        </div>
-      );
-    }
+
   // Filter orders based on the selected date range
   const filteredOrders = orders.filter((order) => {
     const orderDate = dayjs(order.created_at);

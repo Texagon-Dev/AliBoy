@@ -11,8 +11,11 @@ import DashboardOrderDetails from "./DashboardOrderDetails";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { fetchOrders, updateLocalOrderStatus, updateOrderStatus } from "@/redux/features/customerOrdersSlice";
-import { fetchAllUsers } from "@/redux/features/userSlice";
+import {
+  updateRealTimeOrderStatus,
+  updateOrderStatus,
+} from "@/redux/features/customerOrdersSlice";
+
 import {
   Select,
   SelectContent,
@@ -20,21 +23,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { updateBookPrintingOrderStatus } from "@/lib/functions";
 
 const DashboardTable = () => {
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.customerOrders.orders);
-  const status = useSelector((state) => state.customerOrders.status);
-
-  useEffect(() => {
-    if (status === "idle") {
-   
-      dispatch(fetchAllUsers()).then(() => {
-        dispatch(fetchOrders());
-      });
-    }
-  }, [status, dispatch]);
 
   useEffect(() => {
     console.log("Orders", orders);
@@ -47,11 +39,15 @@ const DashboardTable = () => {
     Delivered: "#27AC06",
   };
 
-   const handleStatusChange = (orderId, selectedValue = "Pending") => {
+  const handleStatusChange = (orderId, selectedValue = "Pending") => {
     dispatch(updateOrderStatus({ orderId, status: selectedValue }));
-    dispatch(updateLocalOrderStatus({ orderId, status: selectedValue }));
+    dispatch(updateRealTimeOrderStatus({ orderId, status: selectedValue }));
   };
 
+  // Sort orders by created_at in ascending order
+  const sortedOrders = [...orders].sort(
+    (a, b) => new Date(a.created_at) - new Date(b.created_at)
+  );
 
   return (
     <div className="mt-8 md:h-[460px] ">
@@ -78,15 +74,15 @@ const DashboardTable = () => {
               </TableHead>
             </TableRow>
           </TableHeader>
-          <ScrollArea as={TableBody} className="h-[300px] w-full  border p-2">
+          <ScrollArea className="h-[300px] w-full  border p-2">
             <TableBody>
-              {orders.map((order) => (
+              {sortedOrders.map((order, index) => (
                 <TableRow
                   key={order.printing_id}
                   className="flex justify-between items-center"
                 >
                   <TableCell className="md:w-[300px] w-[150px] md:text-2xl raleway-regular px-0">
-                    {order.user_name}
+                    {index + 1}. {order.user_name}
                   </TableCell>
                   <TableCell className="md:w-[300px] w-[150px]   md:text-2xl    raleway-regular px-0">
                     {" "}
