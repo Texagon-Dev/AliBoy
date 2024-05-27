@@ -24,9 +24,13 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoutes from "./lib/ProtectedRoutes";
 import Auth from "./lib/Auth";
+import CheckoutSuccessPage from "./pages/CheckoutSuccessPage";
+import GuestRoutes from "./lib/GuestRoutes";
 
 
 function App() {
+
+  
   return (
     <>
       <Auth />
@@ -34,10 +38,13 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* Auth */}
-          <Route path="signup" element={<SignUp />} />
-          <Route path="signin" element={<SignIn />} />
-          <Route path="reset-password" element={<ResetPassword />} />
-          <Route path="update-password" element={<UpdatePassword />} />
+          <Route element={<GuestRoutes />}>
+            <Route path="signup" element={<SignUp />} />
+            <Route path="signin" element={<SignIn />} />
+            <Route path="reset-password" element={<ResetPassword />} />
+            <Route path="update-password" element={<UpdatePassword />} />
+          </Route>
+
           {/* Dashboard */}
           <Route element={<ProtectedRoutes />}>
             <Route path="dashboard" element={<Dashboard />} />
@@ -61,6 +68,10 @@ function App() {
               element={<BookPrintingOptions />}
             />
             <Route path="dashboard/checkout" element={<CheckoutPage />} />
+            <Route
+              path="dashboard/checkout-success"
+              element={<CheckoutSuccessPage />}
+            />
             <Route path="dashboard/storypage" element={<StoryBookPdfPage />} />
 
             <Route
