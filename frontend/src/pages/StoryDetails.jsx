@@ -107,12 +107,21 @@ const StoryDetails = () => {
   };
 
   // Helper function to determine what message to display
-  const getCharacterFeedback = () => {
+  const getStoryFeedback = () => {
     const length = storyExplanation.length;
     if (length > 2950 && length < 3000) {
       return "You are reaching the character limit.";
     } else if (length >= 3000) {
       return "You have reached the 3000 character limit.";
+    }
+    return ""; // No message if under the limit
+  };
+  const getCharacterFeedback = () => {
+    const length = characterExplanation.length;
+    if (length > 950 && length < 1000) {
+      return "You are reaching the character limit.";
+    } else if (length >= 1000) {
+      return "You have reached the 1000 character limit.";
     }
     return ""; // No message if under the limit
   };
@@ -214,8 +223,8 @@ const StoryDetails = () => {
                         </span>
                       </div>
                       <div>
-                        <p className="text-red-500">{getCharacterFeedback()}</p>
-                        {!getCharacterFeedback() && (
+                        <p className="text-red-500">{getStoryFeedback()}</p>
+                        {!getStoryFeedback() && (
                           <span className="text-[#C7C8CC] lg:text-[16px] raleway-medium">
                             {storyExplanation.length}/3000
                           </span>
@@ -261,9 +270,12 @@ const StoryDetails = () => {
                         </span>
                       </div>
                       <div>
-                        <span className="text-[#C7C8CC] lg:text-[16px] raleway-medium">
-                          {characterExplanation.length}/1000
-                        </span>
+                        <p className="text-red-500">{getCharacterFeedback()}</p>
+                        {!getCharacterFeedback() && (
+                          <span className="text-[#C7C8CC] lg:text-[16px] raleway-medium">
+                            {characterExplanation.length}/1000
+                          </span>
+                        )}
                       </div>
                     </div>
                   </FormDescription>

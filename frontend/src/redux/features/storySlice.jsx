@@ -21,7 +21,7 @@ export const sendStoryData = createAsyncThunk(
     // Form the input object to send to the API
     try {
       const response = await axios.post(
-        `https://195d-202-166-171-219.ngrok-free.app/api/v1/${storyData.genre.value}`,
+        `https://8bc6-202-166-171-221.ngrok-free.app/api/v1/${storyData.genre.value}`,
         { input },
         {
           headers: {
@@ -45,7 +45,7 @@ export const regenerateStorySlide = createAsyncThunk(
   ) => {
     try {
       const response = await axios.post(
-        "https://195d-202-166-171-219.ngrok-free.app/api/v1/rewriteParagraph",
+        "https://8bc6-202-166-171-221.ngrok-free.app/api/v1/rewriteParagraph",
         { input: text },
         {
           headers: {
@@ -81,7 +81,8 @@ const initialState = {
     generationOptions: {
       total_chapters: "3",
       imageStyle: "",
-      language: ""
+      language: "",
+      book_color: "",
     }
   },
   items: [],
@@ -90,7 +91,7 @@ const initialState = {
   
 };
 
-const MAX_WORDS_PER_SLIDE = 35;
+const MAX_WORDS_PER_SLIDE = 55;
 
 const splitTextIntoSlides = (text) => {
   if (!text) return []; // Guard clause to handle undefined or empty strings
@@ -98,16 +99,36 @@ const splitTextIntoSlides = (text) => {
 
   let slides = [];
   const words = text.split(/\s+/); // Split the text into words
+
+  // Create initial slides
   for (let i = 0; i < words.length; i += MAX_WORDS_PER_SLIDE) {
     slides.push({
       slideId: i / MAX_WORDS_PER_SLIDE,
       originalText: words.slice(i, i + MAX_WORDS_PER_SLIDE).join(" "),
-      regeneratedText: null // Initialize with no regenerated text
+      regeneratedText: null, // Initialize with no regenerated text
     });
   }
+
+  // Adjust slides with 5 or fewer words and remove empty slides
+  for (let i = slides.length - 1; i >= 0; i--) {
+    const wordCount = slides[i].originalText.split(/\s+/).length;
+    if (wordCount === 0) {
+      // Remove slides with no words
+      slides.splice(i, 1);
+    } else if (wordCount <= 5 && i > 0) {
+      // Append text to the previous slide and remove current slide
+      slides[i - 1].originalText += " " + slides[i].originalText;
+      slides.splice(i, 1);
+    }
+  }
+
+  // Update slide IDs after adjustments
+  slides.forEach((slide, index) => {
+    slide.slideId = index;
+  });
+
   return slides;
 };
-
 export const storiesSlice = createSlice({
   name: "stories",
   initialState,

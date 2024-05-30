@@ -44,6 +44,7 @@ const StoryGeneration = () => {
       total_chapters: form.getValues("chapters"),
       imageStyle: form.getValues("select-image-style"),
       language: form.getValues("select-story-language"),
+      book_color: form.getValues("select-book-color"),
     };
 
     console.log(formData);
@@ -140,6 +141,10 @@ const StoryGeneration = () => {
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
+                      onChange={(e) => {
+                        field.onChange(e); // Ensure the field value is updated
+                        handleOnChange(); // Call your custom function
+                      }}
                     >
                       <FormControl className=" w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl">
                         <SelectTrigger>
@@ -150,6 +155,40 @@ const StoryGeneration = () => {
                         <SelectItem value="Surrealist">Surrealist</SelectItem>
                         <SelectItem value="Abstract">Abstract</SelectItem>
                         <SelectItem value="Baroque">Baroque</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormDescription></FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="select-book-color"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormItem className="flex justify-between items-center">
+                      <FormLabel className="text-xl lg:text-2xl arvo-bold ">
+                        Select Book Color
+                      </FormLabel>
+                    </FormItem>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      onChange={(e) => {
+                        field.onChange(e); // Ensure the field value is updated
+                        handleOnChange(); // Call your custom function
+                      }}
+                    >
+                      <FormControl className=" w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Auto" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="raleway-semibold text-xl">
+                        <SelectItem value="Red">Red</SelectItem>
+                        <SelectItem value="Green">Green</SelectItem>
+                        <SelectItem value="Blue">Blue</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormDescription></FormDescription>
@@ -170,6 +209,10 @@ const StoryGeneration = () => {
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
+                      onChange={(e) => {
+                        field.onChange(e); // Ensure the field value is updated
+                        handleOnChange(); // Call your custom function
+                      }}
                     >
                       <FormControl className=" w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl ">
                         <SelectTrigger>
