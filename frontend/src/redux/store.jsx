@@ -11,7 +11,13 @@ import userStoriesReducer from "./features/userStoriesSlice";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["user", "stories"], // Only user state will be persisted
+  whitelist: [
+    "user",
+    "stories",
+    "userStories",
+    "bookPrintingOrders",
+    "customerOrders",
+  ], // Only user state will be persisted
 };
 
 const rootReducer = {

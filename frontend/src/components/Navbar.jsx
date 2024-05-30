@@ -48,7 +48,7 @@ const Navbar = () => {
 
   return (
     <nav className="fixed w-screen bg-transparent top-0 z-50 px-4 py-3 backdrop-blur-lg">
-      <div className="container 2xl:px-4 md:px-10 px-5 mx-auto relative lg:text-sm">
+      <div className="container 2xl:px-4  md:px-5 px-5 mx-auto relative lg:text-sm">
         <div className="flex justify-between items-center">
           <ul className="flex items-center flex-shrink-0">
             <li>

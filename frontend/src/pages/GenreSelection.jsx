@@ -20,6 +20,15 @@ import { Button } from "@/components/ui/button";
 import { setGenre } from "@/redux/features/storySlice";
 import { useDispatch } from "react-redux";
 
+
+
+
+const getRandomGenreValue = (genres) => {
+  const randomIndex = Math.floor(Math.random() * genres.length);
+  return genres[randomIndex].value;
+};
+
+
 const genres = [
   { name: "Horror", image: horror, imageHover: horror1, value: "horrorStory" },
   {
@@ -47,9 +56,15 @@ const genres = [
     name: "Automate",
     image: automate,
     imageHover: automate1,
-    value: "automateStory",
+    value: "",
   },
 ];
+
+const randomGenreValue = getRandomGenreValue(genres);
+genres.find((genre) => genre.name === "Automate").value = randomGenreValue;
+
+console.log(randomGenreValue);  
+
 
 const styles = {
   container: "container mx-auto lg:mt-[120px] md:mt-[100px] mt-[80px] mb-8",

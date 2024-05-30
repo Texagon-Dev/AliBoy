@@ -43,7 +43,7 @@ const BookPrintingOptions = () => {
   const metadata1 = useSelector((state) => state.user.metadata);
 
   const form = useForm({
-    mode: "onChange", // to enable re-validation on input change
+    // to enable re-validation on input change
     defaultValues: {
       story_book_id: storyBookId,
       uuid: userId,
@@ -64,18 +64,13 @@ const BookPrintingOptions = () => {
 
 
 
-  const {
-    handleSubmit,
-    control,
-    formState: { isValid, errors },
-    watch,
-  } = form;
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [orderPricing, setOrderPricing] = useState(
     calculateOrderPricing(form.getValues(), totalSlides)
   );
-  const watchQuantity = watch("quantity");
+  const watchQuantity = form.watch("quantity");
   useEffect(() => {
     setOrderPricing(calculateOrderPricing(form.getValues(), totalSlides));
   }, [form, watchQuantity, totalSlides]);
@@ -119,6 +114,8 @@ const BookPrintingOptions = () => {
   const { story_name, total_slides } = specificStory || {};
 
   dispatch(setTotalSlides(total_slides))
+
+
 
   return (
     <section className="container mx-auto w-full mt-[80px] lg:mt-[120px] mb-10 ">
@@ -166,11 +163,11 @@ const BookPrintingOptions = () => {
                   <div className="flex w-full flex-col">
                     <Form {...form}>
                       <form
-                        onSubmit={handleSubmit(onSubmit)}
+                        onSubmit={form.handleSubmit(onSubmit)}
                         className="space-y-6"
                       >
                         <FormField
-                          control={control}
+                          control={form.control}
                           name="binding_name"
                           rules={{ required: "Binding is required" }}
                           render={({ field }) => (
@@ -199,15 +196,12 @@ const BookPrintingOptions = () => {
                                   </SelectItem>
                                 </SelectContent>
                               </Select>
-                              <FormMessage>
-                                {errors.binding_name &&
-                                  errors.binding_name.message}
-                              </FormMessage>
+                            
                             </FormItem>
                           )}
                         />
                         <FormField
-                          control={control}
+                          control={form.control}
                           name="title_size"
                           rules={{ required: "Title size is required" }}
                           render={({ field }) => (
@@ -232,14 +226,12 @@ const BookPrintingOptions = () => {
                                   <SelectItem value="Small">Small</SelectItem>
                                 </SelectContent>
                               </Select>
-                              <FormMessage>
-                                {errors.title_size && errors.title_size.message}
-                              </FormMessage>
+                           
                             </FormItem>
                           )}
                         />
                         <FormField
-                          control={control}
+                          control={form.control}
                           name="quantity"
                           rules={{
                             required: "Quantity is required",
@@ -264,14 +256,12 @@ const BookPrintingOptions = () => {
                                 </span>
                                 <span>{unitPrice}</span>
                               </FormDescription>
-                              <FormMessage>
-                                {errors.quantity && errors.quantity.message}
-                              </FormMessage>
+                          
                             </FormItem>
                           )}
                         />
                         <FormField
-                          control={control}
+                          control={form.control}
                           name="country"
                           rules={{ required: "Country is required" }}
                           render={({ field }) => (
@@ -301,15 +291,13 @@ const BookPrintingOptions = () => {
                                     </SelectItem>
                                   </SelectContent>
                                 </Select>
-                                <FormMessage>
-                                  {errors.country && errors.country.message}
-                                </FormMessage>
+                               
                               </div>
                             </FormItem>
                           )}
                         />
                         <FormField
-                          control={control}
+                          control={form.control}
                           name="city_region"
                           rules={{ required: "City/Region is required" }}
                           render={({ field }) => (
@@ -338,15 +326,12 @@ const BookPrintingOptions = () => {
                                   </SelectItem>
                                 </SelectContent>
                               </Select>
-                              <FormMessage>
-                                {errors.city_region &&
-                                  errors.city_region.message}
-                              </FormMessage>
+                           
                             </FormItem>
                           )}
                         />
                         <FormField
-                          control={control}
+                          control={form.control}
                           name="delivery_address"
                           rules={{ required: "Delivery address is required" }}
                           render={({ field }) => (
@@ -362,15 +347,12 @@ const BookPrintingOptions = () => {
                                   className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl"
                                 />
                               </FormControl>
-                              <FormMessage>
-                                {errors.delivery_address &&
-                                  errors.delivery_address.message}
-                              </FormMessage>
+                        
                             </FormItem>
                           )}
                         />
                         <FormField
-                          control={control}
+                          control={form.control}
                           name="postal_code"
                           rules={{ required: "Postal code is required" }}
                           render={({ field }) => (
@@ -386,20 +368,15 @@ const BookPrintingOptions = () => {
                                   className="block w-full px-4 py-3 h-[50px] rounded-[40px] raleway-semibold text-xl"
                                 />
                               </FormControl>
-                              <FormMessage>
-                                {errors.postal_code &&
-                                  errors.postal_code.message}
-                              </FormMessage>
+                           
                             </FormItem>
                           )}
                         />
                         <div className="text-center">
                           <Button
-                            className={`bg-[#F15084] lg:w-[357px] lg:h-[64px] rounded-[32px] lg:px-[88px] w-[300px] h-[50px] px-[60px] text-2xl leading-7 mt-6 arvo-regular ${
-                              !isValid ? "opacity-50 cursor-not-allowed" : ""
-                            }`}
+                            className={`bg-[#F15084] lg:w-[357px] lg:h-[64px] rounded-[32px] lg:px-[88px] w-[300px] h-[50px] px-[60px] text-2xl leading-7 mt-6 arvo-regular `}
                             type="submit"
-                            disabled={!isValid}
+                            // disabled={!isValid}
                           >
                             Place Order
                           </Button>

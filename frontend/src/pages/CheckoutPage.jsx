@@ -28,6 +28,7 @@ import { useEffect, useState } from "react";
 import { setPrintingOrder } from "@/redux/features/bookPrintingSlice";
 import calculateOrderPricing from "@/lib/calculateOrderPricing";
 import { upsertBookPrintingOrder } from "@/lib/functions";
+import { toast } from "react-toastify";
 
 const styles = {
   container:
@@ -103,7 +104,7 @@ const CheckoutPage = () => {
     console.log(confirmedOrder);
 
     if (!confirmedOrder.payment_method) {
-      alert("Please select a payment method.");
+      toast.error("Please select a payment method.");
       return;
     }
     upsertBookPrintingOrder(userId, updatedOrderDetails);
