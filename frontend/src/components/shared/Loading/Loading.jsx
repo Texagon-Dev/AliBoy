@@ -42,3 +42,29 @@ const Loading = () => {
 };
 
 export default Loading;
+
+
+export const LoadingComp = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % loadingImages.length);
+    }, 1000); // Change image every 1 second
+
+    return () => clearInterval(interval); // Cleanup on component unmount
+  }, []);
+
+  const currentImage = loadingImages[currentIndex];
+
+  return (
+    <div className="flex flex-col items-center justify-center ">
+      <img
+        src={currentImage.src}
+        alt="Loading"
+        className={`${currentImage.animation}`}
+      />
+      {/* <p className="mt-4 text-xl font-semibold">{currentImage.genre}</p> */}
+    </div>
+  );
+};
