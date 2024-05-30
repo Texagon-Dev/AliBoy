@@ -123,16 +123,16 @@ export const deleteUserStoryBook = async (storybookId) => {
   try {
     const { error } = await supabase
       .from("User_Story_Books")
-      .delete()
+      .update({ is_deleted: true })
       .eq("story_book_id", storybookId);
 
     if (error) {
       throw error;
     }
 
-    console.log("User story book deleted successfully");
+    console.log("User story book soft deleted successfully");
   } catch (error) {
-    console.error("Error deleting User Story Book:", error.message);
+    console.error("Error soft deleting User Story Book:", error.message);
   }
 };
 

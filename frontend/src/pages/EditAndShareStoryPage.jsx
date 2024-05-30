@@ -39,9 +39,10 @@ const EditAndShareStoryPage = () => {
 
   useEffect(() => {
     if (stories && stories.length > 0) {
-      const filtered = stories.filter(
-        (story) => story.story_book_id === parseInt(storyBookId, 10)
-      );
+     const filtered = stories.filter(
+       (story) =>
+         story.story_book_id === parseInt(storyBookId, 10) && !story.is_deleted
+     );
       console.log("filtered", filtered);
       setFilteredStories(filtered);
     }
@@ -68,6 +69,11 @@ const EditAndShareStoryPage = () => {
     try {
       await deleteUserStoryBook(storyBookId);
       toast.success("Your story has been deleted.");
+         setFilteredStories(
+           filteredStories.filter(
+             (story) => story.story_book_id !== parseInt(storyBookId, 10)
+           )
+         );
       navigate("/user");
     } catch (error) {
       console.error("Error deleting user story book:", error.message);
