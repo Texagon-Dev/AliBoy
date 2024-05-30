@@ -159,16 +159,7 @@ const StoryBookPdfPage = () => {
     <section className="container mx-auto mt-[110px] mb-10">
       <div className="w-full flex justify-center items-center text-4xl text-center flex-col lg:text-[64px] lg:leading-[58px] font-bold mb-10 ">
         <div className="w-full  mb-8 lg:w-[1280px]">
-          <Button className="bg-transparent text-primary1-blue text-sm lg:text-2xl arvo-bold hover:bg-transparent p-0 flex justify-start gap-2 ">
-            <NavLink className="flex" to="/dashboard">
-              <img
-                className="h-[30px] w-[30px] "
-                src={lefticon}
-                alt="go to dashboard icon"
-              />{" "}
-              Go to Dashboard
-            </NavLink>
-          </Button>
+      
           <div className="flex flex-col lg:flex-row lg:justify-center">
             <div className="lg:w-4/5 flex flex-col justify-center">
               {isEditing ? (
@@ -211,20 +202,13 @@ const StoryBookPdfPage = () => {
                 Save Book
               </Button>
 
-              <NavLink to="/dashboard/bookprinting">
-                <Button
-                  variant="outlined"
-                  className="rounded-[40px] border border-primary1-pink px-4 lg:w-[209px] md:w-40 text-primary1-pink hover:bg-primary1-pink hover:text-white arvo-regular text-[16px]  "
-                >
-                  Print a Book
-                </Button>
-              </NavLink>
+        
             </div>
           </div>
         </div>
 
         <Carousel>
-          <CarouselContent className="w-[1020px]">
+          <CarouselContent className="w-[1120px]">
             {storyData.map(
               (story, storyIndex) =>
                 story.output &&
@@ -244,8 +228,8 @@ const StoryBookPdfPage = () => {
                           backgroundImage: `url(${rectangle})`,
                           backgroundSize: "cover",
                           backgroundPosition: "center",
-                          height: "565px",
-                          width: "1000px",
+                          height: "615px",
+                          width: "1100px",
                           "@media (maxWidth: 1024px)": {
                             backgroundImage: `url(${rectangle})`,
                             backgroundSize: "cover",
@@ -259,13 +243,13 @@ const StoryBookPdfPage = () => {
                           <img
                             src={regenerate}
                             alt="story image"
-                            className="absolute top-5 left-[430px] cursor-pointer"
+                            className="absolute top-5 left-[450px] cursor-pointer"
                           />
 
                           <img
                             src={/*{chapterData.image ||}*/ storyImage}
                             alt={`Chapter ${chapterData.id}`}
-                            className="w-[411px] h-[348px] rounded-[16px] absolute top-20 left-14 cursor-pointer text-xs"
+                            className="w-[411px] h-[400px] rounded-[16px] absolute top-24 left-[80px] cursor-pointer text-xs"
                           />
 
                           <Button className="absolute bottom-12 left-[200px] bg-transparent hover:bg-transparent border border-[#FF0000] text-[#FF0000] rounded-[32px] h-10 px-4 arvo-regular">
@@ -295,7 +279,7 @@ const StoryBookPdfPage = () => {
                                   {chapterData["chapter name"]}
                                 </h3>
 
-                                <p className="whitespace-pre-wrap">
+                                <p className="whitespace-pre-wrap text-[22px]">
                                   {slide.regeneratedText ||
                                     slide.originalText ||
                                     slide.editedText}
@@ -316,7 +300,7 @@ const StoryBookPdfPage = () => {
                               </div>
                             </div>
                             <span className="absolute raleway-medium text-2xl  bottom-5 right-16">
-                              {slideIndex + 1} 
+                              {slideIndex + 1}
                             </span>
                           </div>
                         </div>

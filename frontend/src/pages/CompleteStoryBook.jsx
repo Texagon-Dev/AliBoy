@@ -30,13 +30,11 @@ const styles = {
   contentWrapper: "flex flex-col lg:flex-row lg:justify-center",
   textSection: "lg:w-4/5 flex flex-col justify-center ",
   heading1:
-    "text-primary1-blue text-2xl lg:text-5xl md:text-4xl arvo-bold md:leading-[59px] w-full lg:ml-[100px] cursor-pointer flex justify-center items-center  flex-wrap",
+    "text-primary1-blue text-2xl lg:text-5xl md:text-4xl arvo-bold md:leading-[59px] w-full lg:ml-[120px] cursor-pointer flex justify-center items-center  flex-wrap",
   heading3:
     "text-xl lg:text-[28px] leading-8 raleway-medium py-6 lg:ml-[100px] w-full",
   creatorName: "text-primary1-pink raleway-bold",
   buttonWrapper: "flex lg:flex-col justify-center md:flex-row gap-4",
-  addButton:
-    "rounded-[40px] bg-primary1-pink lg:w-[209px] px-4 arvo-regular text-[16px] md:w-40 hover:bg-transparent hover:border hover:border-primary1-pink hover:text-primary1-pink",
   printButton:
     "rounded-[40px] border border-primary1-pink px-4 lg:w-[209px] md:w-40 text-primary1-pink hover:bg-primary1-pink hover:text-white arvo-regular text-[16px]",
   relativeWrapper: "relative",
@@ -92,16 +90,6 @@ const CompleteStoryBook = () => {
     <section className={styles.container}>
       <div className={styles.titleSection}>
         <div className={styles.titleWrapper}>
-          <Button className={styles.button}>
-            <NavLink className={styles.navLink} to="/dashboard">
-              <img
-                className={styles.icon}
-                src={lefticon}
-                alt="go to dashboard icon"
-              />{" "}
-              Go to Dashboard
-            </NavLink>
-          </Button>
           <div className={styles.contentWrapper}>
             <div
               className={`${styles.textSection} flex items-center justify-center`}
@@ -118,82 +106,74 @@ const CompleteStoryBook = () => {
               </h3>
             </div>
             <div className={styles.buttonWrapper}>
-              <Button className={styles.addButton}>Add a New Page</Button>
               <Button variant="outlined" className={styles.printButton}>
-                Print a Book
+                <NavLink
+                  to={`/dashboard/bookprinting?storyBookId=${storyBookId}`}
+                >
+                  Print a Book
+                </NavLink>
               </Button>
             </div>
           </div>
         </div>
 
-        <div
-          className={styles.relativeWrapper}
-          style={{
-            backgroundImage: `url(${rectangle})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            height: "565px",
-            width: "1000px",
-          }}
-        >
-          <Carousel>
-            <CarouselContent className="w-[1020px]">
-              {metadata.map((chapterData, chapterIndex) => {
-                const slides = chapterData.slides;
+        <Carousel>
+          <CarouselContent className="w-[1120px]">
+            {metadata.map((chapterData, chapterIndex) => {
+              const slides = chapterData.slides;
 
-                return slides.map((slide, slideIndex) => (
-                  <CarouselItem key={`${chapterIndex}-${slideIndex}`}>
-                    <div
-                      className="relative"
-                      style={{
+              return slides.map((slide, slideIndex) => (
+                <CarouselItem key={`${chapterIndex}-${slideIndex}`}>
+                  <div
+                    className="relative"
+                    style={{
+                      backgroundImage: `url(${rectangle})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      height: "608px",
+                      width: "1100px",
+                      "@media (maxWidth: 1024px)": {
                         backgroundImage: `url(${rectangle})`,
                         backgroundSize: "cover",
                         backgroundPosition: "center",
-                        height: "565px",
-                        width: "1000px",
-                        "@media (maxWidth: 1024px)": {
-                          backgroundImage: `url(${rectangle})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                          height: "50vh",
-                          width: "50vw",
-                        },
-                      }}
-                    >
-                      <div>
-                        <img
-                          src=/*{chapterData.image ||}*/ {storyImage}
-                          alt={`Chapter ${chapterData.id}`}
-                          className="w-[411px] h-[348px] rounded-[16px] absolute top-28 left-14 cursor-pointer text-xs"
-                        />
-                      </div>
-                      <div>
-                        <div className="text-2xl raleway-regular w-1/3 h-[20%] text-start absolute top-[18%] right-[100px]">
-                          <div>
-                            <h3 className="arvo-bold mb-4">
-                              Chapter {chapterData.id} -{" "}
-                              {chapterData["chapter name"]}
-                            </h3>
-                            <p>
-                              {slide.regeneratedText ||
-                                slide.originalText ||
-                                slide.editedText}
-                            </p>
-                          </div>
-                        </div>
-                        <span className="absolute raleway-medium text-2xl bottom-5 right-16">
-                          {slideIndex + 1}
-                        </span>
-                      </div>
+                        height: "50vh",
+                        width: "50vw",
+                      },
+                    }}
+                  >
+                    <div>
+                      <img
+                        src=/*{chapterData.image ||}*/ {storyImage}
+                        alt={`Chapter ${chapterData.id}`}
+                        className="w-[411px] h-[400px] rounded-[16px] absolute top-24 left-[80px] cursor-pointer text-xs"
+                      />
                     </div>
-                  </CarouselItem>
-                ));
-              })}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-        </div>
+                    <div>
+                      <div className="text-2xl raleway-regular w-1/3 h-[20%] text-start absolute top-[12%] right-[100px]">
+                        <div>
+                          <h3 className="arvo-bold mb-4">
+                            Chapter {chapterData.id} -{" "}
+                            {chapterData["chapter name"]}
+                          </h3>
+                          <p>
+                            {slide.regeneratedText ||
+                              slide.originalText ||
+                              slide.editedText}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="absolute raleway-medium text-2xl bottom-5 right-16">
+                        {slideIndex + 1}
+                      </span>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ));
+            })}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
       </div>
     </section>
   );
