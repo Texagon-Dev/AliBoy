@@ -39,7 +39,7 @@ CREATE TABLE "User_Story_Books" (
 
 
 CREATE TABLE "Book_Printing_Orders" (
-    printing_id SERIAL PRIMARY KEY,
+    printing_id SERIAL PRIMARY KEY ,
     story_book_id INTEGER NOT NULL,
     uuid UUID NOT NULL,
     binding_name VARCHAR NOT NULL,
@@ -54,6 +54,7 @@ CREATE TABLE "Book_Printing_Orders" (
     shipping_amount FLOAT NOT NULL,
     payment_method VARCHAR NOT NULL,
     order_status VARCHAR DEFAULT 'Pending', -- Default value set to 'Pending'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (uuid) REFERENCES "users"(uuid),
     FOREIGN KEY (story_book_id) REFERENCES "User_Story_Books"(story_book_id)
 );
