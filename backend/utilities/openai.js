@@ -1,11 +1,13 @@
 const { ChatOpenAI } = require("@langchain/openai"); // Import the library you're using
 require('dotenv').config(); // Load environment variables
 
+console.log(process.env.OPENAI_API_KEYS)
+
 function OpenAI() {
   const llm = new ChatOpenAI({
     temperature: 0,
     apiKey: process.env.OPENAI_API_KEYS,
-    model: "gpt-4-turbo",
+    model: "gpt-4o",
   });
   return llm
 }
