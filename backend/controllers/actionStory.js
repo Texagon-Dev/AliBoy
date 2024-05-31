@@ -64,6 +64,7 @@ async function actionStory(req, res) {
 
   try {
     const prompt = await storyPrompt("actionStory",story_length);
+    genre = "action"
     const final = await storyGeneration(prompt, final_input, total_chapters , paragraphs , words);
     res.json( final );
   } catch (error) {

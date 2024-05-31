@@ -66,7 +66,8 @@ async function horrorStory(req, res) {
 
   try {
     const prompt = await storyPrompt("horrorStory",story_length);
-    const final = await storyGeneration(prompt, final_input, total_chapters , paragraphs , words);
+    genre = "horror";
+    const final = await storyGeneration(prompt, final_input, total_chapters , paragraphs , words , genre);
     res.json( final );
   } catch (error) {
     // Handle errors
