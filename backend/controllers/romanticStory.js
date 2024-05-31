@@ -63,7 +63,7 @@ async function romanticStory(req, res) {
                         `;
 
   try {
-    const prompt = await storyPrompt("remanticStory",story_length);
+    const prompt = await storyPrompt("romanticStory",story_length);
     genre = "romantic";
     const final = await storyGeneration(prompt, final_input, total_chapters , paragraphs , words , genre);
     res.json( final );
