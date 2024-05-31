@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@langchain/core": "^0.2.0",
     "@langchain/openai": "^0.0.28",
     "@supabase/supabase-js": "^2.43.1",
     "bcrypt": "^5.1.1",
@@ -18,7 +19,10 @@
     "formidable": "^3.5.1",
     "langchain": "^0.1.35",
     "nodemon": "^3.1.0",
-    "uuidv4": "^6.2.13"
+    "request": "^2.88.2",
+    "requests": "^0.3.0",
+    "uuidv4": "^6.2.13",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "prettier": "^3.0.0-alpha.6"
