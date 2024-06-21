@@ -1,8 +1,8 @@
 // routes/userRoutes.js
 const express = require('express');
 const router = express.Router();
-const UserController = require('../controllers/UserController');
+const actionStory = require('../controllers/actionStory');
 
-router.post('/signup', UserController.signup);
+router.post('/actionStory', actionStory.actionStory);
 
 module.exports = router;
