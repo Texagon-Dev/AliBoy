@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loading from "@/components/shared/Loading/Loading";
 import { fetchStories } from "@/redux/features/userStoriesSlice";
 import { useEffect, useState } from "react";
-import { deleteUserStoryBook } from "@/lib/functions";
+import {  hardDeleteUserStoryBook, isStoryBookReferenced, softDeleteUserStoryBook } from "@/lib/functions";
 import { toast } from "react-toastify";
 
 const EditAndShareStoryPage = () => {
@@ -65,18 +65,22 @@ const EditAndShareStoryPage = () => {
 
   console.log("filteredStories", specificStory);
 
+
   const handleDelete = async () => {
     try {
-      await deleteUserStoryBook(storyBookId);
-      toast.success("Your story has been deleted.");
-         setFilteredStories(
-           filteredStories.filter(
-             (story) => story.story_book_id !== parseInt(storyBookId, 10)
-           )
-         );
+      const isReferenced = await isStoryBookReferenced(storyBookId);
+      if (isReferenced) {
+        await softDeleteUserStoryBook(storyBookId);
+        toast.success("Your story has been deleted.");
+      } else {
+        await hardDeleteUserStoryBook(storyBookId);
+        toast.success("Your story has been deleted.");
+      }
+      dispatch(fetchStories(userId));
       navigate("/user");
     } catch (error) {
-      console.error("Error deleting user story book:", error.message);
+      console.error("Error deleting story book:", error.message);
+      toast.error("Error deleting story. Please try again.");
     }
   };
 

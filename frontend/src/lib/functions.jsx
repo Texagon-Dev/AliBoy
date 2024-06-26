@@ -119,7 +119,26 @@ export const fetchStoryBooks = async () => {
   }
 };
 
-export const deleteUserStoryBook = async (storybookId) => {
+export const isStoryBookReferenced = async (storybookId) => {
+  try {
+    const { data, error } = await supabase
+      .from("Book_Printing_Orders") 
+      .select("story_book_id")
+      .eq("story_book_id", storybookId);
+
+    if (error) {
+      throw error;
+    }
+
+    return data.length > 0;
+  } catch (error) {
+    console.error("Error checking if story book is referenced:", error.message);
+    throw error;
+  }
+};
+
+
+export const softDeleteUserStoryBook = async (storybookId) => {
   try {
     const { error } = await supabase
       .from("User_Story_Books")
@@ -130,12 +149,29 @@ export const deleteUserStoryBook = async (storybookId) => {
       throw error;
     }
 
-    console.log("User story book soft deleted successfully");
+    console.log("User story book deleted successfully");
   } catch (error) {
-    console.error("Error soft deleting User Story Book:", error.message);
+    console.error("Error deleting User Story Book:", error.message);
   }
 };
 
+// Function to hard delete a story book
+export const hardDeleteUserStoryBook = async (storybookId) => {
+  try {
+    const { error } = await supabase
+      .from("User_Story_Books")
+      .delete()
+      .eq("story_book_id", storybookId);
+
+    if (error) {
+      throw error;
+    }
+
+    console.log("User story book deleted successfully");
+  } catch (error) {
+    console.error("Error deleting User Story Book:", error.message);
+  }
+};
 // 3- FOR UPLOADING AVATAR AND UPDATING USER TABLE
 export async function uploadAvatarToSupabase(userId, file, dispatch) {
   const folder = "avatars";
