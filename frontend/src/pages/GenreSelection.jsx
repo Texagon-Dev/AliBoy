@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { setGenre } from "@/redux/features/storySlice";
 import { useDispatch } from "react-redux";
+import { Helmet } from "react-helmet-async";
 
 
 
@@ -100,43 +101,49 @@ const GenreSelection = () => {
      }
    };
   return (
-    <section className={styles.container}>
-      <div className={styles.mainWrapper}>
-        <div className={styles.contentWrapper}>
-          <h1 className={styles.title}>Explore Diverse Story Genres</h1>
-          <p className={styles.description}>
-            Select the genre that best suits your imagination and let the AI
-            weave its magic into your story
-          </p>
-        </div>
-        <div className={styles.gridContainer}>
-          {genres.map((genre, index) => (
-            <button
-              key={index}
-              className={styles.genreButton}
-              onClick={() => setSelectedGenre(index)}
-              onMouseEnter={() => setHoveredGenre(index)}
-              onMouseLeave={() => setHoveredGenre(null)}
-            >
-              <img
-                className={styles.image}
-                src={
-                  hoveredGenre === index || selectedGenre === index
-                    ? genre.imageHover
-                    : genre.image
-                }
-                alt={genre.name}
-              />
-              <div className={styles.genreName}>{genre.name}</div>
-            </button>
-          ))}
-        </div>
+    <>
+      <Helmet>
+        <title>Genre Selection</title>
+      </Helmet>
 
-        <Button className={styles.button} onClick={handleNext}>
-          Next
-        </Button>
-      </div>
-    </section>
+      <section className={styles.container}>
+        <div className={styles.mainWrapper}>
+          <div className={styles.contentWrapper}>
+            <h1 className={styles.title}>Explore Diverse Story Genres</h1>
+            <p className={styles.description}>
+              Select the genre that best suits your imagination and let the AI
+              weave its magic into your story
+            </p>
+          </div>
+          <div className={styles.gridContainer}>
+            {genres.map((genre, index) => (
+              <button
+                key={index}
+                className={styles.genreButton}
+                onClick={() => setSelectedGenre(index)}
+                onMouseEnter={() => setHoveredGenre(index)}
+                onMouseLeave={() => setHoveredGenre(null)}
+              >
+                <img
+                  className={styles.image}
+                  src={
+                    hoveredGenre === index || selectedGenre === index
+                      ? genre.imageHover
+                      : genre.image
+                  }
+                  alt={genre.name}
+                />
+                <div className={styles.genreName}>{genre.name}</div>
+              </button>
+            ))}
+          </div>
+
+          <Button className={styles.button} onClick={handleNext}>
+            Next
+          </Button>
+        </div>
+      </section>
+    </>
   );
 };
 

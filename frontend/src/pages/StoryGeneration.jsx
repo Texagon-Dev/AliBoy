@@ -29,6 +29,7 @@ import {
 } from "@/redux/features/storySlice";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 
 const StoryGeneration = () => {
   const navigate = useNavigate();
@@ -80,6 +81,10 @@ const StoryGeneration = () => {
 
   return (
     <>
+   
+      <Helmet>
+        <title>Story Options</title>
+      </Helmet>
       <section className="container mx-auto lg:mt-[120px] md:mt-[100px] mt-[80px] mb-10">
         <div className="w-full flex justify-center items-center text-4xl text-center flex-col lg:text-[64px] lg:leading-[58px] font-bold mb-10">
           <div className="w-full  mb-8">

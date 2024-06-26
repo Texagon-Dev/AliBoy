@@ -21,7 +21,7 @@ export const sendStoryData = createAsyncThunk(
     // Form the input object to send to the API
     try {
       const response = await axios.post(
-        `https://8bc6-202-166-171-221.ngrok-free.app/api/v1/${storyData.genre.value}`,
+        `https://6ade-202-166-171-221.ngrok-free.app/api/v1/${storyData.genre.value}`,
         { input },
         {
           headers: {
@@ -45,7 +45,7 @@ export const regenerateStorySlide = createAsyncThunk(
   ) => {
     try {
       const response = await axios.post(
-        "https://8bc6-202-166-171-221.ngrok-free.app/api/v1/rewriteParagraph",
+        "https://6ade-202-166-171-221.ngrok-free.app/api/v1/rewriteParagraph",
         { input: text },
         {
           headers: {
